@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply m-4;
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+.info_area td {
+    @apply py-1 px-6 text-center;
+}
+
+kbd,
+code {
+    @apply bg-gray-100 text-gray-600 font-mono px-2 py-1 rounded;
+}
