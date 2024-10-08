@@ -33,6 +33,14 @@ view at:
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+dashboard:
+  https://vercel.com/zmilas-projects/literumado
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+view at: 
+  https://literumado.vercel.app/
+
+
+## historio:
+
+- 0.2 [2024-10-08] Aldonis historion. Farita konvertilo Esperanto<->Ŝava
+- 0.1 [2024-10-05] Unua versio. Farita konvertilo Dekuma<->Dekduuma
