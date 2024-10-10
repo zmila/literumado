@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.3",
+        "dato": "2024-10-10",
+        "komento": "Aldonis paĝaranĝon, kun supra ligilo reen al indekso"
+    },
+    {
         "versio": "0.2",
         "dato": "2024-10-08",
         "komento": "Aldonis historion. Farita konvertilo Esperanto<->Ŝava"

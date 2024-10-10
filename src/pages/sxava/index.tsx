@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ŜavaKonvertilo } from '@/utils/SxavaKonvertilo';
+import Layout from '@/components/Layout';
 
 const ŜavaKonvertiloComponent: React.FC = () => {
     const [ŝava, setŜava] = useState('');
@@ -40,7 +41,7 @@ const ŜavaKonvertiloComponent: React.FC = () => {
     };
 
     return (
-        <div>
+        <Layout>
             <h1 className="text-4xl font-bold mb-4">Konvertilo inter la Ŝava kaj Esperanto</h1>
 
             <div className="ŝava">
@@ -96,18 +97,11 @@ const ŜavaKonvertiloComponent: React.FC = () => {
                     <a href="https://kovro.heliohost.org/eo/tools/Sxava/sxava.html">La Ŝava alfabeto por Esperanto</a></p>
             </footer>
             <style jsx>{`
-                a {
-                    color: blue;
-                    text-decoration: underline;
-                    cursor: pointer;
-                    margin-right: .5em;
-                    margin-left: .5em;
-                }
                 .ŝava {
                     @apply font-sans;
                 }
             `}</style>
-        </div >
+        </Layout>
     );
 };
 

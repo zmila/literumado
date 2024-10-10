@@ -20,3 +20,10 @@ kbd,
 code {
     @apply bg-gray-100 text-gray-600 font-mono px-2 py-1 rounded;
 }
+a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-right: .5em;
+    margin-left: .5em;
+}

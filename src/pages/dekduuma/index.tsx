@@ -1,6 +1,7 @@
 // Dekduuma component is a simple form that converts decimal numbers to duodecimal numbers.
 import { DekduumaKonvertilo } from "@/utils/DekduumaKonvertilo";
 import React, { useState } from "react";
+import Layout from '@/components/Layout';
 
 const Dekduuma = () => {
 
@@ -38,7 +39,7 @@ const Dekduuma = () => {
     };
 
     return (
-        <div>
+        <Layout>
             <h1 className="text-4xl font-bold mb-4">Dekuma-Dekduuma konvertilo</h1>
             <p className="text-lg mb-6">Konvertilo inter la dekuma (bazo 10), dekduuma (dozena, bazo 12) kaj kaktovikaj nombrosistemoj. <br />
                 En la dekduuma sistemo uzu <kbd>A</kbd> kaj <kbd>B</kbd> por la dekumaj <code>10</code> kaj <code>11</code>.</p>
@@ -101,7 +102,7 @@ const Dekduuma = () => {
                 </div>
 
             </div >
-        </div >
+        </Layout>
     );
 }
 export default Dekduuma;

@@ -40,7 +40,12 @@ view at:
   https://literumado.vercel.app/
 
 
+## todo
+- [ ] (med) en dekduuma konvertilo aldonu bildon kun miaj variantoj de la kaktovikaj manskribitaj ciferoj
+- [ ] (min) en dekduuma konvertilo faru eblecon transformi nombron al teksto (kaj 10 kaj 12)
+
 ## historio:
 
+- 0.3 [2024-10-10] Aldonis paĝaranĝon, kun supra ligilo reen al indekso.
 - 0.2 [2024-10-08] Aldonis historion. Farita konvertilo Esperanto<->Ŝava
 - 0.1 [2024-10-05] Unua versio. Farita konvertilo Dekuma<->Dekduuma
