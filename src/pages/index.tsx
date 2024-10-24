@@ -44,9 +44,9 @@ export default function Home() {
           </ol>
         </main>
 
-        {/* <footer className={styles.footer}>
-          <p>footer</p>
-        </footer> */}
+        <footer className={styles.footer}>
+          <p>v 0.3</p>
+        </footer>
       </div >
     </>
   );
