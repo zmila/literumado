@@ -12,6 +12,8 @@ export default function Home() {
   const d12 = ddk.montruDaton12(hodiaŭ);
   const kakt = ddk.alKaktovika(d12);
 
+  const dayOfWeek = hodiaŭ.toLocaleDateString('eo', { weekday: 'long' });
+
   return (
     <>
       <Head>
@@ -24,7 +26,7 @@ export default function Home() {
 
       <div className={`${styles.page}`}>
         <main className={styles.main}>
-          <h1 className="text-4xl font-bold mb-4">Hodiaŭ estas</h1>
+          <h1 className="text-4xl font-bold mb-4">Hodiaŭ estas <code>{dayOfWeek}</code></h1>
           <p className="mb-4"><code className="text-2xl">{d10}</code> --- <code className="text-3xl">{kakt}</code></p>
 
           <h1 className="text-4xl font-bold mb-4">Konvertiloj</h1>
@@ -41,6 +43,13 @@ export default function Home() {
               <br />
               or <Link href="/route1/route11">sub-page</Link>
             </li> */}
+          </ol>
+
+          <h1 className="text-4xl font-bold mt-4 mb-4">aliaj iloj</h1>
+          <ol>
+            <li>
+              <Link href="/krado33" className="underline text-blue-600">krado33</Link>
+            </li>
           </ol>
         </main>
 
