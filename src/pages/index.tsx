@@ -53,8 +53,8 @@ export default function Home() {
           </ol>
         </main>
 
-        <footer className={styles.footer}>
-          <p>v 0.3</p>
+        <footer className="mt-4">
+          <p>v 0.4</p>
         </footer>
       </div >
     </>
