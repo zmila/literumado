@@ -28,7 +28,7 @@ const HexTile: React.FC<HexTileProps> = ({ column, row, size }) => {
         return corners;
     }
 
-    const middles = () => {
+    /* const middles = () => {
         const corners = getCorners();
 
         const middles = [];
@@ -43,11 +43,11 @@ const HexTile: React.FC<HexTileProps> = ({ column, row, size }) => {
         middles.push(new Point(x, y));
 
         return middles;
-    }
+    } */
 
-    const toString = () => {
+    /* const toString = () => {
         return `hex<${column},${row}>`;
-    }
+    } */
 
     const id = () => {
         return `${column}:${row}`;
@@ -66,7 +66,7 @@ const HexTile: React.FC<HexTileProps> = ({ column, row, size }) => {
     }
 
     const flat_hex_corner = (center: Point, size: number, i: number) => {
-        var angle_rad = (i + 4) * a60;
+        const angle_rad = (i + 4) * a60;
         return new Point(
             center.x + size * Math.cos(angle_rad),
             center.y + size * Math.sin(angle_rad)

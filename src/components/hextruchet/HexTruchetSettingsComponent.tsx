@@ -3,7 +3,7 @@ import React from 'react';
 
 interface HexTruchetSettingsComponentProps {
     htSettings: HexTruchetSettings;
-    onChanged: (controlName: keyof HexTruchetSettings, controlValue: any) => void;
+    onChanged: (controlName: keyof HexTruchetSettings, controlValue: boolean | number) => void;
 }
 
 const HexTruchetSettingsComponent: React.FC<HexTruchetSettingsComponentProps> = ({ htSettings, onChanged }) => {

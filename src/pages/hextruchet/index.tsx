@@ -29,18 +29,10 @@ const HexTruchetComponent: React.FC = () => {
         }
     };
 
-    const setShowGrid = (value: boolean) => {
-        hexTruchetSettings.showGrid = value;
-        // setShowGrid(value);
-    }
-
-    const handleSettingsChanged = (control: keyof HexTruchetSettings, value: any) => {
+    const handleSettingsChanged = (control: keyof HexTruchetSettings, value: boolean | number) => {
         setHexTruchetSettings((prevSettings) => {
             return { ...prevSettings, [control]: value };
         });
-    }
-
-    const handleChangeSizes = () => {
     }
 
     return (

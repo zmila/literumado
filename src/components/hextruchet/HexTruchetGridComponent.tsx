@@ -1,6 +1,5 @@
 import { HexTruchetSettings } from '@/types/HexTruchetSettings';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import HexTile from './HexTile';
 
 interface HexTruchetGridComponentProps {
@@ -11,15 +10,15 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
 
     const drawGridAxes = () => {
         const axis = [];
-        axis.push(<line x1="0" y1="0" x2={hexW} y2="0" stroke="red" strokeWidth="1" />);
-        axis.push(<line x1="0" y1="0" x2="0" y2={hexH} stroke="red" strokeWidth="1" />);
+        axis.push(<line key='right' x1="0" y1="0" x2={hexW} y2="0" stroke="red" strokeWidth="1" />);
+        axis.push(<line key='down' x1="0" y1="0" x2="0" y2={hexH} stroke="red" strokeWidth="1" />);
         for (let x = 1; x <= width; x++) {
             const ax = x * 1.5 * size - size / 2;
-            axis.push(<line x1={ax} y1="0" x2={ax} y2={2 * size} stroke="blue" strokeWidth="1" />);
+            axis.push(<line key={'x' + x} x1={ax} y1="0" x2={ax} y2={2 * size} stroke="blue" strokeWidth="1" />);
         }
         for (let y = 1; y <= height; y++) {
             const ay = y * size * sr3 - size + 4;
-            axis.push(<line x1={0} y1={ay} x2={2 * size} y2={ay} stroke="blue" strokeWidth="1" />);
+            axis.push(<line key={"y" + y} x1={0} y1={ay} x2={2 * size} y2={ay} stroke="blue" strokeWidth="1" />);
         }
         return axis;
     }
@@ -27,7 +26,7 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
     useEffect(() => {
     }, [htSettings]);
 
-    const { size, width, height, showGrid } = htSettings;
+    const { size, width, height } = htSettings;
     const sr3 = Math.sqrt(3);
     const hexW = 1.5 * size * width + size;
     const hexH = sr3 * size * height; // sqrt(3) comes from sin(60°)
@@ -37,7 +36,8 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
     const hexs = [];
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
-            hexs.push(<HexTile column={col} row={row} size={size} />);
+            const key = `${col}:${row}`;
+            hexs.push(<HexTile key={key} column={col} row={row} size={size} />);
         }
     }
 
