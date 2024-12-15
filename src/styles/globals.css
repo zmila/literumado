@@ -16,10 +16,18 @@ body {
     @apply py-1 px-6 text-center;
 }
 
+.ifDimensions {
+    @apply border border-gray-300 rounded-md px-2 py-1.5 ml-2 w-20;
+}
+
+.ifCheck {
+    @apply border border-gray-300 rounded-md ml-2 px-2 py-2;
+}
 kbd,
 code {
     @apply bg-gray-100 text-gray-600 font-mono px-2 py-1 rounded;
 }
+
 a {
     color: blue;
     text-decoration: underline;

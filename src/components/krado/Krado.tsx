@@ -2,6 +2,7 @@ import React from 'react';
 
 interface KradoProps {
     code: string;
+    showCode: boolean;
 }
 
 const Krado: React.FC<KradoProps> = ({ code }) => {
@@ -37,16 +38,15 @@ const Krado: React.FC<KradoProps> = ({ code }) => {
 
         return elements;
     };
-
     const svgContent = generateSvgContent(code);
 
     return (
         <span style={{ display: 'inline' }}>
             <svg width="110px" height="110px" viewBox="-2 -2 5 5" xmlns="http://www.w3.org/2000/svg">
                 {svgContent}
-                <text x="0" y="3" fontFamily="SanSerif" fontSize="0.4" fill="black">
+                (showCode && <text x="0" y="3" fontFamily="SanSerif" fontSize="0.6" fill="black">
                     {code}
-                </text>
+                </text>)
             </svg>
         </span>
     );

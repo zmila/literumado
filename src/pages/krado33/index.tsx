@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import Layout from '@/components/Layout';
-import Krado from '@/components/krado/Krado';
+import KradoDemo from '@/components/krado/KradoDemo';
+import KradoMontrilo from '@/components/krado/KradoMontrilo';
+import React from 'react';
+
 
 const Grid33Component: React.FC = () => {
-
-    const [userCode, setUserCode] = useState<string>('');
 
     const generateCombinations = (items: string[], length: number): string[] => {
         if (length === 1) return items;
@@ -20,35 +20,14 @@ const Grid33Component: React.FC = () => {
 
     const allCombinations: string[] = [];
     const items = ['n', 'm', 'b', 'e', 'd', 'i', 'a', 'p', 'o', 'q', 'u', 'w'];
-
     for (let i = 1; i <= items.length; i++) {
         allCombinations.push(...generateCombinations(items, i));
     }
-
-    console.log("count of all combinations: ", allCombinations.length);
-
-    const label = "{a, e, i, o, n, m, u, w, b, p, q, d}";
-
     return (
         <Layout>
-            <div className="m-1">
-                <label htmlFor="enter-code">{label}</label>:
-                <input id="enter-code" type="text" className="border mt-3 ml-2 mb-0" onChange={(e) => setUserCode(e.target.value)} />
-                <Krado code={userCode} />
-            </div>
+            <KradoDemo showCode={false} />
 
-            <style jsx>{`
-                #all-combos {
-                    border: 1px solid #green;
-                    background-color: #f0f0f0;
-                    height: calc(100vh - 360px); 
-                    overflow-y: scroll;
-                    padding: .5em;
-                }
-            `}</style>
-            <div id="all-combos" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '2px' }}>
-                {allCombinations.map(code => <Krado key={code} code={code} />)}
-            </div>
+            <KradoMontrilo kradoj={allCombinations} showCode={true} />
         </Layout>
     );
 };

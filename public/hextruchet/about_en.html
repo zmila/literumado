@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagonal Truchet Tiling</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+
+        td:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        kbd,
+        code {
+            background-color: #f7fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <p><a href="/hextruchet">back</a></p>
+    <header>
+        <h1>Hexagonal Truchet Tiling</h1>
+    </header>
+
+    <main>
+        <article>
+            <p>
+                <a href="https://en.wikipedia.org/wiki/Hexagonal_tiling"><b>Hexagonal tiling or tessellation</b></a>
+                is a pattern of regular hexagons that fit together seamlessly, often
+                seen in nature like honeycomb structures and used in floor tiling and graphic designs. <br />
+
+                <a href="https://en.wikipedia.org/wiki/Truchet_tiles"><b>Truchet Tiling</b></a>
+                uses square tiles with unique designs, often curves or lines, that connect when placed next
+                to each other. Named after Sébastien Truchet, this method allows for
+                intricate and appealing patterns by rotating and arranging tiles. <br />
+
+                <b>Hexagonal Truchet tiling</b> merges Hexagonal Tiling and Truchet Tiling, featuring hexagons adorned
+                with
+                three Bezier curves connecting the midpoints of their edges.
+            </p>
+        </article>
+
+        <article>
+            <h2>Overview</h2>
+            <p>
+                Imagine hexagonal tiles with a flat top. We number the edges clockwise starting from the top edge as
+                zero.
+                <br />
+                <img src="images/hex_with_edge_numbers.png" alt="Hexagonal flat-top tile with numbered edges" />
+            </p>
+            <p>
+                From the top edge, we have five choices for the first curve connection, and then three choices from the
+                remaining four edges. The last two edges automatically pair up, giving us a grand total of 15 unique
+                hexagonal Truchet tiles. Check out the table below to see all 15 tiles, complete with their edge-pair
+                codes.
+                <br />
+                <img src="images/all_Hex_Truchet_tiles_5x3_with_codes.png"
+                    alt="All 15 Hexagonal Truchet tiles with codes" />
+            </p>
+            <p>
+                When we lay out many tiles on a hex grid, the curves connect to form a spectacular random image.
+            </p>
+            <table border="0">
+                <tr>
+                    <td><img src="images/random1.png" /></td>
+                    <td rowspan="2">
+                        When repeated in a consistent order, these tiles can form delightful patterns and motifs:<br />
+                        <img src="images/random3_with_pattern.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Here's how it looks without the underlying grid:<br />
+                        <img src="images/random2_nogrid.png" />
+                    </td>
+                </tr>
+            </table>
+        </article>
+
+        <article>
+            <h2>Encoding</h2>
+            <p>
+                The orientation of each tile can visualize information linked to its position within the tiling.
+                With 15 tiles at our disposal, we can encode the English alphabet, some punctuation, and numbers.
+            </p>
+            <p>
+                The simplest approach would be to add an empty tile to the mix, making 16 tiles in total, and encode
+                everything under the sun with just two tiles, yielding <kbd>16*16 = 256</kbd> items. But that's too
+                straightforward, overly
+                mechanical, and not very memorable for us humans.
+                Considering <a href="https://en.wikipedia.org/wiki/Letter_frequency">letter frequency</a>, the nine most
+                common English letters <kbd>(E, T, A, O, I, N, S, H, and R)</kbd> make up 70% of letter usage.
+                If we assign a single tile to each of these letters and use two tiles for all other letters,
+                it would be more efficient than using two symbols for every letter: <br />
+                <kbd>0.7*n + 0.3*2*n = 1.3*n</kbd> versus <kbd>2*n</kbd>, where <kbd>n</kbd>
+                is the number of letters in the text. <br />
+                The space, a frequent flyer in texts, also earns its single-tile encoding.
+            </p>
+            <p>
+                So let's whip up a legendary, fictional alphabet using these tiles! We're ditching the empty tile
+                because
+                who likes gaps in their text? Besides, the number 16 feels too computery with all its powers of
+                two—humans
+                prefer the quirky charm of odd numbers.
+            </p>
+        </article>
+
+        <article>
+            <h2>Punctuation</h2>
+            <p>
+                First up, the space. It's so crucial and common that it's encoded not with two tiles, not with one, but
+                with
+                half a tile. Well, not literally, but you get the idea. In the encoding, two characters denote a space.
+                <img src="images/two_spaces.png" alt="Space tiles" /> <br />
+                These tiles look similar and stand out from the rest, used interchangeably to indicate spaces between
+                words.
+                However, one can also signal the end of a special sequence.
+                Throughout the text, symbols <kbd>_</kbd> and <kbd>^</kbd> represent the space tiles. Two consecutive
+                spaces
+                (e.g., <kbd>_^</kbd>) signify a line break or the end of a paragraph.
+            </p>
+            <p>
+                <img src="images/punctuations.png" alt="Punctuation tiles" /> <br />
+                The tile marked with <kbd>*</kbd> followed by a space tile indicates a period, ending a sentence. This
+                tile,
+                in combination with others, creates various punctuation marks (see below).
+                The tiles marked with <kbd>/</kbd> and <kbd>\</kbd> (right and left slash) are used as case markers,
+                similar
+                to English's lower and upper cases, but this encoding features three cases: Right, Left, and None.
+            </p>
+        </article>
+
+        <article>
+            <h2>Letters</h2>
+            <p>
+                Tiles 1-9 encode the nine most frequent English letters: <kbd>E, T, A, O, I, N, S, H, and R</kbd>, in
+                that
+                order.<br />
+                Preceded by the <kbd>/</kbd> marker, the next nine letters are encoded:
+                <kbd>D, L, C, U, M, W, F, G, and Y</kbd>,<br />
+                and the <kbd>\</kbd> marker encodes the remaining eight letters: <kbd>P, B, V, K, J, X, Q, and Z</kbd>:
+                <br />
+                <img src="images/letters.png" alt="Letter tiles" /> <br />
+            </p>
+        </article>
+
+        <article>
+            <h2>Sample text encoded in Hex Truchet:</h2>
+            <p>
+                <q>The quick brown fox jumps over the lazy dog</q> <br />
+                <tt>281_\7/45/3\4_\294/66_/74\6_\5/4/5\17_4\319_/238/9_/14/8</tt> <br />
+                The text is arranged vertically from top to bottom, with columns running from left to right.
+            </p>
+
+            <table>
+                <tr>
+                    <td>2</td>
+                    <td>5</td>
+                    <td>9</td>
+                    <td>4</td>
+                    <td>/</td>
+                    <td>3</td>
+                    <td>/</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>/</td>
+                    <td>4</td>
+                    <td>\</td>
+                    <td>5</td>
+                    <td>1</td>
+                    <td>9</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>/</td>
+                    <td>6</td>
+                    <td>\</td>
+                    <td>9</td>
+                    <td>_</td>
+                </tr>
+                <tr>
+                    <td>_</td>
+                    <td>\</td>
+                    <td>6</td>
+                    <td>_</td>
+                    <td>1</td>
+                    <td>_</td>
+                    <td>/</td>
+                </tr>
+                <tr>
+                    <td>\</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>\</td>
+                    <td>7</td>
+                    <td>/</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>_</td>
+                    <td>_</td>
+                    <td>5</td>
+                    <td>_</td>
+                    <td>2</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>/</td>
+                    <td>\</td>
+                    <td>/</td>
+                    <td>/</td>
+                    <td>4</td>
+                    <td>3</td>
+                    <td>/</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2</td>
+                    <td>7</td>
+                    <td>4</td>
+                    <td>\</td>
+                    <td>8</td>
+                    <td>8</td>
+                </tr>
+            </table>
+
+            <p>
+                Here's how it looks encoded in Hex Truchet, with and without the grid:<br />
+                <img src="images/quick_brown_fox_grid.png" alt="The quick brown fox encoded with grid" />
+                <img src="images/quick_brown_fox_no_grid.png" alt="The quick brown fox encoded without grid" />
+            </p>
+
+            <p>
+                For a larger example, consider Article 1 of the Universal Declaration of Human Rights (171 characters).
+                If
+                encoded as two hex digits, it requires 342 tiles, but in Hex Truchet, it only needs 208 tiles:<br />
+            <blockquote>All human beings are born free and equal in dignity and rights. <br />
+                They are endowed with reason and conscience and should<br />
+                act towards one another in a spirit of brotherhood.</blockquote>
+            <blockquote><tt>3/2/2_8/4/536_\2156/87_391_\2496_/7911_36/1_1\7/43/2_56_/15/8652/9_36/1_95/8827*_<br />
+                    281/9_391_16/14/61/1_/6528_913746_36/1_/3467/3516/31_36/1_784/4/2/1_<br />
+                    3/32_24/639/17_461_3642819_56_3_7\15952_4/7_\2942819844/1*_</tt></blockquote>
+            Here's how it looks with and without the grid:<br />
+            <img src="images/Art1UDHR_grid.png" alt="Article 1 of the UDHR with grid" /><br />
+            <img src="images/Art1UDHR_no_grid.png" alt="Article 1 of the UDHR without grid" /><br />
+            </p>
+
+            <p>
+                It's worth noting that text written or drawn in this encoding can be read not only in two directions
+                (straight and upside down) like ordinary alphabets, but also along four diagonals. Therefore, it's
+                necessary
+                to somehow mark the beginning of the text, perhaps with an arrow.
+                <br />
+                It is also possible to arrange consecutive tiles not linearly, but in an expanding spiral, starting from
+                the
+                center. <br />
+                <img src="images/hexagonal_spiral_36.png" alt="Spiral arrangement of tiles" />
+            </p>
+        </article>
+        <article>
+            <h2>Other punctuation combinations</h2>
+            <table>
+                <tr>
+                    <td>Notation</td>
+                    <td>Meaning</td>
+                    <td>Notation</td>
+                    <td>Meaning</td>
+                    <td>Notation</td>
+                    <td>Meaning</td>
+                </tr>
+                <tr>
+                    <td>*^</td>
+                    <td>. dot</td>
+                    <td>**^</td>
+                    <td>: colon</td>
+                    <td>***^</td>
+                    <td>... ellipsis</td>
+                </tr>
+                <tr>
+                    <td>*0</td>
+                    <td>• capital marker</td>
+                    <td>*/^</td>
+                    <td>, comma</td>
+                    <td>*\^</td>
+                    <td>? question</td>
+                </tr>
+                <tr>
+                    <td>*1^</td>
+                    <td>! exclamation</td>
+                    <td>*2^</td>
+                    <td>“ double quote (open)</td>
+                    <td>*3^</td>
+                    <td>” double quote (close)</td>
+                </tr>
+                <tr>
+                    <td>*4^</td>
+                    <td>' quote</td>
+                    <td>*5^</td>
+                    <td>( open brace</td>
+                    <td>*6^</td>
+                    <td>- dash, hyphen</td>
+                </tr>
+                <tr>
+                    <td>*7^</td>
+                    <td>; semicolon</td>
+                    <td>*8^</td>
+                    <td>) close brace</td>
+                    <td>*9^</td>
+                    <td>` back quote</td>
+                </tr>
+            </table>
+
+            <p>
+                The capital marker indicates that the subsequent letter is capitalized.
+                It is typically used to denote proper nouns, such as names and titles.
+            </p>
+        </article>
+
+        <article>
+            <h2>Numbers</h2>
+            <p>
+                The following table shows the encoding of the numbers 1-9, 0, and 10, 11 for the
+                <a href="https://en.wikipedia.org/wiki/Duodecimal">duodecimal number system</a>.
+                <br />
+                <img src="images/duodecimal_digits.png" alt="Tiles for duodecimal digits" /><br />
+                The tile for 0 means just 0 if used alone (i.e., followed by space). If after the 0 tile there is any
+                other
+                digit tile, all of them until the space tile form a duodecimal number. See examples in the table below.
+            </p>
+            <table>
+                <tr>
+                    <td>Tiles</td>
+                    <td>Number</td>
+                    <td>Tiles</td>
+                    <td>Number</td>
+                    <td>Tiles</td>
+                    <td>Number</td>
+                </tr>
+                <tr>
+                    <td>0^</td>
+                    <td>0</td>
+                    <td>01^</td>
+                    <td>1</td>
+                    <td>02^</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>03^</td>
+                    <td>3</td>
+                    <td>04^</td>
+                    <td>4</td>
+                    <td>05^</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>06^</td>
+                    <td>6</td>
+                    <td>07^</td>
+                    <td>7</td>
+                    <td>08^</td>
+                    <td>8</td>
+                </tr>
+                <tr>
+                    <td>09^</td>
+                    <td>9</td>
+                    <td>0/^</td>
+                    <td>10</td>
+                    <td>0\^</td>
+                    <td>11</td>
+                </tr>
+                <tr>
+                    <td>010^</td>
+                    <td>12</td>
+                    <td>011^</td>
+                    <td>13</td>
+                    <td>012^</td>
+                    <td>14</td>
+                </tr>
+                <tr>
+                    <td>018^</td>
+                    <td>20</td>
+                    <td>026^</td>
+                    <td>30</td>
+                    <td>034^</td>
+                    <td>40</td>
+                </tr>
+                <tr>
+                    <td>020^</td>
+                    <td>24</td>
+                    <td>030^</td>
+                    <td>36</td>
+                    <td>040^</td>
+                    <td>48</td>
+                </tr>
+                <tr>
+                    <td>084^</td>
+                    <td>100</td>
+                    <td>06\4^</td>
+                    <td>1000</td>
+                    <td>01000^</td>
+                    <td>1728</td>
+                </tr>
+            </table>
+            <p>
+                <tt>1000<sub>(10)</sub> = 6*12*12 + 11*12 + 4 = 6\4<sub>(12)</sub></tt><br />
+                <tt>1000<sub>(12)</sub> = 12*12*12 = 1728<sub>(10)</sub></tt>
+            </p>
+        </article>
+    </main>
+
+    <section id="summary">
+        <h2>Summary</h2>
+        <p>
+            In summary, the document explores the intricate and fascinating world of Hexagonal Truchet Tiling, a unique
+            combination of Hexagonal and Truchet Tiling that utilizes Bezier curves to connect hexagonal tiles. The
+            tiles can be arranged to form visually appealing patterns and can also encode information such as letters,
+            numbers, and punctuation. The encoding system described allows for a compact and efficient representation of
+            text and symbols, making it a versatile tool for both artistic and practical applications. The document
+            provides a comprehensive guide to understanding and utilizing this tiling method, complete with visual
+            examples and detailed explanations of the encoding process.
+        </p>
+    </section>
+
+</body>
+
+</html>

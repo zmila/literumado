@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.5",
+        "dato": "2024-12-15",
+        "komento": "Aldono de Hex Truchet (komenco), kaj de grupigo por kradoj 3x3"
+    },
+    {
         "versio": "0.4",
         "dato": "2024-12-06",
         "komento": "Aldonis nomon de tago en semajno, kaj demon de krado 3x3"
