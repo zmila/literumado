@@ -1,4 +1,4 @@
-import { HexTruchetSettings } from '@/types/HexTruchetSettings';
+import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
 import React, { useEffect } from 'react';
 import HexTile from './HexTile';
 import LangUtils from './LangUtils';
@@ -16,26 +16,9 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
     useEffect(() => {
     }, [htSettings]);
 
-    const { size, width, height, showCoord, showGrid } = htSettings;
-    const sr3 = Math.sqrt(3);
+    const { size, width, height, showGrid } = htSettings;
     const hexW = 1.5 * size * width + size;
-    const hexH = sr3 * size * (height + 0.5); // sqrt(3) comes from sin(60°)
-
-    // const drawGridAxes = () => {
-    //     const axis = [];
-    //     axis.push(<line key='right' x1="0" y1="0" x2={hexW} y2="0" stroke="red" strokeWidth="1" />);
-    //     axis.push(<line key='down' x1="0" y1="0" x2="0" y2={hexH} stroke="red" strokeWidth="1" />);
-    //     for (let x = 1; x <= width; x++) {
-    //         const ax = x * 1.5 * size - size / 2;
-    //         axis.push(<line key={'x' + x} x1={ax} y1="0" x2={ax} y2={2 * size} stroke="blue" strokeWidth="1" />);
-    //     }
-    //     for (let y = 1; y <= height; y++) {
-    //         const ay = y * size * sr3 - size + 4;
-    //         axis.push(<line key={"y" + y} x1={0} y1={ay} x2={2 * size} y2={ay} stroke="blue" strokeWidth="1" />);
-    //     }
-    //     return axis;
-    // }
-    // const axis = showAxes ? drawGridAxes() : null;
+    const hexH = Math.sqrt(3) * size * (height + 0.5); // sqrt(3) comes from sin(60°)
 
     const gu = new GrafUtils(size);
 
@@ -45,12 +28,15 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
             for (let col = 0; col < width; col++) {
                 const key = `${col}:${row}`;
                 const hex = new Hex(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} showCoord={showCoord} />);
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} />);
             }
         }
     }
 
-    const htCode = LangUtils.text2hex(text, LangUtils.char2code);
+    const htCode = LangUtils.text2hex(text,
+        htSettings.language === 'esperanto' ? LangUtils.charEo2code : LangUtils.char2code);
+
+    console.log(text, '->', htCode);
 
     const renderHexCodes = (htCode: string) => {
         const len = htCode.length;
@@ -106,7 +92,6 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
     return (
         <div>
             <svg id="hexGrid" viewBox={`-2 -2 ${hexW} ${hexH + 3}`} xmlns="http://www.w3.org/2000/svg">
-                {/* {showAxes && <g>{axis}</g>} */}
                 {showGrid && grid}
                 {encodedText}
             </svg>

@@ -1,37 +1,22 @@
 import HexTruchetSettingsComponent from '@/components/hextruchet/HexTruchetSettingsComponent';
 import HexTruchetGridComponent from '@/components/hextruchet/HexTruchetGridComponent';
-import { HexTruchetSettings } from '@/types/HexTruchetSettings';
-import Layout from '@/components/Layout';
-import React, { useEffect, useState } from 'react';
+import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
+import React, { useState } from 'react';
 
 
 const HexTruchetComponent: React.FC = () => {
 
-    const [lang, setLang] = useState("");
-    useEffect(() => {
-        if (!lang) {
-            setLang('english');
-        } else {
-            localStorage.setItem('lang', lang);
-        }
-    }, [lang]);
-
     const [text, setText] = useState("");
 
     const [hexTruchetSettings, setHexTruchetSettings] = useState<HexTruchetSettings>({
-        showGrid: true,
         size: 30,
-        height: 18,
-        width: 36
+        showGrid: true,
+        height: 12,
+        width: 36,
+        language: 'english'
     } as HexTruchetSettings);
 
-    const handleChangeLang = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLang(event.target.value);
-        if (lang == "english") {
-        }
-    };
-
-    const handleSettingsChanged = (control: keyof HexTruchetSettings, value: boolean | number) => {
+    const handleSettingsChanged = (control: keyof HexTruchetSettings, value: boolean | number | string) => {
         setHexTruchetSettings((prevSettings) => {
             return { ...prevSettings, [control]: value };
         });
@@ -39,34 +24,15 @@ const HexTruchetComponent: React.FC = () => {
 
     return (
         <>
-            <div className="flex mb-4">
-                <label className="mr-8">
-                    <input
-                        type="radio" radioGroup='lang' className="mr-4"
-                        value="esperanto"
-                        checked={lang === 'esperanto'}
-                        onChange={handleChangeLang}
-                    />
-                    Esperanto
-                </label>
-                <label>
-                    <input
-                        type="radio" radioGroup='lang' className="mr-4"
-                        value="english"
-                        checked={lang === 'english'}
-                        onChange={handleChangeLang}
-                    />
-                    English
-                </label>
-            </div>
-            {lang == "english" && <p className="text-lg mb-6">Encoding of the English alphabet using <a href="hextruchet/about_en.html">Hexagonal Truchet tiling</a></p>}
-            {lang == "esperanto" && <p className="text-lg mb-6">Kodigado de la Esperanta alfabeto uzante <a href="hextruchet/about_eo.html">Seslateran Truchet-kahelaron</a></p>}
+            <div className="text-lg">Encoding of the English alphabet using <a href="hextruchet/about_en.html">Hexagonal Truchet tiling</a>
+                / Kodigado de la Esperanta alfabeto uzante <a href="hextruchet/about_eo.html">Seslateran Truchet-kahelaron</a></div>
 
-            <label>Text:<textarea className='ifText' cols={60} value={text} onChange={(e) => setText(e.target.value)} /></label>
             <HexTruchetSettingsComponent htSettings={hexTruchetSettings} onChanged={handleSettingsChanged} />
+            <label style={{ display: 'flex', alignItems: 'center' }}>Text:
+                <textarea className='ifText m-2' cols={80} value={text} onChange={(e) => setText(e.target.value)} />
+            </label>
 
             <HexTruchetGridComponent htSettings={hexTruchetSettings} text={text} />
-
         </>
     );
 };

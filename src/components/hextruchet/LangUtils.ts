@@ -5,7 +5,7 @@ export default class LangUtils {
             return hex;
         }
 
-        const upper = text.toUpperCase();
+        const upper = text.toLocaleUpperCase("eo");
         for (let i = 0; i < upper.length; i++) {
             const ch = upper.charAt(i);
             if (char2code[ch]) {

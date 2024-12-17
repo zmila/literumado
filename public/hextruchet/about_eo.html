@@ -6,30 +6,162 @@
     <meta lang="eo">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seslatera kahelado de Truchet</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+    
+        td {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+    
+        td:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    
+        kbd,
+        code {
+            background-color: #f7fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
 </head>
 
 <body>
     <p><a href="/hextruchet">reen</a></p>
-
     <header>
         <h1>Seslatera kahelado de Truchet</h1>
     </header>
 
-    <big style="color:red">TODO traduku en Esperanton!</big>
-
     <main>
         <article>
             <p>
-                Seslatera kahelado de Truchet
-                (Sebastjen Trüŝe)
+                <a href="https://en.wikipedia.org/wiki/Hexagonal_tiling"><b>Seslatera kahelaro</b></a>
+                estas ŝablono de regulaj heksagonoj, kiuj kuniĝas senjunte, ofte videbla en naturo kiel mielĉelaj
+                strukturoj kaj uzata en plankaj kahelaroj kaj grafikaj dezajnoj. <br />
+    
+                <a href="https://en.wikipedia.org/wiki/Truchet_tiles"><b>Truchet-kahelaro</b></a>
+                uzas kvadratajn kahelojn kun unikaj dezajnoj, ofte kurboj aŭ linioj, kiuj konektiĝas kiam metitaj apud
+                unu la alia. Nomita laŭ Sébastien Truchet [Sebastjen Trüŝe], ĉi tiu metodo permesas
+                kompleksajn kaj allogajn mozaikojn per rotaciado kaj aranĝado de kaheloj. <br />
+    
+                <b>Seslatera Truchet-kahelaro</b> kunigas la Seslateran kaj Truchet-kahelarojn, prezentante
+                seslaterojn ornamitajn per tri Bezier-kurboj konektantaj la mezpunktojn de iliaj randoj.
+    
             </p>
+        </article>
+    
+        <article>
+            <h2>Enkodado</h2>
+            <p>Pli detala priskribo de la metodo troveblas en la <a href="about_en.html">angla versio</a>.</p>
+    
+            <p>
+                Tiu ĉi enkodado havas 15 diversajn kahelojn. Du el ili servas kiel signo de
+                spaceto <kbd>_</kbd> kaj <kbd>^</kbd>. Unu estas markilo de interpunkciaj signoj <kbd>*</kbd>.
+                Du pluaj estas markiloj de "uskleco". La ceteraj kaheloj servas por marki ciferojn kaj literojn.<br />
+                <img src="images/eo_interpunkcio.png" alt="Signoj por interpunkcio"><br />
+    
+                Esperanta latina alfabeto havas nur majusklojn kaj minusklojn.
+                Tiu ĉi enkodado uzas tri "usklojn": dekstra <kbd>/</kbd>, maldekstra <kbd>\</kbd> kaj nenia.
+                Ĉiu litero do estas enkodita per unu kahelo (la plej oftaj) aŭ per du kaheloj:
+                signo de uskleco kaj la litero mem.
+                <img src="images/eo_literoj.png" alt="Enkodado de Esperantaj literoj"><br />
+    
+    
+            </p>
+        </article>
+
+        <article>
+            <h2>Ekzemploj</h2>
+            <p>
+                <q>eĥoŝanĝoj ĉiuĵaŭde</q> <br />
+                <tt>3\\14/1 15/74\6 _\22\7\ 11/4\53</tt> <br />
+            </p>
+            <p>
+                La teksto estas aranĝita vertikale de supre malsupren, kaj kolumnoj sekvas de maldekstre dekstren.
+            </p>
+            <table>
+                <tr>
+                    <td>3</td>
+                    <td>1</td>
+                    <td>_</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>\</td>
+                    <td>5</td>
+                    <td>\</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>\</td>
+                    <td>/</td>
+                    <td>2</td>
+                    <td>/</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>7</td>
+                    <td>2</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>4</td>
+                    <td>\</td>
+                    <td>\</td>
+                </tr>
+                <tr>
+                    <td>/</td>
+                    <td>\</td>
+                    <td>7</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>6</td>
+                    <td>\</td>
+                    <td>3</td>
+                </tr>
+            </table>
+            <p>
+                Kiel tio aspektas per la Seslatera enkodado de Truchet, kun videbla kaj nevidebla reto:<br />
+                <img src="images/eĥoŝanĝoj_ĉiuĵaŭde.png" alt="eĥoŝanĝoj ĉiuĵaŭde kun reto" />
+                <img src="images/eĥoŝanĝoj_ĉiuĵaŭde_no_grid.png" alt="eĥoŝanĝoj ĉiuĵaŭde sen reto" />
+            </p>
+            <p>
+                Pli granda ekzemplo, la unua artikolo de "Universala Deklaracio de Homaj Rajtoj":<br />
+                <blockquote>Ĉiuj homoj estas denaske liberaj kaj egalaj laŭ digno<br />
+                    kaj rajtoj. Ili posedas racion kaj konsciencon, kaj devus<br />
+                    konduti unu al alia en spirito de frateco.</blockquote>
+                <blockquote>
+                    <tt>\22\7\6_\34\94\6_38918_\53518/83_62\4371\6_/81\6_3\8161\6_61/4_\52\854<br />
+                        _/81\6_71\694\6*_262_/3483\518_71/2245_/81\6_/8458/2235/245*/_/81\6_\53/9\78<br />
+                        _/845\5\792_\75\7_16_1621_35_8/327294_\53_/67193/24*</tt>
+                </blockquote>
+                
+                Kiel tio aspektas, kun kaj sen reto:<br />
+                <img src="images/eo_UDHR.png" alt="unua artikolo de UDHR kun reto" /><br />
+                <img src="images/eo_UDHR_no_grid.png" alt="unua artikolo de UDHR kun reto" /><br />
+            </p>
+
         </article>
     </main>
 
     <section id="summary">
         <h2>Resumo</h2>
         <p>
-
+            La artikolo prezentas la kombinon de la seslatera kahelado kaj de kahelado de Truchete (kahelado per
+            seslateroj ornamitaj per Bezier-kurboj). Ĝi montras kiel la aranĝoj de la kaheloj kreas diversajn bildojn,
+            mozaikojn. Plie, la artikolo priskribas enkodan sistemon por reprezenti Esperantajn literojn kaj ciferojn
+            per diversaj kaheloj kaj ilustras ĝin per ekzemploj.
         </p>
     </section>
 

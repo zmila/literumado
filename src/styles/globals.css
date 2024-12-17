@@ -17,7 +17,7 @@ body {
 }
 
 .ifDimensions {
-    @apply border border-gray-300 rounded-md px-2 py-1.5 ml-2 w-20;
+    @apply border border-gray-300 rounded-md px-2 py-1.5 ml-2 w-16;
 }
 
 .ifText {
