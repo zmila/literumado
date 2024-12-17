@@ -51,6 +51,7 @@ view at:
 ## historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+- 0.5.1 [2024-12-17] Farita Hex Truchet por la angla
 - 0.5 [2024-12-15] Aldono de Hex Truchet (komenco), kaj de grupigo por kradoj 3x3
 - 0.4 [2024-12-06] Aldonis nomon de tago en semajno, kaj demon de krado 3x3
 - 0.3 [2024-10-10] Aldonis paĝaranĝon, kun supra ligilo reen al indekso.

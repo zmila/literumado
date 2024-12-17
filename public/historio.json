@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.5.1",
+        "dato": "2024-12-17",
+        "komento": "Farita Hex Truchet por la angla"
+    },
+    {
         "versio": "0.5",
         "dato": "2024-12-15",
         "komento": "Aldono de Hex Truchet (komenco), kaj de grupigo por kradoj 3x3"

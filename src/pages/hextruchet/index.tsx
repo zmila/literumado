@@ -16,6 +16,8 @@ const HexTruchetComponent: React.FC = () => {
         }
     }, [lang]);
 
+    const [text, setText] = useState("");
+
     const [hexTruchetSettings, setHexTruchetSettings] = useState<HexTruchetSettings>({
         showGrid: true,
         size: 30,
@@ -36,7 +38,7 @@ const HexTruchetComponent: React.FC = () => {
     }
 
     return (
-        <Layout>
+        <>
             <div className="flex mb-4">
                 <label className="mr-8">
                     <input
@@ -60,11 +62,12 @@ const HexTruchetComponent: React.FC = () => {
             {lang == "english" && <p className="text-lg mb-6">Encoding of the English alphabet using <a href="hextruchet/about_en.html">Hexagonal Truchet tiling</a></p>}
             {lang == "esperanto" && <p className="text-lg mb-6">Kodigado de la Esperanta alfabeto uzante <a href="hextruchet/about_eo.html">Seslateran Truchet-kahelaron</a></p>}
 
+            <label>Text:<textarea className='ifText' cols={60} value={text} onChange={(e) => setText(e.target.value)} /></label>
             <HexTruchetSettingsComponent htSettings={hexTruchetSettings} onChanged={handleSettingsChanged} />
 
-            <HexTruchetGridComponent htSettings={hexTruchetSettings} />
+            <HexTruchetGridComponent htSettings={hexTruchetSettings} text={text} />
 
-        </Layout>
+        </>
     );
 };
 

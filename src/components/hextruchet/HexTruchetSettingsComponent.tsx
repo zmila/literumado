@@ -21,6 +21,10 @@ const HexTruchetSettingsComponent: React.FC<HexTruchetSettingsComponentProps> = 
                 <input type="checkbox" className="ifCheck" name="showGrid" checked={htSettings.showGrid} onChange={handleChange} />
             </label>
             <label className="mr-4">
+                Show Coord:
+                <input type="checkbox" className="ifCheck" name="showCoord" checked={htSettings.showCoord} onChange={handleChange} />
+            </label>
+            <label className="mr-4">
                 Height:
                 <input type="number" className="ifDimensions" name="height" value={htSettings.height} onChange={handleChange} />
             </label>
