@@ -23,6 +23,7 @@ body {
 .ifText {
     @apply border border-gray-300 rounded-md px-2 py-1.5 ml-2;
 }
+
 .ifCheck {
     @apply border border-gray-300 rounded-md ml-2 px-2 py-2;
 }
@@ -38,4 +39,29 @@ a {
     cursor: pointer;
     margin-right: .5em;
     margin-left: .5em;
+}
+button {
+    padding: .3em .5em;
+    border: 2px solid #0070f3;
+    border-radius: 5px;
+    background-color: #0070f3;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #005bb5;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    background-color: #003f7f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.5);
 }

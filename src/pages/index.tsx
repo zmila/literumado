@@ -86,6 +86,9 @@ export default function Home() {
             <li>
               <Link href="/hextruchet" className="underline text-blue-600">Hex Truchet</Link>
             </li>
+            <li>
+              <Link href="/vojago" className="underline text-blue-600">Vojago game</Link>
+            </li>
           </ol>
         </main>
 
