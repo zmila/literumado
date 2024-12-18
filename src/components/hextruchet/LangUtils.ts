@@ -12,9 +12,8 @@ export default class LangUtils {
                 hex = hex + char2code[ch];
             } else if (LangUtils.punctuation[ch]) {
                 hex = hex + LangUtils.punctuation[ch];
-            } else {
-                hex = hex + ch;
             }
+            // TODO add encoding of numbers
         }
         return hex;
     }

@@ -1,5 +1,5 @@
 import HexTruchetSettingsComponent from '@/components/hextruchet/HexTruchetSettingsComponent';
-import HexTruchetGridComponent from '@/components/hextruchet/HexTruchetGridComponent';
+import HexTruchetLangComponent from '@/components/hextruchet/HexTruchetLangComponent';
 import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
 import React, { useState } from 'react';
 
@@ -9,10 +9,10 @@ const HexTruchetComponent: React.FC = () => {
     const [text, setText] = useState("");
 
     const [hexTruchetSettings, setHexTruchetSettings] = useState<HexTruchetSettings>({
-        size: 30,
+        size: 40,
         showGrid: true,
         height: 12,
-        width: 36,
+        width: 12,
         language: 'english'
     } as HexTruchetSettings);
 
@@ -32,7 +32,7 @@ const HexTruchetComponent: React.FC = () => {
                 <textarea className='ifText m-2' cols={80} value={text} onChange={(e) => setText(e.target.value)} />
             </label>
 
-            <HexTruchetGridComponent htSettings={hexTruchetSettings} text={text} />
+            <HexTruchetLangComponent htSettings={hexTruchetSettings} text={text} />
         </>
     );
 };

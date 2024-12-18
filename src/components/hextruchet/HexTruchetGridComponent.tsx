@@ -1,23 +1,24 @@
 import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
 import React, { useEffect } from 'react';
 import HexTile from './HexTile';
-import LangUtils from './LangUtils';
 import GrafUtils from './GrafUtils';
 import { Hex } from './Hex';
 import { Point } from './Point';
+import { TruchetTile } from '../common/HexTypes';
+
 
 interface HexTruchetGridComponentProps {
     htSettings: HexTruchetSettings;
-    text: string;
+    tiles: TruchetTile[];
 }
 
-const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, text }) => {
+const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, tiles }) => {
 
     useEffect(() => {
     }, [htSettings]);
 
     const { size, width, height, showGrid } = htSettings;
-    const hexW = 1.5 * size * width + size;
+    const hexW = Math.max(1.5 * size * width + size, 1200);
     const hexH = Math.sqrt(3) * size * (height + 0.5); // sqrt(3) comes from sin(60°)
 
     const gu = new GrafUtils(size);
@@ -33,40 +34,17 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
         }
     }
 
-    const htCode = LangUtils.text2hex(text,
-        htSettings.language === 'esperanto' ? LangUtils.charEo2code : LangUtils.char2code);
-
-    console.log(text, '->', htCode);
-
-    const renderHexCodes = (htCode: string) => {
-        const len = htCode.length;
+    const renderTruchetTiles = (tiles: TruchetTile[]) => {
+        const len = tiles.length;
         if (len <= 0) return [];
 
-        let c = 0;
         const result = [];
-        for (let col = 0; col <= width; col++) {
-            for (let row = 0; row < height; row++) {
-                const code = GrafUtils.hexCodes[htCode.charAt(c)];
-                if (code) {
-                    result.push(
-                        <g key={"t" + col + ":" + row}>
-                            {showTruchetTile(col, row, code)}
-                        </g>);
-                } else {
-                    console.warn(`char ${text.charAt(c)} at position ${c} has no hex code!`);
-                }
-                c++;
-                if (c >= len) {
-                    break;
-                }
-            }
-            if (c >= len) {
-                break;
-            }
-        }
-
-        if (c < len) {
-            console.log(`remaining text: ` + text.substring(c));
+        for (let c = 0; c < Math.min(len, width * height); c++) {
+            const tt = tiles[c];
+            const code = GrafUtils.hexCodes[tt.code];
+            result.push(<g key={"t" + tt.col + ":" + tt.row}>
+                {showTruchetTile(tt.col, tt.row, code)}
+            </g>);
         }
 
         return result;
@@ -87,17 +65,18 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
             x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y} />;
     }
 
-    const encodedText = renderHexCodes(htCode);
+    const encodedTiles = renderTruchetTiles(tiles);
 
     return (
         <div>
             <svg id="hexGrid" viewBox={`-2 -2 ${hexW} ${hexH + 3}`} xmlns="http://www.w3.org/2000/svg">
                 {showGrid && grid}
-                {encodedText}
+                {encodedTiles}
             </svg>
         </div>
     );
 }
+
 
 export default HexTruchetGridComponent;
 
