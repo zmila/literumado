@@ -9,10 +9,10 @@ const HexTruchetComponent: React.FC = () => {
     const [text, setText] = useState("");
 
     const [hexTruchetSettings, setHexTruchetSettings] = useState<HexTruchetSettings>({
-        size: 40,
+        size: 30,
         showGrid: true,
         height: 12,
-        width: 12,
+        width: 28,
         language: 'english'
     } as HexTruchetSettings);
 

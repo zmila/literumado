@@ -33,6 +33,8 @@ export default class LangUtils {
         '(': '*5',
         ')': '*8',
         '`': '*9',
+        '"': '*2',
+        '&': '\\9'
     };
 
     static char2code = {

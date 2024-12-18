@@ -21,7 +21,8 @@ export class Hex {
 
         const corners = [];
         for (let i = 0; i < 6; i++) {
-            corners.push(this.gu.flat_hex_corner(center, i));
+            corners.push(this.gu.point_hex_corner(center, i));
+            // corners.push(this.gu.flat_hex_corner(center, i));
         }
 
         return corners;
@@ -56,7 +57,7 @@ export class Hex {
                 case "B": // big arc
                     curves.push(this.show_arc(c[0], c[1], buildArc));
                     break;
-                case "L":
+                case "L": // line
                     curves.push(this.show_line(c[0], c[1], buildLine));
                     break;
             }

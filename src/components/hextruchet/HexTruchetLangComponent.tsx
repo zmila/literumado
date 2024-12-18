@@ -17,7 +17,7 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
     const { width, height } = htSettings;
     const htCode = LangUtils.text2hex(text,
         htSettings.language === 'esperanto' ? LangUtils.charEo2code : LangUtils.char2code);
-    //console.log(text, '->', htCode);
+    console.log(text, '->', htCode);
 
     const renderHexCodes = (htCode: string) => {
         const len = htCode.length;
@@ -25,8 +25,8 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
 
         let c = 0;
         const result = [];
-        for (let col = 0; col < width && c < len; col++) {
-            for (let row = 0; row < height && c < len; row++) {
+        for (let row = 0; row < height && c < len; row++) {
+            for (let col = 0; col < width && c < len; col++) {
                 result.push(new TruchetTile(row, col, htCode.charAt(c)));
                 c++;
             }
@@ -39,7 +39,7 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
     }
 
     return (
-        <div style={{ border: "1px solid yellow" }}>
+        <div>
             <HexTruchetGridComponent htSettings={htSettings} tiles={renderHexCodes(htCode)} />
         </div>
     )

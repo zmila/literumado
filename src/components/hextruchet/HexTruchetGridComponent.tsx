@@ -14,12 +14,14 @@ interface HexTruchetGridComponentProps {
 
 const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, tiles }) => {
 
-    useEffect(() => {
-    }, [htSettings]);
+    useEffect(() => { }, [htSettings]);
 
     const { size, width, height, showGrid } = htSettings;
-    const hexW = Math.max(1.5 * size * width + size, 1200);
-    const hexH = Math.sqrt(3) * size * (height + 0.5); // sqrt(3) comes from sin(60°)
+    // max(width, 1200) - to prevent very big tiles when width is small
+    const hexW = Math.max(Math.sqrt(3) * size * (width + 1), 1200);  // sqrt(3) comes from sin(60°)
+    const hexH = 1.5 * size * height + size;
+    // const hexW = Math.max(1.5 * size * width + size, 1200);
+    // const hexH = Math.sqrt(3) * size * (height + 0.5); // sqrt(3) comes from sin(60°)
 
     const gu = new GrafUtils(size);
 
