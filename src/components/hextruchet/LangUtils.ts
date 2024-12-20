@@ -1,109 +1,119 @@
+import { TruchetCode } from "../common/HexMeta";
+
+const { TStar, TSp1, TSp2, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9 } = TruchetCode;
+
 export default class LangUtils {
-    static text2hex(text: string, char2code: { [key: string]: string }): string {
-        let hex = "";
+
+    static textToTruchetCodes(text: string, char2code: { [key: string]: TruchetCode[] }): TruchetCode[] {
+        let tc: TruchetCode[] = [];
         if (!text.length) {
-            return hex;
+            return tc;
         }
 
         const upper = text.toLocaleUpperCase("eo");
         for (let i = 0; i < upper.length; i++) {
             const ch = upper.charAt(i);
             if (char2code[ch]) {
-                hex = hex + char2code[ch];
+                tc = [...tc, ...char2code[ch]];
             } else if (LangUtils.punctuation[ch]) {
-                hex = hex + LangUtils.punctuation[ch];
+                tc = [...tc, ...LangUtils.punctuation[ch]];
+            } else if (ch == '\\') {
+                tc.push(TL);
+            } else if (ch == '/') {
+                tc.push(TR);
+            } else if (ch == '0') {
+                tc.push(T0);
             }
-            // TODO add encoding of numbers
         }
-        return hex;
+        return tc;
     }
 
-    static punctuation: { [key: string]: string } = {
-        '.': '*',
-        ' ': '_',
-        '^': '^',
-        ':': '**',
-        ',': '*/',
-        '?': '*\\',
-        '!': '*1',
-        '•': '*0',
-        '\'': '*4',
-        '-': '*6',
-        ';': '*7',
-        '(': '*5',
-        ')': '*8',
-        '`': '*9',
-        '"': '*2',
-        '&': '\\9'
+    static punctuation: { [key: string]: TruchetCode[] } = {
+        '.': [TStar],
+        ' ': [TSp1],
+        '^': [TSp2],
+        ':': [TStar, TStar],
+        ',': [TStar, TR],
+        '?': [TStar, TL],
+        '!': [TStar, T1],
+        '•': [TStar, T0],
+        '\'': [TStar, T4],
+        '-': [TStar, T6],
+        ';': [TStar, T7],
+        '(': [TStar, T5],
+        ')': [TStar, T8],
+        '`': [TStar, T9],
+        '"': [TStar, T2],
+        '&': [TL, T9],
     };
 
-    static char2code = {
-        A: "3",
-        B: "\\2",
-        C: "/3",
-        D: "/1",
-        E: "1",
-        F: "/7",
-        G: "/8",
-        H: "8",
-        I: "5",
-        J: "\\5",
-        K: "\\4",
-        L: "/2",
-        M: "/5",
-        N: "6",
-        O: "4",
-        P: "\\1",
-        Q: "\\7",
-        R: "9",
-        S: "7",
-        T: "2",
-        U: "/4",
-        V: "\\3",
-        W: "/6",
-        X: "\\6",
-        Y: "/9",
-        Z: "\\8",
+    static char2code: { [key: string]: TruchetCode[] } = {
+        A: [T3],
+        B: [TL, T2],
+        C: [TR, T3],
+        D: [TR, T1],
+        E: [T1],
+        F: [TR, T7],
+        G: [TR, T8],
+        H: [T8],
+        I: [T5],
+        J: [TL, T5],
+        K: [TL, T4],
+        L: [TR, T2],
+        M: [TR, T5],
+        N: [T6],
+        O: [T4],
+        P: [TL, T1],
+        Q: [TL, T7],
+        R: [T9],
+        S: [T7],
+        T: [T2],
+        U: [TR, T4],
+        V: [TL, T3],
+        W: [TR, T6],
+        X: [TL, T6],
+        Y: [TR, T9],
+        Z: [TL, T8],
     };
 
-    static charEo2code = {
-        A: "1",
-        Ŝ: "/1",
-        Ĵ: "\\1",
+    static charEo2code: { [key: string]: TruchetCode[] } = {
+        A: [T1],
+        Ŝ: [TR, T1],
+        Ĵ: [TL, T1],
 
-        I: "2",
-        C: "/2",
-        Ĉ: "\\2",
+        I: [T2],
+        C: [TR, T2],
+        Ĉ: [TL, T2],
 
-        E: "3",
-        P: "/3",
-        H: "\\3",
+        E: [T3],
+        P: [TR, T3],
+        H: [TL, T3],
 
-        O: "4",
-        Ŭ: "/4",
-        B: "\\4",
+        O: [T4],
+        Ŭ: [TR, T4],
+        B: [TL, T4],
 
-        N: "5",
-        Z: "/5",
-        D: "\\5",
+        N: [T5],
+        Z: [TR, T5],
+        D: [TL, T5],
 
-        L: "6",
-        F: "/6",
-        J: "\\6",
+        L: [T6],
+        F: [TR, T6],
+        J: [TL, T6],
 
-        R: "7",
-        Ĝ: "/7",
-        U: "\\7",
+        R: [T7],
+        Ĝ: [TR, T7],
+        U: [TL, T7],
 
-        S: "8",
-        K: "/8",
-        G: "\\8",
+        S: [T8],
+        K: [TR, T8],
+        G: [TL, T8],
 
-        T: "9",
-        V: "/9",
-        M: "\\9",
+        T: [T9],
+        V: [TR, T9],
+        M: [TL, T9],
 
-        Ĥ: "\\\\1",
+        Ĥ: [TL, TL, T1],
     };
 
 }

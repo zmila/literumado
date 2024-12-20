@@ -1,7 +1,7 @@
 import GrafUtils from "./GrafUtils";
 import { Point } from "./Point";
 
-export class Hex {
+export class HexData {
     column: number;
     row: number;
     gu: GrafUtils;

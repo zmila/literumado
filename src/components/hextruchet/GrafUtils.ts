@@ -1,3 +1,4 @@
+import { TruchetCode } from "../common/HexMeta";
 import { Point } from "./Point";
 
 // 60 gradus in radians
@@ -82,22 +83,27 @@ export default class GrafUtils {
         );
     }
 
-    static hexCodes: { [key: string]: string } = {
-        "_": "01 23 45",
-        "^": "05 12 34",
-        "*": "03 14 25",
-        "0": "03 12 45",
-        "\\": "05 14 23",
-        "/": "01 25 34",
-        "1": "03 15 24",
-        "2": "02 14 35",
-        "3": "04 13 25",
-        "4": "01 24 35",
-        "5": "04 12 35",
-        "6": "04 15 23",
-        "7": "02 15 34",
-        "8": "02 13 45",
-        "9": "05 13 24",
-    };
+    static getFormula(code: TruchetCode): string {
+        switch (code) {
+            case TruchetCode.TEmpty: return "00 00 00";
+            case TruchetCode.TSp1: return "01 23 45";
+            case TruchetCode.TSp2: return "05 12 34";
+            case TruchetCode.TStar: return "03 14 25";
+            case TruchetCode.TL: return "05 14 23";
+            case TruchetCode.TR: return "01 25 34";
+            case TruchetCode.T0: return "03 12 45";
+            case TruchetCode.T1: return "03 15 24";
+            case TruchetCode.T2: return "02 14 35";
+            case TruchetCode.T3: return "04 13 25";
+            case TruchetCode.T4: return "01 24 35";
+            case TruchetCode.T5: return "04 12 35";
+            case TruchetCode.T6: return "04 15 23";
+            case TruchetCode.T7: return "02 15 34";
+            case TruchetCode.T8: return "02 13 45";
+            case TruchetCode.T9: return "05 13 24";
+            case TruchetCode.TFull: return "03 14 25 01 12 23 34 45 05";
+            default: throw new Error("Unknown code: " + code);
+        }
+    }
 
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Hex } from './Hex';
+import { HexData } from './HexData';
 
 interface HexTileProps {
     column: number;
     row: number;
-    hex: Hex;
+    hex: HexData;
 };
 
 const HexTile: React.FC<HexTileProps> = ({ column, row, hex }) => {

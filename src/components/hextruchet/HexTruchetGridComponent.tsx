@@ -2,17 +2,16 @@ import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
 import React, { useEffect } from 'react';
 import HexTile from './HexTile';
 import GrafUtils from './GrafUtils';
-import { Hex } from './Hex';
+import { HexData } from './HexData';
 import { Point } from './Point';
-import { TruchetTile } from '../common/HexTypes';
-
+import { HexMeta } from '../common/HexMeta';
 
 interface HexTruchetGridComponentProps {
     htSettings: HexTruchetSettings;
-    tiles: TruchetTile[];
+    hexMeta: HexMeta;
 }
 
-const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, tiles }) => {
+const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, hexMeta }) => {
 
     useEffect(() => { }, [htSettings]);
 
@@ -25,35 +24,8 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
 
     const gu = new GrafUtils(size);
 
-    const grid = [];
-    if (showGrid) {
-        for (let row = 0; row < height; row++) {
-            for (let col = 0; col < width; col++) {
-                const key = `${col}:${row}`;
-                const hex = new Hex(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} />);
-            }
-        }
-    }
-
-    const renderTruchetTiles = (tiles: TruchetTile[]) => {
-        const len = tiles.length;
-        if (len <= 0) return [];
-
-        const result = [];
-        for (let c = 0; c < Math.min(len, width * height); c++) {
-            const tt = tiles[c];
-            const code = GrafUtils.hexCodes[tt.code];
-            result.push(<g key={"t" + tt.col + ":" + tt.row}>
-                {showTruchetTile(tt.col, tt.row, code)}
-            </g>);
-        }
-
-        return result;
-    }
-
     const showTruchetTile = (column: number, row: number, formula: string) => {
-        const hex = new Hex(column, row, gu);
+        const hex = new HexData(column, row, gu);
         return hex.showTruchetTile(formula, buildSvgArc, buildSvgLine);
     }
 
@@ -67,13 +39,31 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
             x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y} />;
     }
 
-    const encodedTiles = renderTruchetTiles(tiles);
+    const grid = [];
+    for (let row = 0; row < height; row++) {
+        for (let col = 0; col < width; col++) {
+            if (hexMeta.renderMode(row, col) === 'hidden') {
+                continue;
+            }
+            const key = `${col}:${row}`;
+            if (showGrid) {
+                const hex = new HexData(col, row, gu);
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} />);
+            }
+            const tc = hexMeta.truchetCode(row, col);
+            if (!!tc) {
+                const code = GrafUtils.getFormula(tc);
+                grid.push(<g key={"t" + key}>
+                    {showTruchetTile(col, row, code)}
+                </g>);
+            }
+        }
+    }
 
     return (
         <div>
             <svg id="hexGrid" viewBox={`-2 -2 ${hexW} ${hexH + 3}`} xmlns="http://www.w3.org/2000/svg">
-                {showGrid && grid}
-                {encodedTiles}
+                {grid}
             </svg>
         </div>
     );
