@@ -10,8 +10,8 @@ interface VojagoResultComponentProps {
 const VojagoResultComponent: React.FC<VojagoResultComponentProps> = ({ settings, board }) => {
 
     return (
-        <div style={{ border: "1px solid blue" }}>
-            game result: {settings.boardSize} {settings.boardType}; <br /> {board.playerName} {board.currentStep}<br />
+        <div>
+            game result: {settings.boardSize} <br /> {board.playerName} {board.currentStep}<br />
         </div>
     );
 };

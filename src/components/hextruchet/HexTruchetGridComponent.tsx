@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import HexTile from './HexTile';
 import GrafUtils from './GrafUtils';
 import { HexData } from './HexData';
-import { Point } from './Point';
+import { Point } from "../common/HexTypes";
 import { HexMeta } from '../common/HexMeta';
 
 interface HexTruchetGridComponentProps {
@@ -40,18 +40,26 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
     }
 
     const grid = [];
+    if (showGrid) {
+        for (let row = 0; row < height; row++) {
+            for (let col = 0; col < width; col++) {
+                if (hexMeta.renderMode(row, col) === 'hidden') {
+                    continue;
+                }
+                const key = `${col}:${row}`;
+                const hex = new HexData(col, row, gu);
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} />);
+            }
+        }
+    }
     for (let row = 0; row < height; row++) {
         for (let col = 0; col < width; col++) {
             if (hexMeta.renderMode(row, col) === 'hidden') {
                 continue;
             }
-            const key = `${col}:${row}`;
-            if (showGrid) {
-                const hex = new HexData(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} />);
-            }
             const tc = hexMeta.truchetCode(row, col);
             if (!!tc) {
+                const key = `${col}:${row}`;
                 const code = GrafUtils.getFormula(tc);
                 grid.push(<g key={"t" + key}>
                     {showTruchetTile(col, row, code)}
@@ -68,7 +76,6 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
         </div>
     );
 }
-
 
 export default HexTruchetGridComponent;
 

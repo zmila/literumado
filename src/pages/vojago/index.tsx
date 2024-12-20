@@ -2,7 +2,7 @@ import { VojagoBoard } from '@/components/vojago/VojagoBoard';
 import VojagoBoardComponent from '@/components/vojago/VojagoBoardComponent';
 import { BoardAction } from '@/components/vojago/VojagoCommon';
 import VojagoResultComponent from '@/components/vojago/VojagoResultComponent';
-import { VojagoBoardType, VojagoSettings } from '@/components/vojago/VojagoSettings';
+import { VojagoSettings } from '@/components/vojago/VojagoSettings';
 import VojagoSettingsComponent from '@/components/vojago/VojagoSettingsComponent';
 import React, { useState } from 'react';
 
@@ -19,8 +19,7 @@ const VojagoComponent: React.FC = () => {
 
     const [vojagoSettings, setVojagoSettings] = useState<VojagoSettings>({
         size: 30,
-        boardSize: 12,
-        boardType: VojagoBoardType.Hexagon,
+        boardSize: 5,
     } as VojagoSettings);
 
     const [board, setBoard] = useState<VojagoBoard>({
@@ -30,6 +29,9 @@ const VojagoComponent: React.FC = () => {
     });
 
     const handleSettingsChanged = (newSettings: VojagoSettings) => {
+        if (newSettings.boardSize <= 1) {
+            newSettings.boardSize = 2;
+        }
         setVojagoSettings(newSettings);
     }
 

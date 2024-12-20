@@ -1,15 +1,9 @@
 import GrafUtils from "./GrafUtils";
-import { Point } from "./Point";
+import { Point } from "../common/HexTypes";
 
 export class HexData {
-    column: number;
-    row: number;
-    gu: GrafUtils;
 
-    constructor(column: number, row: number, gu: GrafUtils) {
-        this.column = column;
-        this.row = row;
-        this.gu = gu;
+    constructor(public column: number, public row: number, public gu: GrafUtils) {
     }
 
     center() {

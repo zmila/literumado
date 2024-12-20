@@ -1,7 +1,8 @@
 import { VojagoSettings } from '@/components/vojago/VojagoSettings';
 import React from 'react';
-import { HexMeta, RenderMode, TruchetCode } from '../common/HexMeta';
+import { HexMeta } from '../common/HexMeta';
 import HexTruchetGridComponent from '../hextruchet/HexTruchetGridComponent';
+import { HexagonBoardGenerator } from './HexagonBoardGenerator';
 import { VojagoBoard } from './VojagoBoard';
 import { BoardAction } from './VojagoCommon';
 
@@ -14,28 +15,21 @@ interface VojagoBoardComponentProps {
 
 const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ preview, settings, board, onBoardAction: onBoardChange }) => {
 
-    const htSettings = {
-        size: 30,
-        showGrid: true,
-        height: settings.boardSize,
-        width: settings.boardSize,
-        language: 'english'
-    };
+    const hexMeta: HexMeta = new HexagonBoardGenerator().generateBoard(settings.boardSize);
+    const rows = 2 * settings.boardSize - 1;
+    const cols = 2 * settings.boardSize - 1;
 
-    const hexMeta: HexMeta = {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        renderMode(row: number, col: number) {
-            return RenderMode.Visible;
-        },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        truchetCode(row: number, col: number) {
-            return TruchetCode.TEmpty;
-        }
+    const htSettings = {
+        size: settings.size,
+        showGrid: true,
+        height: rows,
+        width: cols,
+        language: ''
     };
 
     return (
-        <div style={{ border: "1px solid yellow" }}>
-            game board: {settings.boardSize} {settings.boardType};
+        <div>
+            {preview && <HexTruchetGridComponent htSettings={htSettings} hexMeta={hexMeta} />}
             {!preview &&
                 <div>
                     {board.playerName} {board.currentStep}<br />

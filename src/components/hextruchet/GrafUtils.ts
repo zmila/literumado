@@ -1,5 +1,5 @@
 import { TruchetCode } from "../common/HexMeta";
-import { Point } from "./Point";
+import { HexPoint, Point } from "../common/HexTypes";
 
 // 60 gradus in radians
 const a60 = Math.PI / 3;
@@ -82,6 +82,31 @@ export default class GrafUtils {
             center.y + this.size * Math.sin(angle_rad)
         );
     }
+
+    static axial_add(hex: HexPoint, vec: HexPoint): HexPoint {
+        return new HexPoint(hex.q + vec.q, hex.r + vec.r)
+    }
+
+    static axial_to_offset(hex: HexPoint, isEven: boolean): Point {
+        const col = hex.q + (isEven ? (hex.r + (hex.r & 1)) / 2 : (hex.r - (hex.r & 1)) / 2);
+        const row = hex.r;
+
+        return new Point(row, col)
+    }
+
+    static get_neighbors(N: number): Point[] {
+        const center = new HexPoint(0, 0);
+        const results = []
+        for (let q = -N; q <= N; q++) {
+            for (let r = Math.max(-N, -q - N); r <= Math.min(+N, -q + N); r++) {
+                results.push(this.axial_add(center, new HexPoint(q, r)));
+            }
+        }
+        const isEven = N % 2 !== 0;
+
+        return results.map((hex) => this.axial_to_offset(hex, isEven));
+    }
+
 
     static getFormula(code: TruchetCode): string {
         switch (code) {

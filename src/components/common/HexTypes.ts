@@ -10,8 +10,20 @@ export class TruchetTile {
     }
 }
 
+export class Point {
+    constructor(public x: number, public y: number) {
+    }
 
-export enum HexGridType {
-    Hexagon = "hexagon", // width is count of hexs on side, so width=1 is one hex, width=2 is 7 hexes
-    Rectangle = "rectangle", // has height and width
+    p() {
+        return [this.x, this.y];
+    }
+
+    toString() {
+        return "{" + Math.round(this.x) + ", " + Math.round(this.y) + "}";
+    }
 }
+
+export class HexPoint {
+    constructor(public q: number, public r: number) { }
+}
+

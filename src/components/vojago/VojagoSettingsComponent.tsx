@@ -1,5 +1,5 @@
 import React from "react";
-import { VojagoBoardType, VojagoSettings } from "./VojagoSettings";
+import { VojagoSettings } from "./VojagoSettings";
 
 interface VojagoSettingsProps {
     settings: VojagoSettings;
@@ -32,24 +32,11 @@ const VojagoSettingsComponent: React.FC<VojagoSettingsProps> = ({
     };
 
     return (
-        <div id="settings" className="flex items-center" style={{ border: "1px solid green" }}>
+        <div id="settings" className="flex items-center" >
             {/* <label className="mr-4">
             Show Grid:
             <input type="checkbox" className="ifCheck" name="showGrid" checked={settings.showGrid} onChange={handleChange} />
             </label> */}
-            <label className="mr-4">
-                Board type:
-                <input
-                    type="radio" radioGroup='boardType' name='boardType' className="mr-4 ml-4" onChange={handleChange}
-                    value="hexagon" checked={settings.boardType === VojagoBoardType.Hexagon} />
-                Hexagon
-            </label>
-            <label className="mr-4">
-                <input
-                    type="radio" radioGroup='boardType' name='boardType' className="mr-4" onChange={handleChange}
-                    value="square" checked={settings.boardType === VojagoBoardType.Square} />
-                Square
-            </label>
             <label className="mrl-4">
                 Size:
                 <input type="number" className="ifDimensions" name="boardSize" value={settings.boardSize} onChange={handleChange} />
