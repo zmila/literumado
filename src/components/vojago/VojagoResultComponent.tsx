@@ -1,6 +1,6 @@
 import { VojagoSettings } from '@/components/vojago/VojagoSettings';
 import React from 'react';
-import { VojagoBoard } from './VojagoBoard';
+import { VojagoBoard } from "./VojagoCommon";
 
 interface VojagoResultComponentProps {
     settings: VojagoSettings;
@@ -11,7 +11,7 @@ const VojagoResultComponent: React.FC<VojagoResultComponentProps> = ({ settings,
 
     return (
         <div>
-            game result: {settings.boardSize} <br /> {board.playerName} {board.currentStep}<br />
+            game result: {settings.boardSize} <br /> player: {board.currentPlayer} 
         </div>
     );
 };

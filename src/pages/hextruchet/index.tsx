@@ -11,6 +11,8 @@ const HexTruchetComponent: React.FC = () => {
     const [hexTruchetSettings, setHexTruchetSettings] = useState<HexTruchetSettings>({
         size: 30,
         showGrid: true,
+        gridColor: 'grey',
+        gridFill: 'none',
         height: 12,
         width: 28,
         language: 'english'

@@ -1,4 +1,4 @@
-import { TruchetCode } from "../common/HexMeta";
+import { TruchetCode } from "../common/HexTypes";
 
 const { TStar, TSp1, TSp2, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9 } = TruchetCode;
 

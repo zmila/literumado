@@ -5,20 +5,22 @@ interface HexTileProps {
     column: number;
     row: number;
     hex: HexData;
+    color: string;
+    fill?: string;
 };
 
-const HexTile: React.FC<HexTileProps> = ({ column, row, hex }) => {
+const HexTile: React.FC<HexTileProps> = ({ column, row, hex, color, fill = "none" }) => {
 
     const id = () => {
         return `${row}:${column}`;
     }
     const points = hex.corners().map((point) => point.p()).join(" ")
-    //const center = hex.center();
+    const center = hex.center();
 
     return (
         <g id={id()}>
-            {/* <text x={center.x - hex.gu.size / 2} y={center.y + 4} fontSize={hex.gu.size / 1.5} fill="#f93">{id()}</text> */}
-            <polygon points={points} strokeWidth="2" stroke="#3f6" fill="none" />
+            <polygon points={points} strokeWidth="1" stroke={color} fill={fill} />
+            <text x={center.x - hex.gu.size / 2} y={center.y + 4} fontSize={hex.gu.size / 1.5} fill="#f93">{id()}</text>
         </g>
     );
 };

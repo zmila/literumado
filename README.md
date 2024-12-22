@@ -51,6 +51,7 @@ view at:
 ## historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+- 0.6.1 [2024-12-18] Laborante pri ludo 'Vojago': farita seslatera ludejo
 - 0.6 [2024-12-18] La kaheloj estas re-orientitaj, nun ili estas pintaj supre
 - 0.5.2 [2024-12-17] Farita por Esperanto
 - 0.5.1 [2024-12-17] Farita Hex Truchet por la angla

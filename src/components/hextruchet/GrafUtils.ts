@@ -1,4 +1,4 @@
-import { TruchetCode } from "../common/HexMeta";
+import { TruchetCode } from "../common/HexTypes";
 import { HexPoint, Point } from "../common/HexTypes";
 
 // 60 gradus in radians
@@ -110,7 +110,7 @@ export default class GrafUtils {
 
     static getFormula(code: TruchetCode): string {
         switch (code) {
-            case TruchetCode.TEmpty: return "00 00 00";
+            case TruchetCode.TEmpty: return "";
             case TruchetCode.TSp1: return "01 23 45";
             case TruchetCode.TSp2: return "05 12 34";
             case TruchetCode.TStar: return "03 14 25";

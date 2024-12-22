@@ -28,6 +28,11 @@ const HexTruchetSettingsComponent: React.FC<HexTruchetSettingsComponentProps> = 
         onChanged(name as keyof HexTruchetSettings, controlValue);
     };
 
+    const handleColorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target;
+        onChanged(name as keyof HexTruchetSettings, value);
+    };
+
     return (
         <div id="htSettings" className="flex items-center">
             <label className="mr-4">
@@ -38,6 +43,29 @@ const HexTruchetSettingsComponent: React.FC<HexTruchetSettingsComponentProps> = 
                 Size:
                 <input type="number" className="ifDimensions" name="size" value={htSettings.size} onChange={handleChange} />
             </label> */}
+            <label className="mr-4">
+                Color:
+                <select name="gridColor" value={htSettings.gridColor} onChange={handleColorChange} className="mr-2 ml-2">
+                    <option value="grey">Grey</option>
+                    <option value="black">Black</option>
+                    <option value="brown">Brown</option>
+                    <option value="green">Green</option>
+                    <option value="blue">Blue</option>
+                    <option value="red">Red</option>
+                </select>
+            </label>
+            <label className="mr-4">
+                Fill:
+                <select name="gridFill" value={htSettings.gridFill} onChange={handleColorChange} className="mr-2 ml-2">
+                    <option value="none">None</option>
+                    <option value="LemonChiffon">Lemon Chiffon</option>
+                    <option value="AliceBlue">AliceBlue</option>
+                    <option value="Honeydew">Honeydew</option>
+                    <option value="LightYellow">LightYellow</option>
+                    <option value="MintCream">MintCream</option>
+                    <option value="lavender">lavender</option>
+                </select>
+            </label>
             <label className="mr-4">
                 Height:
                 <input type="number" className="ifDimensions" name="height" value={htSettings.height} onChange={handleChange} />

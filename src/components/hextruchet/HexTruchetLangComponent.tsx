@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { HexMeta, RenderMode, TruchetCode } from '../common/HexMeta';
+import { HexMeta } from "../common/HexTypes";
+import { RenderMode } from "../common/HexTypes";
+import { TruchetCode } from "../common/HexTypes";
 import HexTruchetGridComponent from './HexTruchetGridComponent';
 import { HexTruchetSettings } from './HexTruchetSettings';
 import LangUtils from './LangUtils';
@@ -53,6 +55,10 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
         },
         truchetCode(row: number, col: number) {
             return tiles[key(row, col)];
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        extra(row: number, col: number) {
+            return null;
         }
     };
 
