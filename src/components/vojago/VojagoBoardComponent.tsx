@@ -4,45 +4,33 @@ import { HexMeta, Point, RenderMode, truchetCode, TruchetCode } from "../common/
 import GrafUtils from '../hextruchet/GrafUtils';
 import { HexData } from '../hextruchet/HexData';
 import HexTruchetGridComponent from '../hextruchet/HexTruchetGridComponent';
-import { HexagonBoardGenerator } from './HexagonBoardGenerator';
-import { BoardAction, PlayerOrientation, VojagoBoard } from "./VojagoCommon";
+import { BoardAction, GameState, PlayerOrientation, VojagoBoard } from "./VojagoCommon";
 
 interface VojagoBoardComponentProps {
-    preview: boolean;
+    gameState: GameState;
     settings: VojagoSettings;
     board: VojagoBoard;
-    onBoardAction: (action: BoardAction, tile?: TruchetCode) => void;
+    hexMeta: HexMeta;
+    onBoardAction: (action: BoardAction, tile?: TruchetCode | string) => void;
 }
 
-const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ preview, settings, board, onBoardAction: onBoardChange }) => {
+const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, settings, board, hexMeta, onBoardAction: onBoardChange }) => {
 
     const [tileCode, setTileCode] = React.useState<string>('');
 
-    const rows = 2 * settings.boardSize - 1;
-    const cols = 2 * settings.boardSize - 1;
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
+        const eValue = event.target.value;
+        console.log(`Next tile: ${eValue}`);
+        setTileCode(eValue);
+    }
 
-    const htSettings = {
-        size: settings.size,
-        showGrid: true,
-        gridColor: 'grey',
-        gridFill: 'lightyellow',
-        height: rows,
-        width: cols,
-        language: ''
-    };
-
-    // const center = settings.boardSize - 1;
-    const gu = new GrafUtils(settings.size);
-
-    const players = board.players;
-
-    const extra: ExtraElement[] = [];
-    players.forEach((player) => {
-        const p = player.position;
-        const hex = new HexData(p.col, p.row, gu);
-        const pMiddle = hex.middles()[p.orientation];
-        extra.push(new ExtraElement(p.row, p.col, <circle key="player" cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color} />));
-    })
+    const handleNextStep = (): void => {
+        const code = truchetCode(tileCode);
+        if (code && code !== TruchetCode.TEmpty) {
+            console.log(`Next step: ${code}`);
+            onBoardChange(BoardAction.Step, code);
+        }
+    }
 
     const buildPlayerMove = (playerColor: string, column: number, row: number, from: PlayerOrientation, to: PlayerOrientation) => {
         const hex = new HexData(column, row, gu);
@@ -68,27 +56,44 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ preview, se
         return extra.filter(e => e.row === row && e.col === col).map(e => e.element);
     }
 
-    players.forEach((player) => {
+    const htSettings = {
+        size: settings.size,
+        showGrid: true,
+        gridColor: 'grey',
+        gridFill: 'lightyellow',
+        height: 2 * settings.boardSize - 1,
+        width: 2 * settings.boardSize - 1,
+        language: ''
+    };
+
+    // const center = settings.boardSize - 1;
+    const gu = new GrafUtils(settings.size);
+
+    const extra: ExtraElement[] = [];
+    board.players.forEach((player) => {
+        const p = player.position;
+        const hex = new HexData(p.col, p.row, gu);
+        const pMiddle = hex.middles()[p.orientation];
+        extra.push(new ExtraElement(p.row, p.col, <circle key="player" cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color} />));
+    })
+
+    board.players.forEach((player) => {
         player.moves.forEach((m) => {
             const svgElements = buildPlayerMove(player.color, m.col, m.row, m.from, m.to);
             svgElements.forEach(s => extra.push(new ExtraElement(m.row, m.col, s)));
         });
     });
 
-    const hexMeta: HexMeta = HexagonBoardGenerator.generateBoard(settings.boardSize, board.tilesOnBoard);
-
     const playMeta = {
         ...hexMeta,
         renderMode(row: number, col: number) {
             if (row === 0 && col === 0) {
-                // special case
                 return RenderMode.Visible;
             }
             return hexMeta.renderMode(row, col);
         },
         truchetCode(row: number, col: number) {
             if (row === 0 && col === 0) {
-                // special case
                 return TruchetCode.TFull;
             }
             return hexMeta.truchetCode(row, col);
@@ -96,30 +101,21 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ preview, se
         extra: (row: number, col: number) => { return findExtra(row, col); }
     };
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-        const eValue = event.target.value;
-        console.log(`Next tile: ${eValue}`);
-        setTileCode(eValue);
-    }
-
-    const handleNextStep = (): void => {
-        const code = truchetCode(tileCode);
-        if (code && code !== TruchetCode.TEmpty) {
-            console.log(`Next step: ${code}`);
-            onBoardChange(BoardAction.Step, code);
-        }
-    }
-
     return (
         <div>
-            {preview && <HexTruchetGridComponent htSettings={htSettings} hexMeta={hexMeta} />}
-            {!preview &&
+            {gameState === GameState.Settings && <HexTruchetGridComponent htSettings={htSettings} hexMeta={hexMeta} />}
+
+            {gameState === GameState.Playing &&
                 <div>
-                    tiles on board: {Object.keys(board.tilesOnBoard).length}
-                    {board.players.map((p, i) => ` |  Player ${i + 1}: ${p.position.row}:${p.position.col} ${p.position.orientation} `)}
+                    <span style={{ color: board.players[board.currentPlayer].color }}>currentPlayer: {board.currentPlayer + 1}</span>
+                    {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)}
                     <input type="text" maxLength={1} onChange={handleInputChange} className='ifDimensions mr-4 ml-4' />
                     <button onClick={handleNextStep}> Next step</button>
-                    <button onClick={() => onBoardChange(BoardAction.Finish)}>Finish</button>
+                    <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta} />
+                </div>}
+
+            {gameState === GameState.Finished &&
+                <div>
                     <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta} />
                 </div>}
         </div>

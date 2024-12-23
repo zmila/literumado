@@ -28,7 +28,7 @@ export class PlayerMove {
 }
 
 export class PlayerInfo {
-    constructor(public name: string, public color: string, public position: PlayerPosition, public moves: PlayerMove[]) { }
+    constructor(public color: string, public position: PlayerPosition, public moves: PlayerMove[]) { }
 }
 
 export interface VojagoBoard {
@@ -36,5 +36,11 @@ export interface VojagoBoard {
     currentPlayer: number;
     players: PlayerInfo[];
     tilesOnBoard: { [key: string]: TruchetCode; };
+}
+
+export enum GameState {
+    Settings = "settings",
+    Playing = "playing",
+    Finished = "finished"
 }
 

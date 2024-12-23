@@ -79,7 +79,7 @@ export default function Home() {
           </ol>
 
           <h1 className="text-4xl font-bold mt-4 mb-4">aliaj iloj</h1>
-          <ol>
+          <ol className="list-disc list-inside space-y-2">
             <li>
               <Link href="/krado33" className="underline text-blue-600">krado33</Link>
             </li>

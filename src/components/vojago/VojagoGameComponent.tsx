@@ -1,46 +1,14 @@
-import { TruchetCode } from "../common/HexTypes";
-import { PlayerInfo, VojagoBoard } from "./VojagoCommon";
 import VojagoBoardComponent from '@/components/vojago/VojagoBoardComponent';
 import { BoardAction, PlayerMove, PlayerOrientation, PlayerPosition } from '@/components/vojago/VojagoCommon';
-import VojagoResultComponent from '@/components/vojago/VojagoResultComponent';
 import { VojagoSettings } from '@/components/vojago/VojagoSettings';
 import VojagoSettingsComponent from '@/components/vojago/VojagoSettingsComponent';
 import React, { useState } from 'react';
-import GrafUtils from '../hextruchet/GrafUtils';
-
-
-enum GameState {
-    Settings = "settings",
-    Playing = "playing",
-    Finished = "finished"
-}
+import { HexMeta, TruchetCode } from "../common/HexTypes";
+import { HexagonBoardGenerator } from "./HexagonBoardGenerator";
+import { GameState, PlayerInfo, VojagoBoard } from "./VojagoCommon";
+import { VojagoGameUtils as utils } from './VojagoGameUtils';
 
 const VojagoGameComponent: React.FC = () => {
-
-    const [gameState, setGameState] = useState<GameState>(GameState.Settings);
-
-    const [vojagoSettings, setVojagoSettings] = useState<VojagoSettings>({
-        size: 30,
-        boardSize: 5,
-    } as VojagoSettings);
-
-    const key = (row: number, col: number) => {
-        return `${row}:${col}`;
-    }
-    const center = vojagoSettings.boardSize - 1;
-    const cols = 2 * vojagoSettings.boardSize - 1;
-
-    const emptyBoard = {
-        playersCount: 2,
-        currentPlayer: 0,
-        tilesOnBoard: {},
-        players: [
-            new PlayerInfo("Player1", "green", new PlayerPosition(center, 0, PlayerOrientation.P3), []),
-            new PlayerInfo("Player2", "red", new PlayerPosition(center, cols - 1, PlayerOrientation.P0), []),
-        ],
-    };
-
-    const [board, setBoard] = useState<VojagoBoard>(emptyBoard);
 
     const handleSettingsChanged = (newSettings: VojagoSettings) => {
         if (newSettings.boardSize <= 1) {
@@ -49,54 +17,77 @@ const VojagoGameComponent: React.FC = () => {
         setVojagoSettings(newSettings);
     }
 
-    const calculateNextOrientation = (player: PlayerInfo, tile: TruchetCode) => {
-        const currPos = player.position;
-        const formula = GrafUtils.getFormula(tile);
-        const f = currPos.orientation.valueOf().toString();
-        const pair = formula.split(" ").find((p) => p.startsWith(f) || p.endsWith(f))!;
-        return parseInt(pair.startsWith(f) ? pair[1] : pair[0]);
-    }
+    const moveOverTile = (currPlayer: PlayerInfo, tile: TruchetCode): string | null => {
+        const currPos = currPlayer.position;
+        const nextOr = utils.calculateNextOrientation(currPlayer, tile);
+        currPlayer.moves.push(new PlayerMove(currPos.row, currPos.col, currPos.orientation, nextOr));
+        currPlayer.position = utils.calculateNextPosition(currPos, nextOr)!;
 
-    const calculateNextPosition = (position: PlayerPosition, to: number) => {
-        const dc = (position.row % 2 === 0) ? 0 : 1;
-        const nextOr = (to + 3) % 6;
-        switch (to) {
-            case PlayerOrientation.P0: return new PlayerPosition(position.row, position.col + 1, nextOr);
-            case PlayerOrientation.P1: return new PlayerPosition(position.row + 1, position.col + dc, nextOr);
-            case PlayerOrientation.P2: return new PlayerPosition(position.row + 1, position.col + dc - 1, nextOr);
-            case PlayerOrientation.P3: return new PlayerPosition(position.row, position.col - 1, nextOr);
-            case PlayerOrientation.P4: return new PlayerPosition(position.row - 1, position.col + dc - 1, nextOr);
-            case PlayerOrientation.P5: return new PlayerPosition(position.row - 1, position.col + dc, nextOr);
+        const nextPos = currPlayer.position;
+        const collided = utils.playersCollided(board, currPos, nextOr);
+        if (collided) {
+            // collided with other player --> finish game, lost.
+            return `Player '${currPlayer.color}' lost due to a collision with '${collided.color}' player`;
+            // TODO check if players > 2, then these two lost, other may continue
         }
+
+        if (utils.isOutOfBoard(nextPos, maxColumns, hexMeta)) {
+            // go out of board --> finish game
+            return `Player '${currPlayer.color}' lost due to moving off the board`;
+        }
+
+        const nextTile = utils.getTileAtPos(nextPos, board.tilesOnBoard);
+        if (nextTile) {
+            // enter an existing tile --> repeat the move thru the next tile
+            return moveOverTile(currPlayer, nextTile);
+        }
+
+        // enter an empty tile, it's safe to continue
+        return null;
     }
 
     const handleBoardStep = (tile: TruchetCode) => {
-
-        console.log("handleBoardStep", tile);
-
         const currPlayer = board.players[board.currentPlayer];
         const currPos = currPlayer.position;
-        const nextOr = calculateNextOrientation(currPlayer, tile);
-        currPlayer.moves.push(new PlayerMove(currPos.row, currPos.col, currPos.orientation, nextOr));
-        currPlayer.position = calculateNextPosition(currPos, nextOr)!;
+        const newTilesOnBoard = { ...board.tilesOnBoard, [utils.key(currPos.row, currPos.col)]: tile };
+
+        const moveResult = moveOverTile(currPlayer, tile);
+        if (moveResult) {
+            setGameResult(moveResult);
+            // TODO deactivate players that lost
+            // set finished when active player is only one or none
+            setGameState(GameState.Finished);
+        } else {
+            // other players on this tile
+            const otherPlayers = utils.getOtherPlayers(board).filter(p => p.position.row === currPos.row && p.position.col === currPos.col);
+            otherPlayers.forEach(op => {
+                const moveResult = moveOverTile(op, tile);
+                if (moveResult) {
+                    setGameResult(moveResult);
+                    setGameState(GameState.Finished);
+                }
+            });
+        }
+
+        // "Player {name} won because the other players collided with each other."
 
         setBoard({
             ...board,
             currentPlayer: (board.currentPlayer + 1) % board.playersCount,
             players: board.players,
-            tilesOnBoard: { ...board.tilesOnBoard, [key(currPos.row, currPos.col)]: tile },
+            tilesOnBoard: newTilesOnBoard,
         });
     }
 
-    const handleBoardAction = (action: BoardAction, tile?: TruchetCode) => {
+    const handleBoardAction = (action: BoardAction, stepData?: TruchetCode | string) => {
         switch (action) {
             case BoardAction.Step:
-                if (tile) {
-                    handleBoardStep(tile);
+                if (stepData) {
+                    handleBoardStep(stepData as TruchetCode);
                 }
                 break;
             case BoardAction.Finish:
-                // TODO show results
+                setGameResult(stepData as string);
                 setGameState(GameState.Finished);
                 break;
             case BoardAction.Cancel:
@@ -131,6 +122,31 @@ const VojagoGameComponent: React.FC = () => {
         setBoard(emptyBoard);
     }
 
+    const [gameState, setGameState] = useState<GameState>(GameState.Settings);
+    const [gameResult, setGameResult] = useState<string>("");
+
+    const [vojagoSettings, setVojagoSettings] = useState<VojagoSettings>({
+        size: 30,
+        boardSize: 5,
+        playersCount: 2,
+    } as VojagoSettings);
+
+    const center = vojagoSettings.boardSize - 1;
+    const maxColumns = 2 * vojagoSettings.boardSize - 1;
+
+    const emptyBoard = {
+        playersCount: vojagoSettings.playersCount,
+        currentPlayer: 0,
+        tilesOnBoard: {},
+        players: [
+            new PlayerInfo("green", new PlayerPosition(center, 0, PlayerOrientation.P3), []),
+            new PlayerInfo("red", new PlayerPosition(center, maxColumns - 1, PlayerOrientation.P0), []),
+        ],
+    };
+
+    const [board, setBoard] = useState<VojagoBoard>(emptyBoard);
+    const hexMeta: HexMeta = HexagonBoardGenerator.generateBoard(vojagoSettings.boardSize, board.tilesOnBoard);
+
     return (
         <>
             <div className="text-lg">Vojago - game. <a href="vojago/rules.html">View rules</a>. </div>
@@ -139,19 +155,20 @@ const VojagoGameComponent: React.FC = () => {
                 <div>
                     <VojagoSettingsComponent settings={vojagoSettings} onSettingsChange={handleSettingsChanged} />
                     <button onClick={startGame}>Start game</button>
-                    <VojagoBoardComponent preview={true} settings={vojagoSettings} board={board} onBoardAction={handleBoardAction} />
+                    <VojagoBoardComponent gameState={gameState} settings={vojagoSettings} board={board} hexMeta={hexMeta} onBoardAction={handleBoardAction} />
                 </div>}
 
             {gameState === GameState.Playing &&
                 <div>
                     <button onClick={cancelGame}>Cancel</button>
-                    <VojagoBoardComponent preview={false} settings={vojagoSettings} board={board} onBoardAction={handleBoardAction} />
+                    <VojagoBoardComponent gameState={gameState} settings={vojagoSettings} board={board} hexMeta={hexMeta} onBoardAction={handleBoardAction} />
                 </div>}
 
             {gameState === GameState.Finished &&
                 <div>
-                    <button onClick={newGame}>New Game</button>
-                    <VojagoResultComponent settings={vojagoSettings} board={board} />
+                    <button onClick={newGame}>New Game</button> <br />
+                    <h2 style={{ padding: '.3em .5em' }}>game result: {gameResult}</h2>
+                    <VojagoBoardComponent gameState={gameState} settings={vojagoSettings} board={board} hexMeta={hexMeta} onBoardAction={handleBoardAction} />
                 </div>}
         </>
     );
@@ -166,17 +183,10 @@ export default VojagoGameComponent;
 [x]    a. show player trace
 2. select tile for player1 - show 5 options
 3. rotate tile for player1 - left or right
-4. put the tile on board
-5. check player move:
-    a. go out of board --> finish game (but check move of other player, it may go out of board too, then both loose)
-    b. crash into other player --> finish game, both loose.
-    c. safe move
-6. check other player auto-move
-    a. go out of board --> second player loose
-    b. crash into third player --> both loose
-    c. safe move
-7. update board state
-8. repeat from 2 for other player
+[x] 4. put the tile on board
+[x] 5. check player move:
+[x] 6. check other player auto-move
+7. repeat from 2 for other player
 
     Rotate Clockwise: ↻ (U+21BB)
     Rotate Counter Clockwise: ↺ (U+21BA)
