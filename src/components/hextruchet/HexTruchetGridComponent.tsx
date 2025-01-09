@@ -45,7 +45,7 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
                 }
                 const key = `${col}:${row}`;
                 const hex = new HexData(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={gridFill} />);
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={gridFill} showCoord={htSettings.showCoord} />);
             }
         }
     }

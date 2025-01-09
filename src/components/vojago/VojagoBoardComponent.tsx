@@ -59,6 +59,7 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, 
     const htSettings = {
         size: settings.size,
         showGrid: true,
+        showCoord: true,
         gridColor: 'grey',
         gridFill: 'lightyellow',
         height: 2 * settings.boardSize - 1,

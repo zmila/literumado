@@ -7,9 +7,10 @@ interface HexTileProps {
     hex: HexData;
     color: string;
     fill?: string;
+    showCoord?: boolean;
 };
 
-const HexTile: React.FC<HexTileProps> = ({ column, row, hex, color, fill = "none" }) => {
+const HexTile: React.FC<HexTileProps> = ({ column, row, hex, color, fill = "none", showCoord = false }) => {
 
     const id = () => {
         return `${row}:${column}`;
@@ -20,7 +21,11 @@ const HexTile: React.FC<HexTileProps> = ({ column, row, hex, color, fill = "none
     return (
         <g id={id()}>
             <polygon points={points} strokeWidth="1" stroke={color} fill={fill} />
-            <text x={center.x - hex.gu.size / 2} y={center.y + 4} fontSize={hex.gu.size / 1.5} fill="#f93">{id()}</text>
+            {showCoord && (
+                <text x={center.x - hex.gu.size / 2} y={center.y + 4} fontSize={hex.gu.size / 1.5} fill="#f93">
+                    {id()}
+                </text>
+            )}
         </g>
     );
 };
