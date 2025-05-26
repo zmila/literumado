@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ŜavaKonvertilo } from '@/utils/SxavaKonvertilo';
 import Layout from '@/components/Layout';
 
-const ŜavaKonvertiloComponent: React.FC = () => {
+const SxavaKonvertiloComponent: React.FC = () => {
     const [ŝava, setŜava] = useState('');
     const [espa, setEspa] = useState('');
     const [selectedVariant, setSelectedVariant] = useState('pokr');
@@ -105,4 +105,4 @@ const ŜavaKonvertiloComponent: React.FC = () => {
     );
 };
 
-export default ŜavaKonvertiloComponent;
+export default SxavaKonvertiloComponent;

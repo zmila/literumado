@@ -51,6 +51,11 @@ view at:
 ## historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+
+- 0.7.1 [2025-05-26] 
+  update js libraries to newest:
+    > npm i next@latest react@latest react-dom@latest eslint-config-next@latest
+
 - 0.7.0 [2025-05-26] Aldonis konvertilon inter Dekuma <-> Ekvilibra nombrosistemoj
 - 0.6.1 [2024-12-18] Laborante pri ludo 'Vojago': farita seslatera ludejo
 - 0.6 [2024-12-18] La kaheloj estas re-orientitaj, nun ili estas pintaj supre

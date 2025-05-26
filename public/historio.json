@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.7.1",
+        "dato": "2025-05-26",
+        "komento": "update of libraries, next, react to newest; some lint fixes"
+    },
+    {
         "versio": "0.7",
         "dato": "2025-05-26",
         "komento": "Aldonis konvertilon inter Dekuma <-> Ekvilibra nombrosistemoj"
