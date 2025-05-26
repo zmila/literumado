@@ -9,21 +9,60 @@ interface KradoMontriloProps {
 const KradoMontrilo: React.FC<KradoMontriloProps> = ({ kradoj, showCode }) => {
 
     const [groupBy, setGroupBy] = useState('name');
+    const [filter, setFilter] = useState<string>('');
+    const [minLen, setMinLen] = useState<number>(1);
 
-    const groups = (groupBy === 'no_grouping') ? [
+    React.useEffect(() => {
+        setGroupBy('group_by_length');
+    }, []);
+
+    const getAll = () => [
         {
             name: 'All',
             items: kradoj
-        }] : Object.values(
-            kradoj.reduce((acc, item) => {
-                const length = item.length;
-                if (!acc[length]) {
-                    acc[length] = { name: `Length: ${length}`, items: [] };
-                }
-                acc[length].items.push(item);
-                return acc;
-            }, {} as { [key: number]: { name: string, items: string[] } })
-        )
+        }
+    ];
+
+    const getGroupsByLength = () => Object.values(
+        kradoj.reduce((acc, item) => {
+            const length = item.length;
+            if (!acc[length]) {
+                acc[length] = { name: `Length: ${length}`, items: [] };
+            }
+            acc[length].items.push(item);
+            return acc;
+        }, {} as { [key: number]: { name: string, items: string[] } })
+    );
+
+    const getFiltered = () => {
+        const filterChars = new Set(filter.split(''));
+        const filterCharsArray = Array.from(filterChars);
+        const filtered = kradoj.filter(code =>
+            filterCharsArray.every(char => !code.includes(char))
+            && code.length >= minLen
+        );
+
+        console.info('filtered: ', filter.length, filtered)
+        return [
+            {
+                name: 'Filtered',
+                items: filtered
+            }
+        ];
+    };
+
+    const groups = (() => {
+        switch (groupBy) {
+            case 'no_grouping':
+                return getAll();
+            case 'group_by_length':
+                return getGroupsByLength();
+            case 'filtered':
+                return getFiltered();
+            default:
+                return [];
+        }
+    })();
 
     return (
         <>
@@ -33,7 +72,13 @@ const KradoMontrilo: React.FC<KradoMontriloProps> = ({ kradoj, showCode }) => {
                 }}>
                     <option value="no_grouping">no grouping</option>
                     <option value="group_by_length">group by length</option>
+                    <option value="filtered">filtered</option>
                 </select>
+                {groupBy === 'filtered' &&
+                    <span>
+                        <input id="filter" type="text" className="border mt-3 ml-2 mb-0" onChange={(e) => setFilter(e.target.value)} />
+                        <input id="minLen" type="number" className="border mt-3 ml-2 mb-0" onChange={(e) => setMinLen(parseInt(e.target.value))} />
+                    </span>}
             </div>
 
             <div className="mt-3" id="groups-container">
@@ -51,7 +96,7 @@ const KradoMontrilo: React.FC<KradoMontriloProps> = ({ kradoj, showCode }) => {
             #all-combos {
                 border: 1px solid #green;
                 background-color: #f0f0f0;
-                height: calc(100vh - 360px); 
+                height: calc(100vh - 160px); 
                 overflow-y: scroll;
                 padding: .5em;
             }

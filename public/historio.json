@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.7",
+        "dato": "2025-05-26",
+        "komento": "Aldonis konvertilon inter Dekuma <-> Ekvilibra nombrosistemoj"
+    },
+    {
         "versio": "0.6.1",
         "dato": "2024-12-22",
         "komento": "Laborante pri ludo 'Vojago': farita seslatera ludejo"

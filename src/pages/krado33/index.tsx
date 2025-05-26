@@ -25,7 +25,7 @@ const Grid33Component: React.FC = () => {
     }
     return (
         <Layout>
-            <KradoDemo showCode={false} />
+            {/* <KradoDemo showCode={false} /> */}
 
             <KradoMontrilo kradoj={allCombinations} showCode={true} />
         </Layout>

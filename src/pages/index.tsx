@@ -69,6 +69,9 @@ export default function Home() {
               <Link href="/dekduuma" className="underline text-blue-600">Dekuma-Dekduuma konvertilo</Link>
             </li>
             <li>
+              <Link href="/ekvilibra" className="underline text-blue-600">Dekuma-Ekvilibra konvertilo</Link>
+            </li>
+            <li>
               <Link href="/sxava" className="underline text-blue-600">Ŝava konvertilo</Link>
             </li>
             {/* <li>
