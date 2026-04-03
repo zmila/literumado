@@ -1,0 +1,66 @@
+/* Dekduuma Page Styles */
+
+/* Main title */
+.title {
+    @apply text-4xl font-bold mb-4;
+}
+
+/* Description paragraph */
+.description {
+    @apply text-lg mb-6;
+}
+
+/* Input fields container */
+.inputsContainer {
+    @apply flex flex-row gap-4;
+}
+
+/* Standard input field */
+.input {
+    @apply p-2 border rounded;
+}
+
+/* Special input for Kaktovika (larger text) */
+.inputKaktovika {
+    @apply p-2 border rounded text-xl;
+}
+
+/* Results display area */
+.resultsContainer {
+    @apply mt-2;
+}
+
+/* Result value in monospace with background */
+.resultValue {
+    @apply font-mono bg-gray-100 px-2 py-1 rounded;
+}
+
+/* Information and reference area */
+.infoArea {
+    display: block;
+}
+
+/* Reference table styling */
+.table {
+    @apply table-auto border border-collapse max-w-full my-4;
+}
+
+/* Table header row styling */
+.tableHeader {
+    @apply bg-gray-100 text-gray-600 uppercase text-sm leading-normal;
+}
+
+/* Table header cell */
+.tableHeaderCell {
+    @apply py-3 px-6 text-left;
+}
+
+/* Reference example blockquote */
+.referenceExample {
+    @apply m-4;
+}
+
+/* Formula in reference example */
+.referenceFormula {
+    @apply text-xl;
+}

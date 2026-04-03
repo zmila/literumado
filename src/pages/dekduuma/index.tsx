@@ -1,11 +1,16 @@
 // Dekduuma component is a simple form that converts decimal numbers to duodecimal numbers.
 import { DekduumaKonvertilo } from "@/utils/DekduumaKonvertilo";
+import { Prononcilo12 } from "@/utils/Prononcilo12";
+import { Prononcilo10 } from "@/utils/Prononcilo10";
 import React, { useState } from "react";
 import Layout from '@/components/Layout';
+import styles from '@/styles/dekduuma.module.css';
+
+const ddk = new DekduumaKonvertilo();
+const prononcilo10 = new Prononcilo10();
+const prononcilo12 = new Prononcilo12();
 
 const Dekduuma = () => {
-
-    const ddk = new DekduumaKonvertilo();
 
     const [dekuma, setDekuma] = useState<number | string>("");
     const [dekduuma, setDekduuma] = useState<string>("");
@@ -14,19 +19,17 @@ const Dekduuma = () => {
     const dekumaŜanĝita = (event: React.ChangeEvent<HTMLInputElement>) => {
         const d10 = Number.parseInt(event.target.value);
         const d12 = ddk.alDekduuma(d10);
-        const kakt = ddk.alKaktovika(d12);
         setDekuma(d10);
         setDekduuma(d12);
-        setKaktovika(kakt);
+        setKaktovika(ddk.alKaktovika(d12));
     };
 
     const dekduumaŜanĝita = (event: React.ChangeEvent<HTMLInputElement>) => {
         const d12 = event.target.value;
         const d10 = ddk.alDekuma(d12);
-        const kakt = ddk.alKaktovika(d12);
         setDekuma(d10);
         setDekduuma(d12);
-        setKaktovika(kakt);
+        setKaktovika(ddk.alKaktovika(d12));
     };
 
     const kaktovikaŜanĝita = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,39 +41,59 @@ const Dekduuma = () => {
         setKaktovika(kakt);
     };
 
+    const getDektumaPrononco = (): string => {
+        try {
+            return prononcilo12.prononcuNombron(dekduuma);
+        } catch (error) {
+            return "❌ la nombro estas tro granda";
+        }
+    };
+
+    const getDekduumaPrononco = (): string => {
+        try {
+            return prononcilo10.prononcuNombron(String(dekuma));
+        } catch (error) {
+            return "❌ la nombro estas tro granda";
+        }
+    };
+
     return (
         <Layout>
-            <h1 className="text-4xl font-bold mb-4">Dekuma-Dekduuma konvertilo</h1>
-            <p className="text-lg mb-6">Konvertilo inter la dekuma (bazo 10), dekduuma (dozena, bazo 12) kaj kaktovikaj nombrosistemoj. <br />
+            <h1 className={styles.title}>Dekuma-Dekduuma konvertilo</h1>
+            <p className={styles.description}>Konvertilo inter la dekuma (bazo 10), dekduuma (dozena, bazo 12) kaj kaktovikaj nombrosistemoj. <br />
                 En la dekduuma sistemo uzu <kbd>A</kbd> kaj <kbd>B</kbd> por la dekumaj <code>10</code> kaj <code>11</code>.</p>
 
             <div>
-                <div className="flex flex-row gap-4">
-                    <input type="number" placeholder="Dekuma nombro" className="p-2 border rounded"
+                <div className={styles.inputsContainer}>
+                    <input type="number" placeholder="Dekuma nombro" className={styles.input}
                         name="dekuma"
                         value={dekuma}
                         onChange={dekumaŜanĝita}
                     />
-                    <input type="text" placeholder="Dekduuma nombro" className="p-2 border rounded"
+                    <input type="text" placeholder="Dekduuma nombro" className={styles.input}
                         name="dekduuma"
                         value={dekduuma}
                         onChange={dekduumaŜanĝita}
                     />
-                    <input type="text" placeholder="Kaktovika nombro" className="p-2 border rounded text-xl"
+                    <input type="text" placeholder="Kaktovika nombro" className={styles.inputKaktovika}
                         name="kaktovika"
                         value={kaktovika}
                         onChange={kaktovikaŜanĝita}
                     />
                 </div>
+                <div className={styles.resultsContainer}>
+                    <div>Literumado dekduuma: <code className={styles.resultValue}>{getDektumaPrononco()}</code></div>
+                    <div>Literumado dekuma: <code className={styles.resultValue}>{getDekduumaPrononco()}</code></div>
+                </div>
 
-                <div className="info_area">
-                    <table className="table-auto border border-collapse max-w-full my-4">
+                <div className={styles.infoArea}>
+                    <table className={styles.table}>
                         <thead>
-                            <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                                <th className="py-3 px-6 text-left">dekuma</th>
-                                <th className="py-3 px-6 text-left">dekduuma</th>
-                                <th className="py-3 px-6 text-left">kaktovika</th>
-                                <th className="py-3 px-6 text-left">prononco</th>
+                            <tr className={styles.tableHeader}>
+                                <th className={styles.tableHeaderCell}>dekuma</th>
+                                <th className={styles.tableHeaderCell}>dekduuma</th>
+                                <th className={styles.tableHeaderCell}>kaktovika</th>
+                                <th className={styles.tableHeaderCell}>prononco</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,8 +115,8 @@ const Dekduuma = () => {
                         </tbody>
                     </table>
 
-                    <blockquote className="m-4">
-                        <span className="text-xl"><code>15251</code><sub>10</sub> = <code>89ab</code><sub>12</sub> = <code>𝋊𝋋𝋌𝋍</code></span>
+                    <blockquote className={styles.referenceExample}>
+                        <span className={styles.referenceFormula}><code>15251</code><sub>10</sub> = <code>89ab</code><sub>12</sub> = <code>𝋊𝋋𝋌𝋍</code></span>
                         <br />
                         = ok mas naŭgroc dektuz elv
                     </blockquote>

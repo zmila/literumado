@@ -1,6 +1,11 @@
 export class DekduumaKonvertilo {
 
     alDekduuma(dekuma: number): string {
+        if (dekuma === 0) {
+            return "0";
+        }
+        const isNegative = dekuma < 0;
+        dekuma = Math.abs(dekuma);
         const d12 = [];
         let d = dekuma
         while (d > 0) {
@@ -8,38 +13,45 @@ export class DekduumaKonvertilo {
             d12.unshift(rem == 10 ? 'A' : rem == 11 ? 'B' : rem);
             d = Math.floor(d / 12);
         }
-        return d12.join("");
+        const result = d12.join("");
+        return isNegative ? "-" + result : result;
     }
 
     alDekuma(dekduuma: string): number {
+        const isNegative = dekduuma.startsWith("-");
+        const numStr = isNegative ? dekduuma.substring(1) : dekduuma;
 
         let dek = 0;
-        for (const char of dekduuma.toUpperCase()) {
+        for (const char of numStr.toUpperCase()) {
             const d = char == 'A' ? 10 : char == 'B' ? 11 : Number.parseInt(char);
             dek = dek * 12 + d;
         }
 
-        return dek;
+        return isNegative ? -dek : dek;
     }
 
     alKaktovika(dekduuma: string): string {
+        const isNegative = dekduuma.startsWith("-");
+        const numStr = isNegative ? dekduuma.substring(1) : dekduuma;
         const out = [];
-        for (const char of dekduuma.toUpperCase()) {
+        for (const char of numStr.toUpperCase()) {
             const kakto = dekdu2kaktovika.get(char)
             out.push(kakto ? kakto : char);
         }
 
-        return out.join('');
+        return isNegative ? "-" + out.join('') : out.join('');
     }
 
     elKaktovika(kaktovika: string): string {
+        const isNegative = kaktovika.startsWith("-");
+        const numStr = isNegative ? kaktovika.substring(1) : kaktovika;
         const out = [];
-        for (const char of kaktovika) {
+        for (const char of numStr) {
             const d12 = kaktovika2dekdu.get(char)
             out.push(d12 ? d12 : char);
         }
 
-        return out.join('');
+        return isNegative ? "-" + out.join('') : out.join('');
     }
 
     montruDaton(d: Date): string {

@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.8.0",
+        "dato": "2026-04-03",
+        "komento": "Aldonis prononcilojn en Esperanto (Dekuma/Dudekuma) kun subteno por negativaj nombrojn."
+    },
+    {
         "versio": "0.7.1",
         "dato": "2025-05-26",
         "komento": "update of libraries, next, react to newest; some lint fixes"

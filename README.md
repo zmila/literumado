@@ -43,7 +43,7 @@ view at:
 
 ## todo
 - [ ] (med) en dekduuma konvertilo aldonu bildon kun miaj variantoj de la kaktovikaj manskribitaj ciferoj
-- [ ] (min) en dekduuma konvertilo faru eblecon transformi nombron al teksto (kaj 10 kaj 12)
+- [x] (min) en dekduuma konvertilo faru eblecon transformi nombron al teksto (kaj 10 kaj 12)
 - [ ] (med) kreu bel-ŝav konvertilon
 - [ ] provu WebComponents (htmx/alpinejs) anstataŭ React
 
@@ -51,7 +51,8 @@ view at:
 ## historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
-
+- 0.8.0 [2026-04-03] 
+  Aldonis prononcilojn en Esperanto (Dekuma/Dudekuma) kun subteno por negativaj nombrojn.
 - 0.7.1 [2025-05-26] 
   update js libraries to newest:
     > npm i next@latest react@latest react-dom@latest eslint-config-next@latest
@@ -67,3 +68,8 @@ view at:
 - 0.2 [2024-10-08] Aldonis historion. Farita konvertilo Esperanto<->Ŝava
 - 0.1 [2024-10-05] Unua versio. Farita konvertilo Dekuma<->Dekduuma
 
+
+
+install
+  npm install --save-dev vitest @vitest/ui
+  npm install -D vitest
