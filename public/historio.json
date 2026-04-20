@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.9.0",
+        "dato": "2026-04-20",
+        "komento": "komenco de `Dinu Kevako`, nun pretas divido je silaboj"
+    },
+    {
         "versio": "0.8.0",
         "dato": "2026-04-03",
         "komento": "Aldonis prononcilojn en Esperanto (Dekuma/Dudekuma) kun subteno por negativaj nombrojn."

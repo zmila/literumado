@@ -74,6 +74,9 @@ export default function Home() {
             <li>
               <Link href="/sxava" className="underline text-blue-600">Ŝava konvertilo</Link>
             </li>
+            <li>
+              <Link href="/dinu_kevako" className="underline text-blue-600">Dinu Kevako</Link>
+            </li>
             {/* <li>
               <Link href="/route1">a page</Link>
               <br />

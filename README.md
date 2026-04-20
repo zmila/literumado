@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Getting Started
 
 First, run the development server:
 
@@ -10,7 +10,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### API routes
+## API routes
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on
   [http://localhost:3000/api/hello](http://localhost:3000/api/hello).
   This endpoint can be edited in `pages/api/hello.ts`.
@@ -21,7 +21,7 @@ API routes provide a solution to build a public API with Next.js.
 Any file inside the folder pages/api is mapped to /api/* and will be treated as an API endpoint instead of a page.
 They are server-side only bundles and won't increase your client-side bundle size.
 
-## deploy on Fly.io
+# deploy on Fly.io
 
 $ fly launch
 or
@@ -31,8 +31,9 @@ view at:
   https://literumado.fly.dev/
 
 
+# Deploy on Vercel
 
-## Deploy on Vercel
+❌  failed to login, forgot password/email!
 
 dashboard:
   https://vercel.com/zmilas-projects/literumado
@@ -41,16 +42,26 @@ view at:
   https://literumado.vercel.app/
 
 
-## todo
+# todo
 - [ ] (med) en dekduuma konvertilo aldonu bildon kun miaj variantoj de la kaktovikaj manskribitaj ciferoj
-- [x] (min) en dekduuma konvertilo faru eblecon transformi nombron al teksto (kaj 10 kaj 12)
+- dinu kevako:
+  - nova paĝo kun "input" / "silabado" / dinu_kevaka prezento kiel SVG
+  - kodo por silabado
+  - kodo por montri defaŭltan svg por ajna letero/silabo - malplena kvadrato
+  - svg-kodoj por ĉiu letero
+  - komponado de silabaj glifoj
+  - ligaturoj
 - [ ] (med) kreu bel-ŝav konvertilon
-- [ ] provu WebComponents (htmx/alpinejs) anstataŭ React
+- [ ] (med) kopiu eo-bali konvertilon
+- [ ] (med) kopiu eo-lontara konvertilon
+- [ ] (min) katalogo de skribiloj
+- [ ] (min) provu WebComponents (htmx/alpinejs) anstataŭ React
 
 
-## historio:
+# historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+- 0.9.0 [2026-04-20] komenco de `Dinu Kevako`, nun pretas divido je silaboj
 - 0.8.0 [2026-04-03] 
   Aldonis prononcilojn en Esperanto (Dekuma/Dudekuma) kun subteno por negativaj nombrojn.
 - 0.7.1 [2025-05-26] 
@@ -69,7 +80,40 @@ view at:
 - 0.1 [2024-10-05] Unua versio. Farita konvertilo Dekuma<->Dekduuma
 
 
+# install
+  npm install
 
-install
-  npm install --save-dev vitest @vitest/ui
-  npm install -D vitest
+# dependencies:
+
+## Main Dependencies
+- **next**: A React framework for building full-stack web applications.
+- **react**: A JavaScript library for building user interfaces.
+- **react-dom**: Serves as the entry point to the DOM and server renderers for React.
+
+## Development Dependencies
+- **@flydotio/dockerfile**: Generates a Dockerfile for deploying Next.js apps on Fly.io.
+- **@types/node**: TypeScript definitions for Node.js.
+- **@types/react**: TypeScript definitions for React.
+- **@types/react-dom**: TypeScript definitions for React DOM.
+- **@vitest/ui**: The UI for Vitest, a testing framework.
+- **eslint**: A tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
+- **eslint-config-next**: ESLint configuration for Next.js projects.
+- **tailwindcss**: A utility-first CSS framework for rapid UI development.
+- **typescript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **vitest**: A fast and simple testing framework.
+
+## Testing
+
+This project uses [Vitest](https://vitest.dev/) for unit testing.
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+This will run all the test files ending with `.test.ts` or `.test.tsx` in the `src` directory. You can also run tests in watch mode, which is useful during development:
+
+```bash
+npm test -- --watch
+```
