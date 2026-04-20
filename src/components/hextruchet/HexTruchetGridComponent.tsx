@@ -1,8 +1,8 @@
-import { HexTruchetSettings } from '@/components/hextruchet/HexTruchetSettings';
-import React, { useEffect } from 'react';
-import { HexMeta, Point } from "../common/HexTypes";
+import {HexTruchetSettings} from '@/components/hextruchet/HexTruchetSettings';
+import React, {JSX, useEffect} from 'react';
+import {HexMeta, Point} from "../common/HexTypes";
 import GrafUtils from './GrafUtils';
-import { HexData } from './HexData';
+import {HexData} from './HexData';
 import HexTile from './HexTile';
 
 interface HexTruchetGridComponentProps {
@@ -10,11 +10,12 @@ interface HexTruchetGridComponentProps {
     hexMeta: HexMeta;
 }
 
-const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSettings, hexMeta }) => {
+const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({htSettings, hexMeta}) => {
 
-    useEffect(() => { }, [htSettings]);
+    useEffect(() => {
+    }, [htSettings]);
 
-    const { size, width, height, showGrid, gridColor, gridFill } = htSettings;
+    const {size, width, height, showGrid, gridColor, gridFill} = htSettings;
     // max(width, 1200) - to prevent very big tiles when width is small
     const hexW = Math.max(Math.sqrt(3) * size * (width + 1), 1200);  // sqrt(3) comes from sin(60°)
     const hexH = 1.5 * size * height + size;
@@ -28,12 +29,12 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
 
     function buildSvgArc(id: string, m1: Point, center: Point, m2: Point): JSX.Element {
         return <path key={id} stroke="blue" strokeWidth="3" fill="none"
-            d={`M${m1.x} ${m1.y} Q${center.x} ${center.y} ${m2.x} ${m2.y}`} />;
+                     d={`M${m1.x} ${m1.y} Q${center.x} ${center.y} ${m2.x} ${m2.y}`}/>;
     }
 
     const buildSvgLine = (id: string, m1: Point, m2: Point): JSX.Element => {
         return <line key={id} stroke="blue" strokeWidth="3"
-            x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y} />;
+                     x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y}/>;
     }
 
     const grid = [];
@@ -45,7 +46,7 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({ htSet
                 }
                 const key = `${col}:${row}`;
                 const hex = new HexData(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={gridFill} showCoord={htSettings.showCoord} />);
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={gridFill} showCoord={htSettings.showCoord}/>);
             }
         }
     }

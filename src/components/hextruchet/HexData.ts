@@ -1,5 +1,6 @@
 import GrafUtils from "./GrafUtils";
-import { Point } from "../common/HexTypes";
+import {Point} from "../common/HexTypes";
+import {JSX} from "react";
 
 export class HexData {
 
@@ -40,8 +41,8 @@ export class HexData {
     }
 
     showTruchetTile(formula: string,
-        buildArc: (arg0: string, arg1: Point, arg2: Point, arg3: Point) => JSX.Element,
-        buildLine: (arg0: string, arg1: Point, arg2: Point) => JSX.Element) {
+                    buildArc: (arg0: string, arg1: Point, arg2: Point, arg3: Point) => JSX.Element,
+                    buildLine: (arg0: string, arg1: Point, arg2: Point) => JSX.Element) {
 
         const sidePairs = GrafUtils.parseTruchetFormula(formula);
         const curves: React.JSX.Element[] = [];

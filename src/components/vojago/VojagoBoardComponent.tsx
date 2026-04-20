@@ -1,10 +1,10 @@
-import { VojagoSettings } from '@/components/vojago/VojagoSettings';
-import React, { ChangeEvent } from 'react';
-import { HexMeta, Point, RenderMode, truchetCode, TruchetCode } from "../common/HexTypes";
+import {VojagoSettings} from '@/components/vojago/VojagoSettings';
+import React, {ChangeEvent, JSX} from 'react';
+import {HexMeta, Point, RenderMode, truchetCode, TruchetCode} from "../common/HexTypes";
 import GrafUtils from '../hextruchet/GrafUtils';
-import { HexData } from '../hextruchet/HexData';
+import {HexData} from '../hextruchet/HexData';
 import HexTruchetGridComponent from '../hextruchet/HexTruchetGridComponent';
-import { BoardAction, GameState, PlayerOrientation, VojagoBoard } from "./VojagoCommon";
+import {BoardAction, GameState, PlayerOrientation, VojagoBoard} from "./VojagoCommon";
 
 interface VojagoBoardComponentProps {
     gameState: GameState;
@@ -14,7 +14,7 @@ interface VojagoBoardComponentProps {
     onBoardAction: (action: BoardAction, tile?: TruchetCode | string) => void;
 }
 
-const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, settings, board, hexMeta, onBoardAction: onBoardChange }) => {
+const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, settings, board, hexMeta, onBoardAction: onBoardChange}) => {
 
     const [tileCode, setTileCode] = React.useState<string>('');
 
@@ -41,14 +41,14 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, 
     const getArcBuilder = (strokeColor: string) => {
         return function buildSvgArc(id: string, m1: Point, center: Point, m2: Point): JSX.Element {
             return <path key={id} stroke={strokeColor} strokeWidth="5" fill="none"
-                d={`M${m1.x} ${m1.y} Q${center.x} ${center.y} ${m2.x} ${m2.y}`} />;
+                         d={`M${m1.x} ${m1.y} Q${center.x} ${center.y} ${m2.x} ${m2.y}`}/>;
         }
     }
 
     const getLineBuilder = (strokeColor: string) => {
         return function buildSvgLine(id: string, m1: Point, m2: Point): JSX.Element {
             return <line key={id} stroke={strokeColor} strokeWidth="5"
-                x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y} />;
+                         x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y}/>;
         }
     }
 
@@ -75,7 +75,7 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, 
         const p = player.position;
         const hex = new HexData(p.col, p.row, gu);
         const pMiddle = hex.middles()[p.orientation];
-        extra.push(new ExtraElement(p.row, p.col, <circle key="player" cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color} />));
+        extra.push(new ExtraElement(p.row, p.col, <circle key="player" cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color}/>));
     })
 
     board.players.forEach((player) => {
@@ -99,32 +99,35 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({ gameState, 
             }
             return hexMeta.truchetCode(row, col);
         },
-        extra: (row: number, col: number) => { return findExtra(row, col); }
+        extra: (row: number, col: number) => {
+            return findExtra(row, col);
+        }
     };
 
     return (
         <div>
-            {gameState === GameState.Settings && <HexTruchetGridComponent htSettings={htSettings} hexMeta={hexMeta} />}
+            {gameState === GameState.Settings && <HexTruchetGridComponent htSettings={htSettings} hexMeta={hexMeta}/>}
 
             {gameState === GameState.Playing &&
                 <div>
-                    <span style={{ color: board.players[board.currentPlayer].color }}>currentPlayer: {board.currentPlayer + 1}</span>
+                    <span style={{color: board.players[board.currentPlayer].color}}>currentPlayer: {board.currentPlayer + 1}</span>
                     {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)}
-                    <input type="text" maxLength={1} onChange={handleInputChange} className='ifDimensions mr-4 ml-4' />
+                    <input type="text" maxLength={1} onChange={handleInputChange} className='ifDimensions mr-4 ml-4'/>
                     <button onClick={handleNextStep}> Next step</button>
-                    <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta} />
+                    <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta}/>
                 </div>}
 
             {gameState === GameState.Finished &&
                 <div>
-                    <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta} />
+                    <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta}/>
                 </div>}
         </div>
     );
 };
 
 class ExtraElement {
-    constructor(public row: number, public col: number, public element: JSX.Element) { }
+    constructor(public row: number, public col: number, public element: JSX.Element) {
+    }
 }
 
 export default VojagoBoardComponent;

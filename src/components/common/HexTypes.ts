@@ -1,3 +1,5 @@
+import {JSX} from "react";
+
 export class TruchetTile {
     row: number;
     col: number;
@@ -24,7 +26,8 @@ export class Point {
 }
 
 export class HexPoint {
-    constructor(public q: number, public r: number) { }
+    constructor(public q: number, public r: number) {
+    }
 }
 
 export enum TruchetCode {
@@ -49,24 +52,42 @@ export enum TruchetCode {
 
 export const truchetCode = (code: string): TruchetCode | null => {
     switch (code) {
-        case " ": return TruchetCode.TEmpty;
-        case "_": return TruchetCode.TSp1;
-        case "^": return TruchetCode.TSp2;
-        case "*": return TruchetCode.TStar;
-        case "\\": return TruchetCode.TL;
-        case "/": return TruchetCode.TR;
-        case "0": return TruchetCode.T0;
-        case "1": return TruchetCode.T1;
-        case "2": return TruchetCode.T2;
-        case "3": return TruchetCode.T3;
-        case "4": return TruchetCode.T4;
-        case "5": return TruchetCode.T5;
-        case "6": return TruchetCode.T6;
-        case "7": return TruchetCode.T7;
-        case "8": return TruchetCode.T8;
-        case "9": return TruchetCode.T9;
-        case "#": return TruchetCode.TFull;
-        default: return null;
+        case " ":
+            return TruchetCode.TEmpty;
+        case "_":
+            return TruchetCode.TSp1;
+        case "^":
+            return TruchetCode.TSp2;
+        case "*":
+            return TruchetCode.TStar;
+        case "\\":
+            return TruchetCode.TL;
+        case "/":
+            return TruchetCode.TR;
+        case "0":
+            return TruchetCode.T0;
+        case "1":
+            return TruchetCode.T1;
+        case "2":
+            return TruchetCode.T2;
+        case "3":
+            return TruchetCode.T3;
+        case "4":
+            return TruchetCode.T4;
+        case "5":
+            return TruchetCode.T5;
+        case "6":
+            return TruchetCode.T6;
+        case "7":
+            return TruchetCode.T7;
+        case "8":
+            return TruchetCode.T8;
+        case "9":
+            return TruchetCode.T9;
+        case "#":
+            return TruchetCode.TFull;
+        default:
+            return null;
     }
 }
 
@@ -78,7 +99,9 @@ export enum RenderMode {
 
 export interface HexMeta {
     renderMode(row: number, col: number): RenderMode;
+
     truchetCode(row: number, col: number): TruchetCode;
+
     extra(row: number, col: number): JSX.Element[] | null;
 }
 
