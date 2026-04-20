@@ -20,7 +20,10 @@ const DinuKevakoComponent: React.FC = () => {
         <Layout>
             <h1 className="text-4xl font-bold mb-4">Dinu Kevako</h1>
             <p className="mb-4">
-                Dinu Kevako estas silabara skribsistemo por Esperanto. Ĉiu signo prezentas silabon en formo KV aŭ KVK. La partoj de signo estas aranĝitaj vertikale: meze estas signo por vokalo, supre estas komenca konsonanto(j), kaj sub la vokalo estas fina konsonanto(j) se ili prezentas.
+                Dinu Kevako estas silabara skribsistemo por Esperanto.
+                Ĉiu signo prezentas silabon en formo KV aŭ KVK. <br/>
+                La partoj de signo estas aranĝitaj vertikale: meze estas signo por vokalo,
+                supre estas komenca konsonanto, kaj la fina konsonanto estas sub la vokalo, se ĝi ĉeestas.
             </p>
             <div>
                 <textarea
