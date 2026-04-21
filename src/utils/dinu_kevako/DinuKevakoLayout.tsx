@@ -2,12 +2,13 @@ import React from 'react';
 import { Vorto } from './tipoj';
 import {
     GLYPH_W, GLYPH_K_H,
-    VOWEL_W,
+    VOWEL_W, VOWEL_W_DOUBLE,
     GAP_KV,
     K_ZONE_TOP, F_ZONE_TOP,
     LINE_STRIDE,
-    CONSONANT_OFFSET_X, GAP_SYLLABLE, GAP_WORD,
+    GAP_SYLLABLE, GAP_WORD,
     NUL_KO,
+    estasUnuopa,
 } from './konstantoj';
 import { DinuKevakoSvg } from './DinuKevakoSvg';
 
@@ -47,38 +48,52 @@ export class DinuKevakoLayout {
             for (let si = 0; si < vorto.length; si++) {
                 const silabo = vorto[si];
 
+                // Determine if this syllable has any double-width consonant
+                const kIsDouble = silabo.k && !estasUnuopa(silabo.k);
+                const fIsDouble = silabo.f && !estasUnuopa(silabo.f);
+                const isDoubleWidth = kIsDouble || fIsDouble;
+
+                // Choose vowel width based on consonant widths
+                const vowelW = isDoubleWidth ? VOWEL_W_DOUBLE : VOWEL_W;
+
                 // wrap if the next syllable column would overflow
-                if (x + VOWEL_W > maxX) {
+                if (x + vowelW > maxX) {
                     novaVico();
                 }
 
                 const col = `c${kolIndekso++}`;
 
+                // Calculate consonant offsets based on their actual width
+                const kConsonantW = (silabo.k && !estasUnuopa(silabo.k)) ? GLYPH_W * 2 : GLYPH_W;
+                const fConsonantW = (silabo.f && !estasUnuopa(silabo.f)) ? GLYPH_W * 2 : GLYPH_W;
+                const kOffsetX = (vowelW - kConsonantW) / 2;
+                const fOffsetX = (vowelW - fConsonantW) / 2;
+
                 // ── k (initial consonant) — centred over the vowel ────────
                 rezulto.push(
-                    <g key={`${col}k`} transform={`translate(${x + CONSONANT_OFFSET_X}, ${baseY + K_ZONE_TOP})`}>
-                        {svg.glifoPerLitero(silabo.k || NUL_KO, `${col}ki`)}
+                    <g key={`${col}k`} transform={`translate(${x + kOffsetX}, ${baseY + K_ZONE_TOP})`}>
+                        {svg.glifoPerLitero(silabo.k || NUL_KO, `${col}ki`, vowelW)}
                     </g>
                 );
 
                 // ── v (vowel) — layout anchor at x ────────────────────────
                 rezulto.push(
                     <g key={`${col}v`} transform={`translate(${x}, ${baseY})`}>
-                        {svg.glifoPerLitero(silabo.v, `${col}vi`)}
+                        {svg.glifoPerLitero(silabo.v, `${col}vi`, vowelW)}
                     </g>
                 );
 
                 // ── f (final consonant) — centred under the vowel ─────────
                 if (silabo.f) {
                     rezulto.push(
-                        <g key={`${col}f`} transform={`translate(${x + CONSONANT_OFFSET_X}, ${baseY + F_ZONE_TOP})`}>
-                            {svg.glifoPerLitero(silabo.f, `${col}fi`)}
+                        <g key={`${col}f`} transform={`translate(${x + fOffsetX}, ${baseY + F_ZONE_TOP})`}>
+                            {svg.glifoPerLitero(silabo.f, `${col}fi`, vowelW)}
                         </g>
                     );
                 }
 
                 // advance x by vowel width (the column anchor unit)
-                x += VOWEL_W + GAP_SYLLABLE;
+                x += vowelW + GAP_SYLLABLE;
             }
 
             // extra word gap (replace last syllable gap with word gap)

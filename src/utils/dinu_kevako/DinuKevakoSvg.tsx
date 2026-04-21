@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     GLYPH_W, GLYPH_K_H, GLYPH_RADIUS, GLYPH_STROKE,
-    VOWEL_W, VOWEL_H, VOWEL_CORNER_R, VOWEL_VERT_H,
+    VOWEL_W, VOWEL_W_DOUBLE, VOWEL_H, VOWEL_CORNER_R, VOWEL_VERT_H,
 } from './konstantoj';
 
 /**
@@ -17,19 +17,19 @@ export class DinuKevakoSvg {
     // ── Dispatcher ────────────────────────────────────────────────────────────
 
     /** Returns the SVG fragment for any Esperanto letter (or fallback). */
-    glifoPerLitero(litero: string, key: string): React.ReactElement {
+    glifoPerLitero(litero: string, key: string, vowelW: number = VOWEL_W): React.ReactElement {
         switch (litero) {
             // vowels
             case 'a':
-                return this.vokalo_a(key);
+                return this.vokalo_a(key, vowelW);
             case 'e':
-                return this.vokalo_e(key);
+                return this.vokalo_e(key, vowelW);
             case 'i':
-                return this.vokalo_i(key);
+                return this.vokalo_i(key, vowelW);
             case 'o':
-                return this.vokalo_o(key);
+                return this.vokalo_o(key, vowelW);
             case 'u':
-                return this.vokalo_u(key);
+                return this.vokalo_u(key, vowelW);
             // consonants
             case 'b':
                 return this.konsonanto_b(key);
@@ -84,29 +84,29 @@ export class DinuKevakoSvg {
 
     // ── Vowels (5) ────────────────────────────────────────────────────────────
 
-    vokalo_a(key: string): React.ReactElement {
+    vokalo_a(key: string, vowelW: number = VOWEL_W): React.ReactElement {
         return (
             <g key={key} data-litero="a">
-                <line x1={0} y1={0} x2={VOWEL_W} y2={0}
+                <line x1={0} y1={0} x2={vowelW} y2={0}
                       stroke="#555" strokeWidth={VOWEL_H} strokeLinecap="round"/>
             </g>
         );
     }
 
-    vokalo_e(key: string): React.ReactElement {
-        return this._renderVok(key, 'e', `scale(1,-1)`);
+    vokalo_e(key: string, vowelW: number = VOWEL_W): React.ReactElement {
+        return this._renderVok(key, 'e', vowelW, `scale(1,-1)`);
     }
 
-    vokalo_i(key: string): React.ReactElement {
-        return this._renderVok(key, 'i');
+    vokalo_i(key: string, vowelW: number = VOWEL_W): React.ReactElement {
+        return this._renderVok(key, 'i', vowelW);
     }
 
-    vokalo_o(key: string): React.ReactElement {
-        return this._renderVok(key, 'o', `translate(${VOWEL_W},0) scale(-1,-1)`);
+    vokalo_o(key: string, vowelW: number = VOWEL_W): React.ReactElement {
+        return this._renderVok(key, 'o', vowelW, `translate(${vowelW},0) scale(-1,-1)`);
     }
 
-    vokalo_u(key: string): React.ReactElement {
-        return this._renderVok(key, 'u', `translate(${VOWEL_W},0) scale(-1,1)`);
+    vokalo_u(key: string, vowelW: number = VOWEL_W): React.ReactElement {
+        return this._renderVok(key, 'u', vowelW, `translate(${vowelW},0) scale(-1,1)`);
     }
 
     // ── Consonant glyphs ──────────────────────────────────────────────────────
@@ -143,8 +143,18 @@ export class DinuKevakoSvg {
         return this._renderKon(key, 'ĝ', this._gxShape());
     }
 
+    /** Two hollow circles side by side: one at x=0-100, one at x=100-200. Total width: 200, height: 100 */
     konsonanto_h(key: string): React.ReactElement {
-        return this._cirkel(key, 'h');
+        return (
+            <g key={key} data-litero="h">
+                {/* First circle: x=0-100 */}
+                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}/>
+                {/* Second circle: x=100-200 */}
+                <circle cx={GLYPH_W + GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}/>
+            </g>
+        );
     }
 
     konsonanto_hx(key: string): React.ReactElement {
@@ -155,8 +165,9 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 'j');
     }
 
+    /** Two m-shapes side by side, touching at the center */
     konsonanto_jx(key: string): React.ReactElement {
-        return this._cirkel(key, 'ĵ');
+        return this._renderKon(key, 'ĵ', this._jxShape());
     }
 
     /** C-shape */
@@ -192,8 +203,9 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 's');
     }
 
+    /** Cursive lowercase m: vertical flip of jx (two n-shapes side by side) */
     konsonanto_sx(key: string): React.ReactElement {
-        return this._cirkel(key, 'ŝ');
+        return this._renderKon(key, 'ŝ', this._jxShape(), `translate(0,${GLYPH_K_H}) scale(1,-1)`);
     }
 
     /** V-shape */
@@ -228,10 +240,10 @@ export class DinuKevakoSvg {
     // ── Private: element renderers ────────────────────────────────────────────
 
     /** Wraps a path string in a vowel <g> element, with optional transform. */
-    private _renderVok(key: string, litero: string, transform?: string): React.ReactElement {
+    private _renderVok(key: string, litero: string, vowelW: number = VOWEL_W, transform?: string): React.ReactElement {
         return (
             <g key={key} data-litero={litero} transform={transform}>
-                <path d={this._iShape()} fill="none" stroke="#555"
+                <path d={this._iShape(vowelW)} fill="none" stroke="#555"
                       strokeWidth={VOWEL_H} strokeLinecap="round" strokeLinejoin="round"/>
             </g>
         );
@@ -264,9 +276,9 @@ export class DinuKevakoSvg {
      *   start right → go left → arc bottom-left corner → go down.
      *   e = scale(1,-1)  |  u = translate(W,0) scale(-1,1)  |  o = translate(W,0) scale(-1,-1)
      */
-    private _iShape(): string {
+    private _iShape(vowelW: number = VOWEL_W): string {
         const R = VOWEL_CORNER_R;
-        return [`M ${VOWEL_W},0`, `H ${R}`, `A ${R},${R} 0 0,0 0,${R}`, `V ${VOWEL_VERT_H}`].join(' ');
+        return [`M ${vowelW},0`, `H ${R}`, `A ${R},${R} 0 0,0 0,${R}`, `V ${VOWEL_VERT_H}`].join(' ');
     }
 
     /** V-shape: top-left → bottom-centre → top-right  (t; flip→d) */
@@ -288,6 +300,19 @@ export class DinuKevakoSvg {
         const midY = GLYPH_K_H / 2;
         const r = GLYPH_W / 2;
         return [`M 0,0`, `V ${midY}`, `A ${r},${r} 0 0,0 ${GLYPH_W},${midY}`, `V 0`].join(' ');
+    }
+
+
+    /** Double m (jx): two M-shapes side by side, touching at center. Total width: 200, height: 100 */
+    private _jxShape(): string {
+        const midY = GLYPH_K_H / 2;
+        const r = GLYPH_W / 2;
+        // M-shape: top-left → down → arc upward → up → top-right
+        // Left M at x=0-100: top-left → down → arc → up
+        const leftM = [`M 0,0`, `V ${midY}`, `A ${r},${r} 0 0,0 ${GLYPH_W},${midY}`, `V 0`].join(' ');
+        // Right M at x=100-200: top-left → down → arc → up (same as left M, just offset to 100-200)
+        const rightM = `M ${GLYPH_W},0 V ${midY} A ${r},${r} 0 0,0 ${GLYPH_W * 2},${midY} V 0`;
+        return `${leftM} ${rightM}`;
     }
 
     /** C-shape: top-right → half-width left → left semicircle → half-width right → bottom-right  (k; flip→g) */

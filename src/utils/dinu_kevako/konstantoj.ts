@@ -10,7 +10,8 @@ export const GLYPH_STROKE   =   5;  // stroke-width for consonant glyphs (matche
 export const GLYPH_RADIUS   = GLYPH_W / 2 - GLYPH_STROKE / 2;  // 47.5
 
 // ── Vowel line ────────────────────────────────────────────────────────────────
-export const VOWEL_W        = 150;  // length of the vowel stroke
+export const VOWEL_W        = 150;  // length of the vowel stroke (single-width syllable)
+export const VOWEL_W_DOUBLE = 250;  // length of the vowel stroke (when k or f is double-width)
 export const VOWEL_H        =   5;  // stroke-width of the vowel line
 export const VOWEL_CORNER_R =  25;  // radius of the rounded corner used in I, E, O, U
 export const VOWEL_VERT_H   = 75;  // length of the vertical descender used in I, E, O, U
@@ -61,3 +62,16 @@ export const LINE_SOLID     = '#c8b89a';
 export const LINE_DOTTED    = '#d9c9b0';
 export const VERT_COLOR     = '#ddd0bc';
 
+
+// ── Consonant width classification ───────────────────────────────────────────
+// Single consonants occupy one glyph cell (GLYPH_W = 100).
+// All others are "double" — two cells wide (2 × GLYPH_W = 200).
+const UNUOPAJ_KONSONANTOJ = new Set<string>([
+    'd', 'g', 'ĝ', 'k', 'l', 'm', 'n', 'r', 't', 'ĉ',
+    // 'h', 'ŝ', and 'ĵ' are now double-width
+]);
+
+/** Returns true if the consonant glyph fits in a single GLYPH_W cell. */
+export function estasUnuopa(litero: string): boolean {
+    return UNUOPAJ_KONSONANTOJ.has(litero);
+}
