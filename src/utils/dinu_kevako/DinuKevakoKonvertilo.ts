@@ -1,10 +1,4 @@
-export type Silabo = {
-    k: string;
-    v: string;
-    f: string;
-};
-
-export type Vorto = Silabo[];
+import { Silabo, Vorto } from './tipoj';
 
 export class DinuKevakoKonvertilo {
     private estasVokalo(char: string): boolean {

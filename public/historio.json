@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.9.1",
+        "dato": "2026-04-21",
+        "komento": "unua versio kun defaulta aranĝo de silaboj vertikale kaj de vortoj en vicoj"
+    },
+    {
         "versio": "0.9.0",
         "dato": "2026-04-20",
         "komento": "komenco de `Dinu Kevako`, nun pretas divido je silaboj"

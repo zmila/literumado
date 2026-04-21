@@ -61,6 +61,7 @@ view at:
 # historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+- 0.9.1 [2026-04-21] unua versio kun defaulta aranĝo de silaboj vertikale kaj de vortoj en vicoj
 - 0.9.0 [2026-04-20] komenco de `Dinu Kevako`, nun pretas divido je silaboj
 - 0.8.0 [2026-04-03] 
   Aldonis prononcilojn en Esperanto (Dekuma/Dudekuma) kun subteno por negativaj nombrojn.
