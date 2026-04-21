@@ -45,12 +45,12 @@ view at:
 # todo
 - [ ] (med) en dekduuma konvertilo aldonu bildon kun miaj variantoj de la kaktovikaj manskribitaj ciferoj
 - dinu kevako:
-  - nova paĝo kun "input" / "silabado" / dinu_kevaka prezento kiel SVG
-  - kodo por silabado
-  - kodo por montri defaŭltan svg por ajna letero/silabo - malplena kvadrato
-  - svg-kodoj por ĉiu letero
-  - komponado de silabaj glifoj
-  - ligaturoj
+  [+] nova paĝo kun "input" / "silabado" / dinu_kevaka prezento kiel SVG
+  [+] kodo por silabado
+  [ ] kodo por montri defaŭltan svg por ajna letero/silabo - malplena kvadrato
+  [ ] svg-kodoj por ĉiu letero
+  [ ] komponado de silabaj glifoj
+  [ ] ligaturoj
 - [ ] (med) kreu bel-ŝav konvertilon
 - [ ] (med) kopiu eo-bali konvertilon
 - [ ] (med) kopiu eo-lontara konvertilon

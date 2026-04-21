@@ -56,6 +56,8 @@ describe('DinuKevakoKonvertilo', () => {
             { input: 'eksci', expected: '(◦|e|k)-(sc|i)' }, // VC-CCV
             { input: 'dekstra', expected: '(d|e|ks)-(tr|a)' }, // CVCC-CCV
             { input: 'adiaŭas', expected: '(◦|a)-(d|i)-(◦|a|ŭ)-(◦|a|s)' }, // V-CV-V̆-VC
+            { input: 'lamp-lumo', expected: '(l|a|mp)-(l|u)-(m|o)' }, // fino de silabo
+            { input: "sent'ema", expected: '(s|e|nt)-(◦|e)-(m|a)' }, // fino de silabo
         ];
 
         testCases.forEach(({ input, expected }) => {
