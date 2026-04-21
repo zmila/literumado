@@ -1,4 +1,5 @@
-import { Silabo, Vorto } from './tipoj';
+import {Silabo, Vorto} from './tipoj';
+import {NUL_KO} from './konstantoj';
 
 export class DinuKevakoKonvertilo {
     private estasVokalo(char: string): boolean {
@@ -87,7 +88,7 @@ export class DinuKevakoKonvertilo {
     }
 
     private formatigiSilabon(s: Silabo): string {
-        const k = s.k || '◦';
+        const k = s.k || NUL_KO;
         if (s.f) {
             return `(${k}|${s.v}|${s.f})`;
         }

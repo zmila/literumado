@@ -1,47 +1,15 @@
 import React from 'react';
 import { Vorto } from './tipoj';
 import {
-    GLYPH_W, GLYPH_K_H, GLYPH_RADIUS, GLYPH_STROKE,
-    VOWEL_W, VOWEL_H,
+    GLYPH_W, GLYPH_K_H,
+    VOWEL_W,
     GAP_KV,
     K_ZONE_TOP, F_ZONE_TOP,
     LINE_STRIDE,
     CONSONANT_OFFSET_X, GAP_SYLLABLE, GAP_WORD,
+    NUL_KO,
 } from './konstantoj';
-
-// ── Default "not implemented" glyph (hollow circle) ──────────────────────────
-function defaultGlifo(key: string, label: string): React.ReactElement {
-    return (
-        <g key={key} data-litero={label}>
-            <circle
-                cx={GLYPH_W / 2}
-                cy={GLYPH_W / 2}
-                r={GLYPH_RADIUS}
-                fill="none"
-                stroke="#888"
-                strokeWidth={GLYPH_STROKE}
-            />
-        </g>
-    );
-}
-
-// ── Vowel line glyph ──────────────────────────────────────────────────────────
-function vokalGlifo(key: string, litero: string): React.ReactElement {
-    // vowel line starts at x=0 (left edge of vowel anchor), full VOWEL_W width
-    return (
-        <g key={key} data-litero={litero}>
-            <line
-                x1={0}
-                y1={0}
-                x2={VOWEL_W}
-                y2={0}
-                stroke="#555"
-                strokeWidth={VOWEL_H}
-                strokeLinecap="round"
-            />
-        </g>
-    );
-}
+import { DinuKevakoSvg } from './DinuKevakoSvg';
 
 // ── Layout ────────────────────────────────────────────────────────────────────
 
@@ -50,6 +18,8 @@ export interface ArangiAgordoj {
     padLeft?: number;
     padTop?: number;
 }
+
+const svg = new DinuKevakoSvg();
 
 export class DinuKevakoLayout {
     /**
@@ -62,8 +32,8 @@ export class DinuKevakoLayout {
         const maxX   = agordoj.svgWidth - padL;
 
         const rezulto: React.ReactElement[] = [];
-        let x        = padL;
-        let baseY    = baseY0;
+        let x          = padL;
+        let baseY      = baseY0;
         let kolIndekso = 0;
 
         const novaVico = () => {
@@ -87,14 +57,14 @@ export class DinuKevakoLayout {
                 // ── k (initial consonant) — centred over the vowel ────────
                 rezulto.push(
                     <g key={`${col}k`} transform={`translate(${x + CONSONANT_OFFSET_X}, ${baseY + K_ZONE_TOP})`}>
-                        {defaultGlifo(`${col}ki`, silabo.k || '◦')}
+                        {svg.glifoPerLitero(silabo.k || NUL_KO, `${col}ki`)}
                     </g>
                 );
 
                 // ── v (vowel) — layout anchor at x ────────────────────────
                 rezulto.push(
                     <g key={`${col}v`} transform={`translate(${x}, ${baseY})`}>
-                        {vokalGlifo(`${col}vi`, silabo.v)}
+                        {svg.glifoPerLitero(silabo.v, `${col}vi`)}
                     </g>
                 );
 
@@ -102,7 +72,7 @@ export class DinuKevakoLayout {
                 if (silabo.f) {
                     rezulto.push(
                         <g key={`${col}f`} transform={`translate(${x + CONSONANT_OFFSET_X}, ${baseY + F_ZONE_TOP})`}>
-                            {defaultGlifo(`${col}fi`, silabo.f)}
+                            {svg.glifoPerLitero(silabo.f, `${col}fi`)}
                         </g>
                     );
                 }

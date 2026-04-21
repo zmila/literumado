@@ -1,3 +1,6 @@
+// ── Special symbols ───────────────────────────────────────────────────────────
+export const NUL_KO = '◦';  // placeholder for a missing consonant
+
 // ── Glyph cell ────────────────────────────────────────────────────────────────
 export const GLYPH_W        = 100;  // width of one glyph cell (k or f consonant)
 export const GLYPH_K_H      = 100;  // height of the initial-consonant (k) zone
@@ -9,6 +12,8 @@ export const GLYPH_RADIUS   = GLYPH_W / 2 - GLYPH_STROKE / 2;  // 47.5
 // ── Vowel line ────────────────────────────────────────────────────────────────
 export const VOWEL_W        = 150;  // length of the vowel stroke
 export const VOWEL_H        =   5;  // stroke-width of the vowel line
+export const VOWEL_CORNER_R =  25;  // radius of the rounded corner used in I, E, O, U
+export const VOWEL_VERT_H   = 75;  // length of the vertical descender used in I, E, O, U
 
 // ── Vertical gaps inside one syllable column ─────────────────────────────────
 export const GAP_KV         =  25;  // gap between bottom of k zone and vowel line
