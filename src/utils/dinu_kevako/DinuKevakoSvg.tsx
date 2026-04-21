@@ -112,11 +112,35 @@ export class DinuKevakoSvg {
     // ── Consonant glyphs ──────────────────────────────────────────────────────
 
     konsonanto_b(key: string): React.ReactElement {
-        return this._cirkel(key, 'b');
+        return (
+            <g key={key} data-litero="b">
+                {/* Left part: right semi-circle (from p's right semi-circle, rotated 180°) */}
+                <path d={this._bSemicircleLeft()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Connecting curve: cubic bezier rotated 180° */}
+                <path d={this._bConnectingCurve()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Right part: vertical line (from p's left line, rotated 180°) */}
+                <path d={this._bLineRight()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
     }
 
     konsonanto_c(key: string): React.ReactElement {
-        return this._cirkel(key, 'c');
+        return (
+            <g key={key} data-litero="c">
+                {/* Left part: vertical line at x=0 */}
+                <path d={this._cLineLeft()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Connecting curve placeholder */}
+                <path d={this._cConnectingCurve()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Right part: left semi-circle */}
+                <path d={this._cSemicircleRight()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
     }
 
     /** Cursive-x: two crossing vertical semicircles */
@@ -200,7 +224,19 @@ export class DinuKevakoSvg {
     }
 
     konsonanto_p(key: string): React.ReactElement {
-        return this._cirkel(key, 'p');
+        return (
+            <g key={key} data-litero="p">
+                {/* Left part: vertical line at x=0 */}
+                <path d={this._pLineLeft()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Connecting curve: cubic bezier from line endpoint to semicircle start */}
+                <path d={this._pConnectingCurve()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Right part: right semi-circle at rightmost position (x=100-200) */}
+                <path d={this._pSemicircleRight()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
     }
 
     /** Top-right hook — l rotated 180° */
@@ -360,6 +396,99 @@ export class DinuKevakoSvg {
         // N-shape without first vertical: starts with arc downward → right downstroke
         // M at middle-top-left, arc down to middle-bottom-right, V up to top-right
         return [`M ${GLYPH_W},${midY}`, `A ${r},${r} 0 0,1 ${GLYPH_W * 2},${midY}`, `V ${GLYPH_K_H}`].join(' ');
+    }
+
+    /** P-shape left part: vertical line from top to bottom at x=0 */
+    private _pLineLeft(): string {
+        // Vertical line: top to bottom at x=0
+        return `M 0,0 V ${GLYPH_K_H}`;
+    }
+
+    /** P-shape connecting curve: cubic bezier from line bottom to semicircle top */
+    private _pConnectingCurve(): string {
+        const startX = 0;
+        const startY = GLYPH_K_H;
+
+        const cp1X = GLYPH_W / 3;
+        const cp1Y = GLYPH_K_H / 3;
+
+        const cp2X = GLYPH_W;
+        const cp2Y = 0;
+
+        const endX = GLYPH_W + GLYPH_W / 2;
+        const endY = 0;
+        return `M ${startX},${startY} C ${cp1X},${cp1Y} ${cp2X},${cp2Y} ${endX},${endY}`;
+    }
+
+    /** C-shape connecting curve: cubic bezier from line bottom to semicircle top */
+    private _cConnectingCurve(): string {
+        const startX = 0;
+        const startY = GLYPH_K_H;
+
+        const cp1X = GLYPH_W / 3;
+        const cp1Y = GLYPH_K_H / 3;
+
+        const cp2X = GLYPH_W;
+        const cp2Y = 0;
+
+        const endX = GLYPH_W * 2;
+        const endY = 0;
+        return `M ${startX},${startY} C ${cp1X},${cp1Y} ${cp2X},${cp2Y} ${endX},${endY}`;
+    }
+
+    /** P-shape right part: right semi-circle positioned at x=100-150 (moved 50px left from edge) */
+    private _pSemicircleRight(): string {
+        const r = GLYPH_W / 2;
+        const rightX = GLYPH_W + GLYPH_W / 2;  // 150: center of right square
+        // Right semi-circle: from top to bottom on the right edge
+        // M at top-right, arc down to bottom-right
+        return [`M ${rightX},0`, `A ${r},${r} 0 0,1 ${rightX},${GLYPH_K_H}`].join(' ');
+    }
+
+    /** B-shape left part: left semi-circle (p's right semi-circle rotated 180° around center) */
+    private _bSemicircleLeft(): string {
+        const r = GLYPH_W / 2;
+        const leftX = GLYPH_W / 2;  // 50: center of left square (mirrored from p's 150)
+        // Left semi-circle: from bottom to top on the left edge (mirrored orientation)
+        // M at bottom-left, arc up to top-left
+        return [`M ${leftX},${GLYPH_K_H}`, `A ${r},${r} 0 0,1 ${leftX},0`].join(' ');
+    }
+
+    /** B-shape connecting curve: cubic bezier rotated 180° around center (100, 50) */
+    private _bConnectingCurve(): string {
+        const startX = GLYPH_W / 2;
+        const startY = GLYPH_K_H;
+
+        const cp1X = GLYPH_W;
+        const cp1Y = GLYPH_K_H;
+
+        const cp2X = 2 * GLYPH_W - GLYPH_W/3;
+        const cp2Y = 2 * GLYPH_K_H / 3;
+
+        const endX = 2 * GLYPH_W;
+        const endY = 0;
+        return `M ${startX},${startY} C ${cp1X},${cp1Y} ${cp2X},${cp2Y} ${endX},${endY}`;
+    }
+
+    /** B-shape right part: vertical line from bottom to top at x=200 */
+    private _bLineRight(): string {
+        // Vertical line from bottom to top at rightmost position (rotated from p's left line)
+        return `M ${GLYPH_W * 2},${GLYPH_K_H} V 0`;
+    }
+
+    /** C-shape left part: vertical line from top to bottom at x=0 */
+    private _cLineLeft(): string {
+        // Vertical line: top to bottom at x=0 (very left edge)
+        return `M 0,0 V ${GLYPH_K_H}`;
+    }
+
+    /** C-shape right part: left semi-circle positioned at x=200 (moved GLYPH_W/2 to the right from x=150) */
+    private _cSemicircleRight(): string {
+        const r = GLYPH_W / 2;
+        const rightX = GLYPH_W + GLYPH_W / 2 + GLYPH_W / 2;  // 200: moved further right
+        // Left semi-circle: from bottom to top on the right edge (mirrored orientation)
+        // M at bottom-right, arc up to top-right
+        return [`M ${rightX},${GLYPH_K_H}`, `A ${r},${r} 0 0,1 ${rightX},0`].join(' ');
     }
 
     /** C-shape: top-right → half-width left → left semicircle → half-width right → bottom-right  (k; flip→g) */
