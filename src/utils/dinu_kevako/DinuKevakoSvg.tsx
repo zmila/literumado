@@ -1,7 +1,7 @@
 import React from 'react';
 import {
     GLYPH_W, GLYPH_K_H, GLYPH_RADIUS, GLYPH_STROKE,
-    VOWEL_W, VOWEL_W_DOUBLE, VOWEL_H, VOWEL_CORNER_R, VOWEL_VERT_H,
+    VOWEL_W, VOWEL_W_DOUBLE, VOWEL_H, VOWEL_CORNER_R, VOWEL_VERT_H, NUL_KO,
 } from './konstantoj';
 
 /**
@@ -77,6 +77,8 @@ export class DinuKevakoSvg {
                 return this.konsonanto_v(key);
             case 'z':
                 return this.konsonanto_z(key);
+            case NUL_KO:
+                return this.konsonanto_nul(key, litero);
             default:
                 return this.neimplementita(key, litero);
         }
@@ -190,12 +192,13 @@ export class DinuKevakoSvg {
         );
     }
 
+    /** Oval: left-bulging semicircle + right-bulging semicircle joined by top/bottom horizontal lines */
     konsonanto_hx(key: string): React.ReactElement {
-        return this._cirkel(key, 'ĥ');
+        return this._renderKon(key, 'ĥ', this._hxShape());
     }
 
     konsonanto_j(key: string): React.ReactElement {
-        return this._cirkel(key, 'j');
+        return this._renderKon(key, 'j', this._jShape());
     }
 
     /** Two m-shapes side by side, touching at the center */
@@ -258,8 +261,9 @@ export class DinuKevakoSvg {
         return this._renderKon(key, 't', this._tShape());
     }
 
+    /** J flipped horizontally */
     konsonanto_ux(key: string): React.ReactElement {
-        return this._cirkel(key, 'ŭ');
+        return this._renderKon(key, 'ŭ', this._jShape(), `translate(${GLYPH_W * 2},0) scale(-1,1)`);
     }
 
     konsonanto_v(key: string): React.ReactElement {
@@ -275,8 +279,19 @@ export class DinuKevakoSvg {
         );
     }
 
+    /** Handwritten-z: 3 horizontal lines connected by alternating right/left bulging arcs */
     konsonanto_z(key: string): React.ReactElement {
-        return this._cirkel(key, 'z');
+        return this._renderKon(key, 'z', this._zShape());
+    }
+
+    /** Placeholder circle syllable without starting k. */
+    konsonanto_nul(key: string, litero: string): React.ReactElement {
+        return (
+            <g key={key} data-litero={litero}>
+                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}/>
+            </g>
+        );
     }
 
     // ── Fallback ──────────────────────────────────────────────────────────────
@@ -285,7 +300,7 @@ export class DinuKevakoSvg {
         return (
             <g key={key} data-litero={litero}>
                 <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
-                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}
+                        fill="none" stroke="grey" strokeWidth={GLYPH_STROKE}
                         strokeDasharray="6 4"/>
             </g>
         );
@@ -313,16 +328,6 @@ export class DinuKevakoSvg {
         );
     }
 
-    /** Placeholder circle for unimplemented consonants. */
-    private _cirkel(key: string, litero: string): React.ReactElement {
-        return (
-            <g key={key} data-litero={litero}>
-                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
-                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}/>
-            </g>
-        );
-    }
-
     // ── Private: shape path factories ─────────────────────────────────────────
 
     /**
@@ -333,6 +338,11 @@ export class DinuKevakoSvg {
     private _iShape(vowelW: number = VOWEL_W): string {
         const R = VOWEL_CORNER_R;
         return [`M ${vowelW},0`, `H ${R}`, `A ${R},${R} 0 0,0 0,${R}`, `V ${VOWEL_VERT_H}`].join(' ');
+    }
+
+    /** J-curve: bottom-left → sweeps right → top-right  (j; flip→ŭ) */
+    private _jShape(): string {
+        return `M 0,${GLYPH_K_H} C ${GLYPH_W},${GLYPH_K_H} ${2 * GLYPH_W - GLYPH_W / 3},${2 * GLYPH_K_H / 3} ${2 * GLYPH_W},0`;
     }
 
     /** V-shape: top-left → bottom-centre → top-right  (t; flip→d) */
@@ -489,6 +499,36 @@ export class DinuKevakoSvg {
         // Left semi-circle: from bottom to top on the right edge (mirrored orientation)
         // M at bottom-right, arc up to top-right
         return [`M ${rightX},${GLYPH_K_H}`, `A ${r},${r} 0 0,1 ${rightX},0`].join(' ');
+    }
+
+    /** Oval: top-line → right-arc → bottom-line → left-arc (hx) + vertical line through center */
+    private _hxShape(): string {
+        const r = GLYPH_K_H / 2;           // semicircle radius = half of full height
+        const x1 = r;                       // left arc x (bulges to x=0)
+        const x2 = GLYPH_W * 2 - r;        // right arc x in right square (bulges to x=GLYPH_W*2)
+        return [
+            `M ${x1},0`,
+            `H ${x2}`,                                              // top horizontal
+            `A ${r},${r} 0 0,1 ${x2},${GLYPH_K_H}`,               // right arc, bulging right
+            `H ${x1}`,                                              // bottom horizontal
+            `A ${r},${r} 0 0,1 ${x1},0`,                          // left arc, bulging left (sweep=1 going up)
+            `M ${GLYPH_W},0 V ${GLYPH_K_H}`,                       // vertical line through center
+        ].join(' ');
+    }
+
+    /** Handwritten-z: top-left → right → arc-right → left → arc-left → bottom-right */
+    private _zShape(): string {
+        const r = GLYPH_K_H / 4;           // radius = half of diameter GLYPH_K_H/2
+        const y1 = GLYPH_K_H / 2;          // after first arc
+        const y2 = GLYPH_K_H;              // after second arc (= bottom)
+        return [
+            `M 0,0`,
+            `H ${GLYPH_W - r}`,                                             // 1st horizontal → stops r before right edge
+            `A ${r},${r} 0 0,1 ${GLYPH_W - r},${y1}`,                      // arc bulging right (reaches x=GLYPH_W)
+            `H ${r}`,                                                        // 2nd horizontal ← stops r from left edge
+            `A ${r},${r} 0 0,0 ${r},${y2}`,                                // arc bulging left (reaches x=0)
+            `H ${GLYPH_W}`,                                                  // 3rd horizontal → bottom-right
+        ].join(' ');
     }
 
     /** C-shape: top-right → half-width left → left semicircle → half-width right → bottom-right  (k; flip→g) */

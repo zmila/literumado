@@ -122,32 +122,9 @@ SVG-komponanto kiu ricevas `vortoj: Vorto[]` kaj:
 
 ## TODO
 
-- [x] Nova paĝo kun eniga tekstkampo, silabada tekstkampo, SVG-prezento
-- [x] Logiko de silabado (`DinuKevakoKonvertilo`)
-- [x] Defaŭlta glifo por **ĉiu konsonanto** — malplena cirklo (diametro 100, same linia diko kiel vokalo)
-- [x] Defaŭlta glifo por **ĉiu vokalo** — horizontala linio (longo 150)
-- [x] Logiko de poziciigo: k supre, v meze, f sube (kun ĝustaj vertikalaj spacoj)
-- [x] Algoritmo de aranĝo: silaboj en vortoj, vortoj en vico, translinio ĉe dekstra rando
-- [x] SVG-krado: pergamenta fono + strukturaj direktlinioj (solida bazlinio + puntitaj randlinioj)
-- [ ] renomigu ĉiujn dinu_kevako --> dinu-kevako
-- [ ] Individuaj SVG-glifoj por simplaj konsonantoj (unu simbolo per litero)
-- [ ] Defaŭlta glifo por **kunmetitaj konsonantoj** (k aŭ f el >1 litero) — du cirkloj horizontale apud-en-apude, larĝo 200
-- [ ] Ĝustigi larĝon de vokalo: 150 se ambaŭ k kaj f estas simplaj; 250 se almenaŭ unu estas kunmetita
+- [ ] Restas glifo por 'dz'
 - [ ] Listo de **ligaturoj** (oftaj konsonantaj aroj kiel unusola kunmetita glifo)
 - [ ] SVG-glifoj por ligaturoj
-- [ ] Plena renderado de Dinu Kevako teksto
 
 ---
-
-## Geometrio rapide
-
-```
-         │← VOWEL_W = 150 →│
-    ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  ← punktita (supro de k)
-         │←GLYPH_W=100→│
-         │     ( k )     │          GAP_KV = 25
-    ─────────────────────────  ← solida (bazlinio / vokalo)
-         │     ( f )     │          GAP_VF = 25
-    ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄  ← punktita (subo de f)
-```
 

@@ -67,7 +67,7 @@ export const VERT_COLOR     = '#ddd0bc';
 // Single consonants occupy one glyph cell (GLYPH_W = 100).
 // All others are "double" — two cells wide (2 × GLYPH_W = 200).
 const UNUOPAJ_KONSONANTOJ = new Set<string>([
-    'd', 'g', 'ĝ', 'k', 'l', 'm', 'n', 'r', 't', 'ĉ',
+    'd', 'g', 'ĝ', 'k', 'l', 'm', 'n', 'r', 't', 'ĉ', 'z'
     // 'b', 'c', 'f', 'h', 'p', 's', 'ŝ', 'ĵ', and 'v' are now double-width
 ]);
 
