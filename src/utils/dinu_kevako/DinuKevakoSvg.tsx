@@ -119,8 +119,9 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 'c');
     }
 
+    /** Cursive-x: two crossing vertical semicircles */
     konsonanto_cx(key: string): React.ReactElement {
-        return this._cirkel(key, 'ĉ');
+        return this._renderKon(key, 'ĉ', this._cxShape());
     }
 
     /** ^ shape — t flipped vertically */
@@ -137,8 +138,9 @@ export class DinuKevakoSvg {
         return this._renderKon(key, 'g', this._cShape(), `translate(${GLYPH_W},0) scale(-1,1)`);
     }
 
+    /** cx rotated 90°: two crossing horizontal semicircles */
     konsonanto_gx(key: string): React.ReactElement {
-        return this._cirkel(key, 'ĝ');
+        return this._renderKon(key, 'ĝ', this._gxShape());
     }
 
     konsonanto_h(key: string): React.ReactElement {
@@ -296,6 +298,26 @@ export class DinuKevakoSvg {
             `M ${GLYPH_W},0`, `H ${midX}`,
             `A ${midY},${midY} 0 0,0 ${midX},${GLYPH_K_H}`,
             `H ${GLYPH_W}`,
+        ].join(' ');
+    }
+
+    /** Cursive-x: right-bulging arc at x=0 and left-bulging arc at x=W, both crossing at centre (W/2, H/2) */
+    private _cxShape(): string {
+        const r  = GLYPH_K_H / 2;
+        const x1 = 0;           // right-bulging arc on left edge
+        const x2 = GLYPH_W;    // left-bulging arc on right edge
+        return [
+            `M ${x1},0 A ${r},${r} 0 0,1 ${x1},${GLYPH_K_H}`,
+            `M ${x2},0 A ${r},${r} 0 0,0 ${x2},${GLYPH_K_H}`,
+        ].join(' ');
+    }
+
+    /** Cursive-x rotated 90°: two crossing horizontal semicircles, both bulging toward the centre */
+    private _gxShape(): string {
+        const r = GLYPH_W / 2;
+        return [
+            `M 0,0 A ${r},${r} 0 0,0 ${GLYPH_W},0`,                        // top arc, sweep=0 → bulges down into cell
+            `M 0,${GLYPH_K_H} A ${r},${r} 0 0,1 ${GLYPH_W},${GLYPH_K_H}`, // bottom arc, sweep=1 → bulges up into cell
         ].join(' ');
     }
 }
