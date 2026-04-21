@@ -130,7 +130,16 @@ export class DinuKevakoSvg {
     }
 
     konsonanto_f(key: string): React.ReactElement {
-        return this._cirkel(key, 'f');
+        return (
+            <g key={key} data-litero="f">
+                {/* Left part: circle at x=0-100 */}
+                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}/>
+                {/* Right part: m-shape without final vertical (arc path), rotated 180° and positioned at x=100-200 */}
+                <path d={this._fShapeArc()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
     }
 
     /** Reverse-C shape — k flipped horizontally */
@@ -200,7 +209,7 @@ export class DinuKevakoSvg {
     }
 
     konsonanto_s(key: string): React.ReactElement {
-        return this._cirkel(key, 's');
+        return this._renderKon(key, 's', this._sShape());
     }
 
     /** Cursive lowercase m: vertical flip of jx (two n-shapes side by side) */
@@ -218,7 +227,16 @@ export class DinuKevakoSvg {
     }
 
     konsonanto_v(key: string): React.ReactElement {
-        return this._cirkel(key, 'v');
+        return (
+            <g key={key} data-litero="v">
+                {/* Left part: m-shape without final vertical (arc path) */}
+                <path d={this._vShapeArc()} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Right part: circle at x=100-200 */}
+                <circle cx={GLYPH_W + GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}/>
+            </g>
+        );
     }
 
     konsonanto_z(key: string): React.ReactElement {
@@ -302,6 +320,18 @@ export class DinuKevakoSvg {
         return [`M 0,0`, `V ${midY}`, `A ${r},${r} 0 0,0 ${GLYPH_W},${midY}`, `V 0`].join(' ');
     }
 
+    /** S-shape: two glyphs side by side forming an S curve. Total width: 200, height: 100 */
+    private _sShape(): string {
+        const midY = GLYPH_K_H / 2;
+        const r = GLYPH_W / 2;
+        // Left part: starts at bottom-left, goes up and arcs right
+        // This is like the first half of an S: M left,bottom V middle A radius right
+        const leftPart = [`M 0,${GLYPH_K_H}`, `V ${midY}`, `A ${r},${r} 0 0,1 ${GLYPH_W},${midY}`].join(' ');
+        // Right part: continues the arc and goes up to top-right
+        // This is like the second half of an S: A radius right V top
+        const rightPart = `A ${r},${r} 0 0,0 ${GLYPH_W * 2},${midY} V 0`;
+        return `${leftPart} ${rightPart}`;
+    }
 
     /** Double m (jx): two M-shapes side by side, touching at center. Total width: 200, height: 100 */
     private _jxShape(): string {
@@ -313,6 +343,23 @@ export class DinuKevakoSvg {
         // Right M at x=100-200: top-left → down → arc → up (same as left M, just offset to 100-200)
         const rightM = `M ${GLYPH_W},0 V ${midY} A ${r},${r} 0 0,0 ${GLYPH_W * 2},${midY} V 0`;
         return `${leftM} ${rightM}`;
+    }
+
+    /** V-shape left part: m-shape without final vertical upstroke (just the arc). Total width: 100, height: 100 */
+    private _vShapeArc(): string {
+        const midY = GLYPH_K_H / 2;
+        const r = GLYPH_W / 2;
+        // M-shape without final upstroke: top-left → down → arc → stops at arc
+        return [`M 0,0`, `V ${midY}`, `A ${r},${r} 0 0,0 ${GLYPH_W},${midY}`].join(' ');
+    }
+
+    /** F-shape right part: n-shape without first left upstroke (starts with top arc), positioned at x=100-200 */
+    private _fShapeArc(): string {
+        const midY = GLYPH_K_H / 2;
+        const r = GLYPH_W / 2;
+        // N-shape without first vertical: starts with arc downward → right downstroke
+        // M at middle-top-left, arc down to middle-bottom-right, V up to top-right
+        return [`M ${GLYPH_W},${midY}`, `A ${r},${r} 0 0,1 ${GLYPH_W * 2},${midY}`, `V ${GLYPH_K_H}`].join(' ');
     }
 
     /** C-shape: top-right → half-width left → left semicircle → half-width right → bottom-right  (k; flip→g) */
