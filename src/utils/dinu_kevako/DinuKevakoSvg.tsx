@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    GLYPH_W, GLYPH_RADIUS, GLYPH_STROKE,
+    GLYPH_W, GLYPH_K_H, GLYPH_RADIUS, GLYPH_STROKE,
     VOWEL_W, VOWEL_H, VOWEL_CORNER_R, VOWEL_VERT_H,
 } from './konstantoj';
 
@@ -93,68 +93,23 @@ export class DinuKevakoSvg {
         );
     }
 
-    /**
-     * Common shape for i, e, o, u:
-     *   horizontal line → arc corner → vertical line.
-     * @param deDekstre  true  → start at right, go left  (i, e)
-     *                   false → start at left,  go right (u, o)
-     * @param suben      true  → vertical goes downward   (i, u)
-     *                   false → vertical goes upward     (e, o)
-     */
-    private _vokaloHoko(key: string, litero: string, deDekstre: boolean, suben: boolean): React.ReactElement {
-        const R = VOWEL_CORNER_R;
-        const sweep = (deDekstre !== suben) ? 1 : 0;
-        const vertY = suben ? VOWEL_VERT_H : -VOWEL_VERT_H;
-        const d = deDekstre
-            ? [
-                `M ${VOWEL_W},0`,
-                `H ${R}`,
-                `A ${R},${R} 0 0,${sweep} 0,${suben ? R : -R}`,
-                `V ${vertY}`,
-            ].join(' ')
-            : [
-                `M 0,0`,
-                `H ${VOWEL_W - R}`,
-                `A ${R},${R} 0 0,${sweep} ${VOWEL_W},${suben ? R : -R}`,
-                `V ${vertY}`,
-            ].join(' ');
-        return (
-            <g key={key} data-litero={litero}>
-                <path d={d} fill="none" stroke="#555"
-                      strokeWidth={VOWEL_H} strokeLinecap="round" strokeLinejoin="round"/>
-            </g>
-        );
-    }
-
     vokalo_e(key: string): React.ReactElement {
-        return this._vokaloHoko(key, 'e', true, false);
+        return this._renderVok(key, 'e', `scale(1,-1)`);
     }
 
     vokalo_i(key: string): React.ReactElement {
-        return this._vokaloHoko(key, 'i', true, true);
+        return this._renderVok(key, 'i');
     }
 
     vokalo_o(key: string): React.ReactElement {
-        return this._vokaloHoko(key, 'o', false, false);
+        return this._renderVok(key, 'o', `translate(${VOWEL_W},0) scale(-1,-1)`);
     }
 
     vokalo_u(key: string): React.ReactElement {
-        return this._vokaloHoko(key, 'u', false, true);
+        return this._renderVok(key, 'u', `translate(${VOWEL_W},0) scale(-1,1)`);
     }
 
-    // ── Consonants (23) ───────────────────────────────────────────────────────
-    // Origin: top-left of the GLYPH_W × GLYPH_W cell.
-    // Current placeholder: hollow circle.  Replace each method body with the
-    // real glyph shape once the design is settled.
-
-    private _cirkel(key: string, litero: string): React.ReactElement {
-        return (
-            <g key={key} data-litero={litero}>
-                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
-                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}/>
-            </g>
-        );
-    }
+    // ── Consonant glyphs ──────────────────────────────────────────────────────
 
     konsonanto_b(key: string): React.ReactElement {
         return this._cirkel(key, 'b');
@@ -168,22 +123,18 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 'ĉ');
     }
 
+    /** ^ shape — t flipped vertically */
     konsonanto_d(key: string): React.ReactElement {
-        return (
-            <g key={key} data-litero="d">
-                <polyline points={`0,${GLYPH_W} ${GLYPH_W / 2},0 ${GLYPH_W},${GLYPH_W}`}
-                          fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}
-                          strokeLinecap="round" strokeLinejoin="round"/>
-            </g>
-        );
+        return this._renderKon(key, 'd', this._tShape(), `translate(0,${GLYPH_K_H}) scale(1,-1)`);
     }
 
     konsonanto_f(key: string): React.ReactElement {
         return this._cirkel(key, 'f');
     }
 
+    /** Reverse-C shape — k flipped horizontally */
     konsonanto_g(key: string): React.ReactElement {
-        return this._cirkel(key, 'g');
+        return this._renderKon(key, 'g', this._cShape(), `translate(${GLYPH_W},0) scale(-1,1)`);
     }
 
     konsonanto_gx(key: string): React.ReactElement {
@@ -206,28 +157,33 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 'ĵ');
     }
 
+    /** C-shape */
     konsonanto_k(key: string): React.ReactElement {
-        return this._cirkel(key, 'k');
+        return this._renderKon(key, 'k', this._cShape());
     }
 
+    /** Bottom-left hook */
     konsonanto_l(key: string): React.ReactElement {
-        return this._cirkel(key, 'l');
+        return this._renderKon(key, 'l', this._lShape());
     }
 
+    /** U-shape */
     konsonanto_m(key: string): React.ReactElement {
-        return this._cirkel(key, 'm');
+        return this._renderKon(key, 'm', this._mShape());
     }
 
+    /** n-shape — m flipped vertically */
     konsonanto_n(key: string): React.ReactElement {
-        return this._cirkel(key, 'n');
+        return this._renderKon(key, 'n', this._mShape(), `translate(0,${GLYPH_K_H}) scale(1,-1)`);
     }
 
     konsonanto_p(key: string): React.ReactElement {
         return this._cirkel(key, 'p');
     }
 
+    /** Top-right hook — l rotated 180° */
     konsonanto_r(key: string): React.ReactElement {
-        return this._cirkel(key, 'r');
+        return this._renderKon(key, 'r', this._lShape(), `translate(${GLYPH_W},${GLYPH_K_H}) scale(-1,-1)`);
     }
 
     konsonanto_s(key: string): React.ReactElement {
@@ -238,14 +194,9 @@ export class DinuKevakoSvg {
         return this._cirkel(key, 'ŝ');
     }
 
+    /** V-shape */
     konsonanto_t(key: string): React.ReactElement {
-        return (
-            <g key={key} data-litero="t">
-                <polyline points={`0,0 ${GLYPH_W / 2},${GLYPH_W} ${GLYPH_W},0`}
-                          fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}
-                          strokeLinecap="round" strokeLinejoin="round"/>
-            </g>
-        );
+        return this._renderKon(key, 't', this._tShape());
     }
 
     konsonanto_ux(key: string): React.ReactElement {
@@ -270,5 +221,81 @@ export class DinuKevakoSvg {
                         strokeDasharray="6 4"/>
             </g>
         );
+    }
+
+    // ── Private: element renderers ────────────────────────────────────────────
+
+    /** Wraps a path string in a vowel <g> element, with optional transform. */
+    private _renderVok(key: string, litero: string, transform?: string): React.ReactElement {
+        return (
+            <g key={key} data-litero={litero} transform={transform}>
+                <path d={this._iShape()} fill="none" stroke="#555"
+                      strokeWidth={VOWEL_H} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
+    }
+
+    /** Wraps a path string in a consonant <g> element, with optional transform. */
+    private _renderKon(key: string, litero: string, d: string, transform?: string): React.ReactElement {
+        return (
+            <g key={key} data-litero={litero} transform={transform}>
+                <path d={d} fill="none" stroke="#555"
+                      strokeWidth={GLYPH_STROKE} strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
+    }
+
+    /** Placeholder circle for unimplemented consonants. */
+    private _cirkel(key: string, litero: string): React.ReactElement {
+        return (
+            <g key={key} data-litero={litero}>
+                <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
+                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}/>
+            </g>
+        );
+    }
+
+    // ── Private: shape path factories ─────────────────────────────────────────
+
+    /**
+     * Hook shape (base for i, e, o, u vowels):
+     *   start right → go left → arc bottom-left corner → go down.
+     *   e = scale(1,-1)  |  u = translate(W,0) scale(-1,1)  |  o = translate(W,0) scale(-1,-1)
+     */
+    private _iShape(): string {
+        const R = VOWEL_CORNER_R;
+        return [`M ${VOWEL_W},0`, `H ${R}`, `A ${R},${R} 0 0,0 0,${R}`, `V ${VOWEL_VERT_H}`].join(' ');
+    }
+
+    /** V-shape: top-left → bottom-centre → top-right  (t; flip→d) */
+    private _tShape(): string {
+        return `M 0,0 L ${GLYPH_W / 2},${GLYPH_K_H} L ${GLYPH_W},0`;
+    }
+
+    /** Bottom-left hook: right-bottom → left → arc BL → top  (l; 180°→r) */
+    private _lShape(): string {
+        const R = GLYPH_W / 2;
+        return [
+            `M ${GLYPH_W},${GLYPH_K_H}`, `H ${GLYPH_W / 2}`,
+            `A ${R},${R} 0 0,1 0,${GLYPH_K_H - R}`, `V 0`,
+        ].join(' ');
+    }
+
+    /** Arch: top-left → down → arc upward → up → top-right  (m; flip→n; rotate→k,g) */
+    private _mShape(): string {
+        const midY = GLYPH_K_H / 2;
+        const r = GLYPH_W / 2;
+        return [`M 0,0`, `V ${midY}`, `A ${r},${r} 0 0,0 ${GLYPH_W},${midY}`, `V 0`].join(' ');
+    }
+
+    /** C-shape: top-right → half-width left → left semicircle → half-width right → bottom-right  (k; flip→g) */
+    private _cShape(): string {
+        const midX = GLYPH_W / 2;
+        const midY = GLYPH_K_H / 2;
+        return [
+            `M ${GLYPH_W},0`, `H ${midX}`,
+            `A ${midY},${midY} 0 0,0 ${midX},${GLYPH_K_H}`,
+            `H ${GLYPH_W}`,
+        ].join(' ');
     }
 }
