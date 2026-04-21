@@ -20,36 +20,65 @@ export class DinuKevakoSvg {
     glifoPerLitero(litero: string, key: string): React.ReactElement {
         switch (litero) {
             // vowels
-            case 'a': return this.vokalo_a(key);
-            case 'e': return this.vokalo_e(key);
-            case 'i': return this.vokalo_i(key);
-            case 'o': return this.vokalo_o(key);
-            case 'u': return this.vokalo_u(key);
+            case 'a':
+                return this.vokalo_a(key);
+            case 'e':
+                return this.vokalo_e(key);
+            case 'i':
+                return this.vokalo_i(key);
+            case 'o':
+                return this.vokalo_o(key);
+            case 'u':
+                return this.vokalo_u(key);
             // consonants
-            case 'b': return this.konsonanto_b(key);
-            case 'c': return this.konsonanto_c(key);
-            case 'ĉ': return this.konsonanto_cx(key);
-            case 'd': return this.konsonanto_d(key);
-            case 'f': return this.konsonanto_f(key);
-            case 'g': return this.konsonanto_g(key);
-            case 'ĝ': return this.konsonanto_gx(key);
-            case 'h': return this.konsonanto_h(key);
-            case 'ĥ': return this.konsonanto_hx(key);
-            case 'j': return this.konsonanto_j(key);
-            case 'ĵ': return this.konsonanto_jx(key);
-            case 'k': return this.konsonanto_k(key);
-            case 'l': return this.konsonanto_l(key);
-            case 'm': return this.konsonanto_m(key);
-            case 'n': return this.konsonanto_n(key);
-            case 'p': return this.konsonanto_p(key);
-            case 'r': return this.konsonanto_r(key);
-            case 's': return this.konsonanto_s(key);
-            case 'ŝ': return this.konsonanto_sx(key);
-            case 't': return this.konsonanto_t(key);
-            case 'ŭ': return this.konsonanto_ux(key);
-            case 'v': return this.konsonanto_v(key);
-            case 'z': return this.konsonanto_z(key);
-            default:  return this.neimplementita(key, litero);
+            case 'b':
+                return this.konsonanto_b(key);
+            case 'c':
+                return this.konsonanto_c(key);
+            case 'ĉ':
+                return this.konsonanto_cx(key);
+            case 'd':
+                return this.konsonanto_d(key);
+            case 'f':
+                return this.konsonanto_f(key);
+            case 'g':
+                return this.konsonanto_g(key);
+            case 'ĝ':
+                return this.konsonanto_gx(key);
+            case 'h':
+                return this.konsonanto_h(key);
+            case 'ĥ':
+                return this.konsonanto_hx(key);
+            case 'j':
+                return this.konsonanto_j(key);
+            case 'ĵ':
+                return this.konsonanto_jx(key);
+            case 'k':
+                return this.konsonanto_k(key);
+            case 'l':
+                return this.konsonanto_l(key);
+            case 'm':
+                return this.konsonanto_m(key);
+            case 'n':
+                return this.konsonanto_n(key);
+            case 'p':
+                return this.konsonanto_p(key);
+            case 'r':
+                return this.konsonanto_r(key);
+            case 's':
+                return this.konsonanto_s(key);
+            case 'ŝ':
+                return this.konsonanto_sx(key);
+            case 't':
+                return this.konsonanto_t(key);
+            case 'ŭ':
+                return this.konsonanto_ux(key);
+            case 'v':
+                return this.konsonanto_v(key);
+            case 'z':
+                return this.konsonanto_z(key);
+            default:
+                return this.neimplementita(key, litero);
         }
     }
 
@@ -59,7 +88,7 @@ export class DinuKevakoSvg {
         return (
             <g key={key} data-litero="a">
                 <line x1={0} y1={0} x2={VOWEL_W} y2={0}
-                      stroke="#555" strokeWidth={VOWEL_H} strokeLinecap="round" />
+                      stroke="#555" strokeWidth={VOWEL_H} strokeLinecap="round"/>
             </g>
         );
     }
@@ -82,25 +111,36 @@ export class DinuKevakoSvg {
                 `H ${R}`,
                 `A ${R},${R} 0 0,${sweep} 0,${suben ? R : -R}`,
                 `V ${vertY}`,
-              ].join(' ')
+            ].join(' ')
             : [
                 `M 0,0`,
                 `H ${VOWEL_W - R}`,
                 `A ${R},${R} 0 0,${sweep} ${VOWEL_W},${suben ? R : -R}`,
                 `V ${vertY}`,
-              ].join(' ');
+            ].join(' ');
         return (
             <g key={key} data-litero={litero}>
                 <path d={d} fill="none" stroke="#555"
-                      strokeWidth={VOWEL_H} strokeLinecap="round" strokeLinejoin="round" />
+                      strokeWidth={VOWEL_H} strokeLinecap="round" strokeLinejoin="round"/>
             </g>
         );
     }
 
-    vokalo_e(key: string): React.ReactElement { return this._vokaloHoko(key, 'e', true,  false); }
-    vokalo_i(key: string): React.ReactElement { return this._vokaloHoko(key, 'i', true,  true);  }
-    vokalo_o(key: string): React.ReactElement { return this._vokaloHoko(key, 'o', false, false); }
-    vokalo_u(key: string): React.ReactElement { return this._vokaloHoko(key, 'u', false, true);  }
+    vokalo_e(key: string): React.ReactElement {
+        return this._vokaloHoko(key, 'e', true, false);
+    }
+
+    vokalo_i(key: string): React.ReactElement {
+        return this._vokaloHoko(key, 'i', true, true);
+    }
+
+    vokalo_o(key: string): React.ReactElement {
+        return this._vokaloHoko(key, 'o', false, false);
+    }
+
+    vokalo_u(key: string): React.ReactElement {
+        return this._vokaloHoko(key, 'u', false, true);
+    }
 
     // ── Consonants (23) ───────────────────────────────────────────────────────
     // Origin: top-left of the GLYPH_W × GLYPH_W cell.
@@ -111,34 +151,114 @@ export class DinuKevakoSvg {
         return (
             <g key={key} data-litero={litero}>
                 <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
-                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE} />
+                        fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}/>
             </g>
         );
     }
 
-    konsonanto_b(key: string): React.ReactElement { return this._cirkel(key, 'b'); }
-    konsonanto_c(key: string): React.ReactElement { return this._cirkel(key, 'c'); }
-    konsonanto_cx(key: string): React.ReactElement { return this._cirkel(key, 'ĉ'); }
-    konsonanto_d(key: string): React.ReactElement { return this._cirkel(key, 'd'); }
-    konsonanto_f(key: string): React.ReactElement { return this._cirkel(key, 'f'); }
-    konsonanto_g(key: string): React.ReactElement { return this._cirkel(key, 'g'); }
-    konsonanto_gx(key: string): React.ReactElement { return this._cirkel(key, 'ĝ'); }
-    konsonanto_h(key: string): React.ReactElement { return this._cirkel(key, 'h'); }
-    konsonanto_hx(key: string): React.ReactElement { return this._cirkel(key, 'ĥ'); }
-    konsonanto_j(key: string): React.ReactElement { return this._cirkel(key, 'j'); }
-    konsonanto_jx(key: string): React.ReactElement { return this._cirkel(key, 'ĵ'); }
-    konsonanto_k(key: string): React.ReactElement { return this._cirkel(key, 'k'); }
-    konsonanto_l(key: string): React.ReactElement { return this._cirkel(key, 'l'); }
-    konsonanto_m(key: string): React.ReactElement { return this._cirkel(key, 'm'); }
-    konsonanto_n(key: string): React.ReactElement { return this._cirkel(key, 'n'); }
-    konsonanto_p(key: string): React.ReactElement { return this._cirkel(key, 'p'); }
-    konsonanto_r(key: string): React.ReactElement { return this._cirkel(key, 'r'); }
-    konsonanto_s(key: string): React.ReactElement { return this._cirkel(key, 's'); }
-    konsonanto_sx(key: string): React.ReactElement { return this._cirkel(key, 'ŝ'); }
-    konsonanto_t(key: string): React.ReactElement { return this._cirkel(key, 't'); }
-    konsonanto_ux(key: string): React.ReactElement { return this._cirkel(key, 'ŭ'); }
-    konsonanto_v(key: string): React.ReactElement { return this._cirkel(key, 'v'); }
-    konsonanto_z(key: string): React.ReactElement { return this._cirkel(key, 'z'); }
+    konsonanto_b(key: string): React.ReactElement {
+        return this._cirkel(key, 'b');
+    }
+
+    konsonanto_c(key: string): React.ReactElement {
+        return this._cirkel(key, 'c');
+    }
+
+    konsonanto_cx(key: string): React.ReactElement {
+        return this._cirkel(key, 'ĉ');
+    }
+
+    konsonanto_d(key: string): React.ReactElement {
+        return (
+            <g key={key} data-litero="d">
+                <polyline points={`0,${GLYPH_W} ${GLYPH_W / 2},0 ${GLYPH_W},${GLYPH_W}`}
+                          fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}
+                          strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
+    }
+
+    konsonanto_f(key: string): React.ReactElement {
+        return this._cirkel(key, 'f');
+    }
+
+    konsonanto_g(key: string): React.ReactElement {
+        return this._cirkel(key, 'g');
+    }
+
+    konsonanto_gx(key: string): React.ReactElement {
+        return this._cirkel(key, 'ĝ');
+    }
+
+    konsonanto_h(key: string): React.ReactElement {
+        return this._cirkel(key, 'h');
+    }
+
+    konsonanto_hx(key: string): React.ReactElement {
+        return this._cirkel(key, 'ĥ');
+    }
+
+    konsonanto_j(key: string): React.ReactElement {
+        return this._cirkel(key, 'j');
+    }
+
+    konsonanto_jx(key: string): React.ReactElement {
+        return this._cirkel(key, 'ĵ');
+    }
+
+    konsonanto_k(key: string): React.ReactElement {
+        return this._cirkel(key, 'k');
+    }
+
+    konsonanto_l(key: string): React.ReactElement {
+        return this._cirkel(key, 'l');
+    }
+
+    konsonanto_m(key: string): React.ReactElement {
+        return this._cirkel(key, 'm');
+    }
+
+    konsonanto_n(key: string): React.ReactElement {
+        return this._cirkel(key, 'n');
+    }
+
+    konsonanto_p(key: string): React.ReactElement {
+        return this._cirkel(key, 'p');
+    }
+
+    konsonanto_r(key: string): React.ReactElement {
+        return this._cirkel(key, 'r');
+    }
+
+    konsonanto_s(key: string): React.ReactElement {
+        return this._cirkel(key, 's');
+    }
+
+    konsonanto_sx(key: string): React.ReactElement {
+        return this._cirkel(key, 'ŝ');
+    }
+
+    konsonanto_t(key: string): React.ReactElement {
+        return (
+            <g key={key} data-litero="t">
+                <polyline points={`0,0 ${GLYPH_W / 2},${GLYPH_W} ${GLYPH_W},0`}
+                          fill="none" stroke="#555" strokeWidth={GLYPH_STROKE}
+                          strokeLinecap="round" strokeLinejoin="round"/>
+            </g>
+        );
+    }
+
+    konsonanto_ux(key: string): React.ReactElement {
+        return this._cirkel(key, 'ŭ');
+    }
+
+    konsonanto_v(key: string): React.ReactElement {
+        return this._cirkel(key, 'v');
+    }
+
+    konsonanto_z(key: string): React.ReactElement {
+        return this._cirkel(key, 'z');
+    }
 
     // ── Fallback ──────────────────────────────────────────────────────────────
 
@@ -147,7 +267,7 @@ export class DinuKevakoSvg {
             <g key={key} data-litero={litero}>
                 <circle cx={GLYPH_W / 2} cy={GLYPH_W / 2} r={GLYPH_RADIUS}
                         fill="none" stroke="#888" strokeWidth={GLYPH_STROKE}
-                        strokeDasharray="6 4" />
+                        strokeDasharray="6 4"/>
             </g>
         );
     }
