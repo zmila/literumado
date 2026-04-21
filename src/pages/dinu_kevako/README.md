@@ -129,6 +129,7 @@ SVG-komponanto kiu ricevas `vortoj: Vorto[]` kaj:
 - [x] Logiko de poziciigo: k supre, v meze, f sube (kun ĝustaj vertikalaj spacoj)
 - [x] Algoritmo de aranĝo: silaboj en vortoj, vortoj en vico, translinio ĉe dekstra rando
 - [x] SVG-krado: pergamenta fono + strukturaj direktlinioj (solida bazlinio + puntitaj randlinioj)
+- [ ] renomigu ĉiujn dinu_kevako --> dinu-kevako
 - [ ] Individuaj SVG-glifoj por simplaj konsonantoj (unu simbolo per litero)
 - [ ] Defaŭlta glifo por **kunmetitaj konsonantoj** (k aŭ f el >1 litero) — du cirkloj horizontale apud-en-apude, larĝo 200
 - [ ] Ĝustigi larĝon de vokalo: 150 se ambaŭ k kaj f estas simplaj; 250 se almenaŭ unu estas kunmetita
