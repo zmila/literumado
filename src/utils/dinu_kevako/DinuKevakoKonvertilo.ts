@@ -1,5 +1,5 @@
-import {Silabo, Vorto} from './tipoj';
-import {NUL_KO} from './konstantoj';
+import { Silabo, Vorto } from './tipoj';
+import { NUL_KO } from './konstantoj';
 
 export class DinuKevakoKonvertilo {
     private estasVokalo(char: string): boolean {
@@ -45,6 +45,7 @@ export class DinuKevakoKonvertilo {
     private vortoAlSilaboj(vortoText: string): Vorto {
         const silaboj: Silabo[] = [];
         let nunaK = '';
+        let postLimo = false;  // True after an explicit syllable boundary (-, ', _)
 
         for (let i = 0; i < vortoText.length; i++) {
             const char = vortoText[i];
@@ -52,15 +53,17 @@ export class DinuKevakoKonvertilo {
             if (char === '-' || char === "'") {
                 this.finuSilabon(nunaK, silaboj);
                 nunaK = '';
+                postLimo = true;
                 continue;
             }
 
             if (this.estasVokalo(char)) {
-                if (silaboj.length > 0 && nunaK.length > 0) {
+                if (silaboj.length > 0 && nunaK.length > 0 && !postLimo) {
                     nunaK = this.prilaboriIntervokalojn(nunaK, silaboj);
                 }
-                silaboj.push({k: nunaK, v: char, f: ''});
+                silaboj.push({ k: nunaK, v: char, f: '' });
                 nunaK = '';
+                postLimo = false;
             } else if (this.estasKonsonanto(char)) {
                 nunaK += char;
             }
@@ -75,7 +78,7 @@ export class DinuKevakoKonvertilo {
         if (nunaK && silaboj.length > 0) {
             silaboj[silaboj.length - 1].f = nunaK;
         } else if (nunaK) {
-            silaboj.push({k: nunaK, v: '', f: ''});
+            silaboj.push({ k: nunaK, v: '', f: '' });
         }
     }
 

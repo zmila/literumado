@@ -58,6 +58,7 @@ describe('DinuKevakoKonvertilo', () => {
             { input: 'adiaŭas', expected: '(◦|a)-(d|i)-(◦|a|ŭ)-(◦|a|s)' }, // V-CV-V̆-VC
             { input: 'lamp-lumo', expected: '(l|a|mp)-(l|u)-(m|o)' }, // fino de silabo
             { input: "sent'ema", expected: '(s|e|nt)-(◦|e)-(m|a)' }, // fino de silabo
+            { input: "dek-kvar", expected: '(d|e|k)-(kv|a|r)' }, // ripeta konsonanto ĉe silabo-dividilo
         ];
 
         testCases.forEach(({ input, expected }) => {
