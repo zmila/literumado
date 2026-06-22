@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.9.4",
+        "dato": "2026-06-22",
+        "komento": "refactoring to extract common svg fragments. add ligatures JN and DZ"
+    },
+    {
         "versio": "0.9.3",
         "dato": "2026-06-22",
         "komento": "farita (mal)pligrandigo de svg-bildoj, por montri pli ol du vicojn da teksto"
