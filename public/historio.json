@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.9.3",
+        "dato": "2026-06-22",
+        "komento": "farita (mal)pligrandigo de svg-bildoj, por montri pli ol du vicojn da teksto"
+    },
+    {
         "versio": "0.9.2",
         "dato": "2026-04-21",
         "komento": "dua versio: ĉiuj literoj havas sian svg-bildon, kaj ili sukcese aperas vertikale en silaboj KV kaj KVK (sed ne KKV aŭ KVKK)"

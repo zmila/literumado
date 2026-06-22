@@ -45,6 +45,11 @@ export class DinuKevakoLayout {
         for (let vi = 0; vi < vortoj.length; vi++) {
             const vorto = vortoj[vi];
 
+            if (vorto.length === 0) {
+                if (x > padL) novaVico();
+                continue;
+            }
+
             for (let si = 0; si < vorto.length; si++) {
                 const silabo = vorto[si];
 

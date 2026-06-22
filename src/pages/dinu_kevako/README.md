@@ -122,7 +122,6 @@ SVG-komponanto kiu ricevas `vortoj: Vorto[]` kaj:
 
 ## TODO
 
-- [ ] Implement zoom in or out, by fixed steps, to show exactly 1, 2, 3 or more lines of text in the SVG container
 - [ ] Listo de **ligaturoj** (oftaj konsonantaj aroj kiel unusola kunmetita glifo)
 - [ ] SVG-glifoj por ligaturoj
 - [ ] Restas glifo por 'dz', 'ajn'

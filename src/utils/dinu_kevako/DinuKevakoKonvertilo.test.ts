@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { DinuKevakoKonvertilo, Vorto } from './DinuKevakoKonvertilo';
+import { DinuKevakoKonvertilo } from './DinuKevakoKonvertilo';
+import { Vorto } from './tipoj';
 
 describe('DinuKevakoKonvertilo', () => {
     const konvertilo = new DinuKevakoKonvertilo();

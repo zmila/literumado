@@ -83,11 +83,16 @@ export class DinuKevakoKonvertilo {
     }
 
     dividuJeSilaboj(text: string): Vorto[] {
-        if (!text) {
-            return [];
+        if (!text) return [];
+        const result: Vorto[] = [];
+        for (const line of text.split('\n')) {
+            const vortojText = this.tekstoAlVortoj(line.toLowerCase());
+            if (vortojText.length > 0) {
+                if (result.length > 0) result.push([]); // line-break sentinel
+                result.push(...vortojText.map(t => this.vortoAlSilaboj(t)));
+            }
         }
-        const vortojText = this.tekstoAlVortoj(text.toLowerCase());
-        return vortojText.map(vortoText => this.vortoAlSilaboj(vortoText));
+        return result;
     }
 
     private formatigiSilabon(s: Silabo): string {
@@ -99,12 +104,16 @@ export class DinuKevakoKonvertilo {
     }
 
     public formatigi(vortoj: Vorto[]): string {
-        if (!vortoj) {
-            return '';
+        if (!vortoj) return '';
+        const parts: string[] = [];
+        for (const vorto of vortoj) {
+            if (vorto.length === 0) {
+                parts.push('\n');
+            } else {
+                if (parts.length > 0 && parts[parts.length - 1] !== '\n') parts.push(' ');
+                parts.push(vorto.map(s => this.formatigiSilabon(s)).join('-'));
+            }
         }
-
-        return vortoj.map(vorto =>
-            vorto.map(s => this.formatigiSilabon(s)).join('-')
-        ).join(' ');
+        return parts.join('');
     }
 }

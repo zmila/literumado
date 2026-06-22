@@ -37,3 +37,6 @@ next-env.d.ts
 
 
 /server-side/grids/
+
+# IDE
+.idea/

@@ -4,19 +4,24 @@ import {DinuKevakoKonvertilo} from '@/utils/dinu_kevako/DinuKevakoKonvertilo';
 import { Vorto } from '@/utils/dinu_kevako/tipoj';
 import DinuKevakoSvgComponent from '@/components/dinu_kevako/DinuKevakoSvgComponent';
 
+const MIN_VICOJ = 1;
+const MAX_VICOJ = 12;
+
 const DinuKevakoComponent: React.FC = () => {
     const dkk = new DinuKevakoKonvertilo();
-    // const defaultText = 'dekstra ekbrilo parte adiaŭas';
-    // const [teksto, setTeksto] = useState(defaultText);
-    // const [vortoj, setVortoj] = useState<Vorto[]>(dkk.dividuJeSilaboj(defaultText));
     const [teksto, setTeksto] = useState('');
     const [vortoj, setVortoj] = useState<Vorto[]>([]);
+    const [vicoj, setVicoj] = useState(2);
 
     const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newTeksto = event.target.value;
         setTeksto(newTeksto);
-        const newVortoj = dkk.dividuJeSilaboj(newTeksto);
-        setVortoj(newVortoj);
+        setVortoj(dkk.dividuJeSilaboj(newTeksto));
+    };
+
+    const handleVicoj = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const v = Number(event.target.value);
+        if (v >= MIN_VICOJ && v <= MAX_VICOJ) setVicoj(v);
     };
 
     return (
@@ -38,8 +43,29 @@ const DinuKevakoComponent: React.FC = () => {
                     readOnly
                     value={dkk.formatigi(vortoj)}
                 ></textarea>
+                <div className="p-2 m-2 flex items-center gap-1">
+                    <button
+                        className="w-6 h-6 flex items-center justify-center border rounded text-sm leading-none disabled:opacity-40"
+                        onClick={() => setVicoj(v => Math.max(MIN_VICOJ, v - 1))}
+                        disabled={vicoj <= MIN_VICOJ}
+                    >−</button>
+                    <input
+                        type="number"
+                        min={MIN_VICOJ}
+                        max={MAX_VICOJ}
+                        value={vicoj}
+                        onChange={handleVicoj}
+                        className="w-10 text-center border rounded text-sm p-0.5 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <button
+                        className="w-6 h-6 flex items-center justify-center border rounded text-sm leading-none disabled:opacity-40"
+                        onClick={() => setVicoj(v => Math.min(MAX_VICOJ, v + 1))}
+                        disabled={vicoj >= MAX_VICOJ}
+                    >+</button>
+                    <span className="text-sm text-gray-500 ml-1">vicoj</span>
+                </div>
                 <div className="p-2 m-2">
-                    <DinuKevakoSvgComponent vortoj={vortoj}/>
+                    <DinuKevakoSvgComponent vortoj={vortoj} vicoj={vicoj} />
                 </div>
             </div>
         </Layout>
