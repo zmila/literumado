@@ -1,5 +1,10 @@
 [
     {
+        "versio": "0.10.0",
+        "dato": "2026-09-05",
+        "komento": "HexTruchet: new option Codes, to show mapping code<->tile"
+    },
+    {
         "versio": "0.9.4",
         "dato": "2026-06-22",
         "komento": "refactoring to extract common svg fragments. add ligatures JN and DZ"

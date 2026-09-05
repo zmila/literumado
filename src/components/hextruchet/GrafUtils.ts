@@ -123,9 +123,9 @@ export default class GrafUtils {
             case TruchetCode.T4: return "01 24 35";
             case TruchetCode.T5: return "04 12 35";
             case TruchetCode.T6: return "04 15 23";
-            case TruchetCode.T7: return "02 15 34";
+            case TruchetCode.T7: return "05 13 24";
             case TruchetCode.T8: return "02 13 45";
-            case TruchetCode.T9: return "05 13 24";
+            case TruchetCode.T9: return "02 15 34";
             case TruchetCode.TFull: return "03 14 25 01 12 23 34 45 05";
             default: throw new Error("Unknown code: " + code);
         }

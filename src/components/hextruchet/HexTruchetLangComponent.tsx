@@ -18,22 +18,25 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
 
     const { width, height } = htSettings;
 
-    const renderHexCodes = (tCodes: TruchetCode[]): { [key: string]: TruchetCode } => {
-        const len = tCodes.length;
-        if (len <= 0) return {};
-
-        let c = 0;
+    const renderHexCodes = (tCodes: (TruchetCode | typeof LangUtils.LINE_BREAK)[]): { [key: string]: TruchetCode } => {
         const result: { [key: string]: TruchetCode } = {};
-        for (let row = 0; row < height && c < len; row++) {
-            for (let col = 0; col < width && c < len; col++) {
-                result[key(row, col)] = tCodes[c];
-                // result.push(new TruchetTile(row, col, htCode.charAt(c)));
-                c++;
+        let row = 0;
+        let col = 0;
+        for (let c = 0; c < tCodes.length && row < height; c++) {
+            const code = tCodes[c];
+            if (code === LangUtils.LINE_BREAK) {
+                row++;
+                col = 0;
+                continue;
             }
+            if (col >= width) {
+                row++;
+                col = 0;
+                if (row >= height) break;
+            }
+            result[key(row, col)] = code;
+            col++;
         }
-        // if (c < len) {
-        //     console.info(`rendered ${c} codes, no room to show the rest: ` + htCode.substring(c).length);
-        // }
 
         return result;
     }
@@ -42,8 +45,19 @@ const HexTruchetLangComponent: React.FC<HexTruchetLangComponentProps> = ({ htSet
         return `${row}:${col}`;
     }
 
-    const tCodes: TruchetCode[] = LangUtils.textToTruchetCodes(text,
-        htSettings.language === 'esperanto' ? LangUtils.charEo2code : LangUtils.char2code);
+    let tCodes: (TruchetCode | typeof LangUtils.LINE_BREAK)[];
+    switch (htSettings.language) {
+        case 'esperanto':
+            tCodes = LangUtils.textToTruchetCodes(text, LangUtils.charEo2code);
+            break;
+        case 'codes':
+            tCodes = LangUtils.codeCharToTruchetCodes(text);
+            break;
+        case 'english':
+        default:
+            tCodes = LangUtils.textToTruchetCodes(text, LangUtils.char2code);
+            break;
+    }
     console.log(text, '->', tCodes);
 
     const tiles: { [key: string]: TruchetCode } = renderHexCodes(tCodes);

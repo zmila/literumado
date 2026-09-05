@@ -91,6 +91,12 @@ const HexTruchetSettingsComponent: React.FC<HexTruchetSettingsComponentProps> = 
                     value="esperanto" checked={htSettings.language === 'esperanto'} />
                 Esperanto
             </label>
+            <label className="mr-4">
+                <input
+                    type="radio" radioGroup='language' name='language' className="mr-4" onChange={handleChange}
+                    value="codes" checked={htSettings.language === 'codes'} />
+                Codes (0..9 \ / * _ ^)
+            </label>
         </div>
     );
 };

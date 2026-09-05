@@ -1,11 +1,58 @@
 import { TruchetCode } from "../common/HexTypes";
 
-const { TStar, TSp1, TSp2, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9 } = TruchetCode;
+const { TStar, TSp1, TSp2, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9, TEmpty } = TruchetCode;
 
 export default class LangUtils {
 
-    static textToTruchetCodes(text: string, char2code: { [key: string]: TruchetCode[] }): TruchetCode[] {
-        let tc: TruchetCode[] = [];
+    // sentinel pushed into a code stream to request a row break during rendering
+    static readonly LINE_BREAK = 'LINE_BREAK' as const;
+
+    private static codeChar2code(ch: string): TruchetCode | typeof LangUtils.LINE_BREAK | undefined {
+        switch (ch) {
+            case '0': return T0;
+            case '1': return T1;
+            case '2': return T2;
+            case '3': return T3;
+            case '4': return T4;
+            case '5': return T5;
+            case '6': return T6;
+            case '7': return T7;
+            case '8': return T8;
+            case '9': return T9;
+            case '\\': return TL;
+            case '/': return TR;
+            case '*': return TStar;
+            case '_': return TSp1;
+            case '^': return TSp2;
+            case ' ': return TEmpty;
+            case '\n': return LangUtils.LINE_BREAK;
+            default: return undefined;
+        }
+    }
+
+    static codeCharToTruchetCodes(text: string): (TruchetCode | typeof LangUtils.LINE_BREAK)[] {
+        const tc: (TruchetCode | typeof LangUtils.LINE_BREAK)[] = [];
+        for (let i = 0; i < text.length; i++) {
+            const code = LangUtils.codeChar2code(text.charAt(i));
+            if (code !== undefined) {
+                tc.push(code);
+            }
+        }
+        return tc;
+    }
+
+    private static fallbackChar2code(ch: string): TruchetCode | typeof LangUtils.LINE_BREAK | undefined {
+        switch (ch) {
+            case '\\': return TL;
+            case '/': return TR;
+            case '0': return T0;
+            case '\n': return LangUtils.LINE_BREAK;
+            default: return undefined;
+        }
+    }
+
+    static textToTruchetCodes(text: string, char2code: { [key: string]: TruchetCode[] }): (TruchetCode | typeof LangUtils.LINE_BREAK)[] {
+        let tc: (TruchetCode | typeof LangUtils.LINE_BREAK)[] = [];
         if (!text.length) {
             return tc;
         }
@@ -17,12 +64,11 @@ export default class LangUtils {
                 tc = [...tc, ...char2code[ch]];
             } else if (LangUtils.punctuation[ch]) {
                 tc = [...tc, ...LangUtils.punctuation[ch]];
-            } else if (ch == '\\') {
-                tc.push(TL);
-            } else if (ch == '/') {
-                tc.push(TR);
-            } else if (ch == '0') {
-                tc.push(T0);
+            } else {
+                const code = LangUtils.fallbackChar2code(ch);
+                if (code !== undefined) {
+                    tc.push(code);
+                }
             }
         }
         return tc;

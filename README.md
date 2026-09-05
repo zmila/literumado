@@ -55,6 +55,7 @@ view at:
 # historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
+- 0.10.0 [2026-09-05] HexTruchet: new option Codes, to show mapping code<->tile
 - 0.9.4 [2026-06-22] refactoring to extract common svg fragments. add ligatures JN and DZ
 - 0.9.3 [2026-06-22] tria versio: farita "zoom" (mal)pligrandigo de svg-bildoj, kaj suporto de \n por komenci novan vicon
 - 0.9.2 [2026-04-21] dua versio: ĉiuj literoj havas sian svg-bildon, kaj ili sukcese aperas vertikale en silaboj KV kaj KVK (sed ne KKV aŭ KVKK)
@@ -114,4 +115,11 @@ This will run all the test files ending with `.test.ts` or `.test.tsx` in the `s
 
 ```bash
 npm test -- --watch
+```
+
+
+## Python Jupyter Notebooks
+
+```bash
+> python -m pip install numpy
 ```

@@ -6,5 +6,5 @@ export interface HexTruchetSettings {
     gridFill: string, // "none" or color
     height: number, // rows count
     width: number, // columns count
-    language: string, // "english" or "esperanto"
+    language: string, // "english", "esperanto", or "codes"
 };
