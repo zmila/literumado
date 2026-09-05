@@ -55,5 +55,16 @@ export class VojagoGameUtils {
         const currentPlayer = board.players[board.currentPlayer];
         return board.players.filter(p => p.color != currentPlayer.color);
     }
+
+    static getRandomTile(): TruchetCode {
+        // 15 playable codes: T0-T9, TL, TR, TStar, TSp1, TSp2
+        // Excludes TEmpty and TFull
+        const playableCodes: TruchetCode[] = [
+            TruchetCode.T0, TruchetCode.T1, TruchetCode.T2, TruchetCode.T3, TruchetCode.T4,
+            TruchetCode.T5, TruchetCode.T6, TruchetCode.T7, TruchetCode.T8, TruchetCode.T9,
+            TruchetCode.TL, TruchetCode.TR, TruchetCode.TStar, TruchetCode.TSp1, TruchetCode.TSp2
+        ];
+        return playableCodes[Math.floor(Math.random() * playableCodes.length)];
+    }
 }
 

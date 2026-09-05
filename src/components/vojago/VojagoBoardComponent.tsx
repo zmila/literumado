@@ -1,10 +1,11 @@
 import {VojagoSettings} from '@/components/vojago/VojagoSettings';
-import React, {ChangeEvent, JSX} from 'react';
-import {HexMeta, Point, RenderMode, truchetCode, TruchetCode} from "../common/HexTypes";
+import React, {JSX} from 'react';
+import {HexMeta, Point, RenderMode, TruchetCode} from "../common/HexTypes";
 import GrafUtils from '../hextruchet/GrafUtils';
 import {HexData} from '../hextruchet/HexData';
 import HexTruchetGridComponent from '../hextruchet/HexTruchetGridComponent';
 import {BoardAction, GameState, PlayerOrientation, VojagoBoard} from "./VojagoCommon";
+import {VojagoGameUtils} from './VojagoGameUtils';
 
 interface VojagoBoardComponentProps {
     gameState: GameState;
@@ -16,19 +17,17 @@ interface VojagoBoardComponentProps {
 
 const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, settings, board, hexMeta, onBoardAction: onBoardChange}) => {
 
-    const [tileCode, setTileCode] = React.useState<string>('');
+    const [pendingTile, setPendingTile] = React.useState<TruchetCode | null>(null);
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-        const eValue = event.target.value;
-        console.log(`Next tile: ${eValue}`);
-        setTileCode(eValue);
-    }
-
-    const handleNextStep = (): void => {
-        const code = truchetCode(tileCode);
-        if (code && code !== TruchetCode.TEmpty) {
-            console.log(`Next step: ${code}`);
-            onBoardChange(BoardAction.Step, code);
+    const handleControlTileClick = (): void => {
+        if (pendingTile === null) {
+            // First click: generate and preview a random tile
+            setPendingTile(VojagoGameUtils.getRandomTile());
+        } else {
+            // Second click: commit the tile and reset
+            console.log(`Control tile: ${pendingTile}`);
+            onBoardChange(BoardAction.Step, pendingTile);
+            setPendingTile(null);
         }
     }
 
@@ -59,7 +58,7 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
     const htSettings = {
         size: settings.size,
         showGrid: true,
-        showCoord: true,
+        showCoord: false,
         gridColor: 'grey',
         gridFill: 'lightyellow',
         height: 2 * settings.boardSize - 1,
@@ -71,6 +70,33 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
     const gu = new GrafUtils(settings.size);
 
     const extra: ExtraElement[] = [];
+
+    if (gameState === GameState.Playing) {
+        const controlHex = new HexData(0, 0, gu);
+        const currentPlayerColor = board.players[board.currentPlayer].color;
+
+        if (pendingTile === null) {
+            const coloredFullTile = controlHex.showTruchetTile(
+                GrafUtils.getFormula(TruchetCode.TFull),
+                getArcBuilder(currentPlayerColor),
+                getLineBuilder(currentPlayerColor)
+            );
+            coloredFullTile.forEach(element => extra.push(new ExtraElement(0, 0, element)));
+        }
+
+        const corners = controlHex.corners();
+        const controlTileOverlay = (
+            <polygon
+                key="controlTileOverlay"
+                points={corners.map(c => `${c.x},${c.y}`).join(' ')}
+                fill="transparent"
+                onClick={handleControlTileClick}
+                style={{ cursor: 'pointer' }}
+            />
+        );
+        extra.push(new ExtraElement(0, 0, controlTileOverlay));
+    }
+
     board.players.forEach((player) => {
         const p = player.position;
         const hex = new HexData(p.col, p.row, gu);
@@ -95,7 +121,7 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
         },
         truchetCode(row: number, col: number) {
             if (row === 0 && col === 0) {
-                return TruchetCode.TFull;
+                return pendingTile ?? TruchetCode.TFull;
             }
             return hexMeta.truchetCode(row, col);
         },
@@ -110,10 +136,11 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
 
             {gameState === GameState.Playing &&
                 <div>
-                    <span style={{color: board.players[board.currentPlayer].color}}>currentPlayer: {board.currentPlayer + 1}</span>
-                    {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)}
-                    <input type="text" maxLength={1} onChange={handleInputChange} className='ifDimensions mr-4 ml-4'/>
-                    <button onClick={handleNextStep}> Next step</button>
+                    <div style={{color: board.players[board.currentPlayer].color}}>
+                        <div>Player {board.currentPlayer + 1} ({board.players[board.currentPlayer].color})</div>
+                        <div>Click the colored Full tile to draw a random tile, then click it again to play.</div>
+                    </div>
+                    {/* {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)} */}
                     <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta}/>
                 </div>}
 
