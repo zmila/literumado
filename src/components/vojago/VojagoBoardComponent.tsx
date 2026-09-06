@@ -6,6 +6,7 @@ import {HexData} from '../hextruchet/HexData';
 import HexTruchetGridComponent from '../hextruchet/HexTruchetGridComponent';
 import {BoardAction, GameState, PlayerOrientation, VojagoBoard} from "./VojagoCommon";
 import {VojagoGameUtils} from './VojagoGameUtils';
+import {log, playerName, tileName} from './VojagoLog';
 
 interface VojagoBoardComponentProps {
     gameState: GameState;
@@ -18,18 +19,37 @@ interface VojagoBoardComponentProps {
 const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, settings, board, hexMeta, onBoardAction: onBoardChange}) => {
 
     const [pendingTile, setPendingTile] = React.useState<TruchetCode | null>(null);
+    const [pendingRotation, setPendingRotation] = React.useState<number>(0); // 0..5 representing 0°..300° in 60° increments
 
     const handleControlTileClick = (): void => {
         if (pendingTile === null) {
             // First click: generate and preview a random tile
-            setPendingTile(VojagoGameUtils.getRandomTile());
+            const selectedTile = VojagoGameUtils.getRandomTile();
+            setPendingTile(selectedTile);
+            setPendingRotation(0); // Reset rotation for new tile
+            log.info(`${playerName(board.players[board.currentPlayer])} player selected tile ${tileName(selectedTile)}.`);
         } else {
-            // Second click: commit the tile and reset
-            console.log(`Control tile: ${pendingTile}`);
-            onBoardChange(BoardAction.Step, pendingTile);
+            // Second click: commit the rotated tile and reset
+            const rotatedTile = VojagoGameUtils.rotateTileClockwise(pendingTile, pendingRotation);
+            onBoardChange(BoardAction.Step, rotatedTile);
             setPendingTile(null);
+            setPendingRotation(0);
         }
     }
+
+    const handleRotateCCW = (): void => {
+        const currentTile = VojagoGameUtils.rotateTileClockwise(pendingTile!, pendingRotation);
+        const rotatedTile = VojagoGameUtils.rotateTileClockwise(currentTile, 5);
+        setPendingRotation((prev) => (prev - 1 + 6) % 6);
+        log.info(`${playerName(board.players[board.currentPlayer])} player rotated CCW: ${tileName(currentTile)} --> ${tileName(rotatedTile)}`);
+    };
+
+    const handleRotateCW = (): void => {
+        const currentTile = VojagoGameUtils.rotateTileClockwise(pendingTile!, pendingRotation);
+        const rotatedTile = VojagoGameUtils.rotateTileClockwise(currentTile, 1);
+        setPendingRotation((prev) => (prev + 1) % 6);
+        log.info(`${playerName(board.players[board.currentPlayer])} player rotated CW: ${tileName(currentTile)} --> ${tileName(rotatedTile)}`);
+    };
 
     const buildPlayerMove = (playerColor: string, column: number, row: number, from: PlayerOrientation, to: PlayerOrientation) => {
         const hex = new HexData(column, row, gu);
@@ -58,7 +78,7 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
     const htSettings = {
         size: settings.size,
         showGrid: true,
-        showCoord: false,
+        showCoord: true,
         gridColor: 'grey',
         gridFill: 'lightyellow',
         height: 2 * settings.boardSize - 1,
@@ -95,13 +115,31 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
             />
         );
         extra.push(new ExtraElement(0, 0, controlTileOverlay));
+
+        // Render rotation control buttons when preview is active
+        if (pendingTile !== null) {
+            const controlCenter = controlHex.center();
+            const hexHeight = gu.hexH;
+            
+            // Position left arrow (↻) below and to the left of control tile
+            const leftArrowX = controlCenter.x - gu.hexW / 3;
+            const leftArrowY = controlCenter.y + hexHeight * 0.75;
+            const rotateCWButton = arrowButton(handleRotateCW, leftArrowX, leftArrowY, gu, currentPlayerColor, '↻');
+            extra.push(new ExtraElement(0, 0, rotateCWButton));
+
+            // Position right arrow (↺) below and to the right of control tile
+            const rightArrowX = controlCenter.x + gu.hexW / 3;
+            const rightArrowY = controlCenter.y + hexHeight * 0.75;
+            const rotateCCWButton = arrowButton(handleRotateCCW, rightArrowX, rightArrowY, gu, currentPlayerColor, '↺');
+            extra.push(new ExtraElement(0, 0, rotateCCWButton));
+        }
     }
 
     board.players.forEach((player) => {
         const p = player.position;
         const hex = new HexData(p.col, p.row, gu);
         const pMiddle = hex.middles()[p.orientation];
-        extra.push(new ExtraElement(p.row, p.col, <circle key="player" cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color}/>));
+        extra.push(new ExtraElement(p.row, p.col, <circle key={`player${player.color}`} cx={pMiddle.x} cy={pMiddle.y} r={5} fill={player.color}/>));
     })
 
     board.players.forEach((player) => {
@@ -121,7 +159,11 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
         },
         truchetCode(row: number, col: number) {
             if (row === 0 && col === 0) {
-                return pendingTile ?? TruchetCode.TFull;
+                // Apply rotation to preview tile
+                if (pendingTile !== null) {
+                    return VojagoGameUtils.rotateTileClockwise(pendingTile, pendingRotation);
+                }
+                return TruchetCode.TFull;
             }
             return hexMeta.truchetCode(row, col);
         },
@@ -138,9 +180,9 @@ const VojagoBoardComponent: React.FC<VojagoBoardComponentProps> = ({gameState, s
                 <div>
                     <div style={{color: board.players[board.currentPlayer].color}}>
                         <div>Player {board.currentPlayer + 1} ({board.players[board.currentPlayer].color})</div>
-                        <div>Click the colored Full tile to draw a random tile, then click it again to play.</div>
+                        <div>Click the colored Full tile to draw a random tile. Use arrows to rotate, then click again to play.</div>
                     </div>
-                    {/* {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)} */}
+                    {board.players.map((p, i) => ` Player ${i + 1} = (${p.position.row}:${p.position.col} ${p.position.orientation}) `)}
                     <HexTruchetGridComponent htSettings={htSettings} hexMeta={playMeta}/>
                 </div>}
 
@@ -158,3 +200,21 @@ class ExtraElement {
 }
 
 export default VojagoBoardComponent;
+
+function arrowButton(handleRotateCW: () => void, rightArrowX: number, rightArrowY: number, gu: GrafUtils, currentPlayerColor: string, body: string) {
+    return <g key={`rotate${body}`} onClick={handleRotateCW} style={{ cursor: 'pointer' }}>
+        <circle cx={rightArrowX} cy={rightArrowY} r={gu.size * 0.8} fill="transparent" />
+        <text
+            x={rightArrowX}
+            y={rightArrowY}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="24"
+            fill={currentPlayerColor}
+            fontWeight="bold"
+            pointerEvents="none"
+        >
+            {body}
+        </text>
+    </g>;
+}

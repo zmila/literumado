@@ -66,5 +66,42 @@ export class VojagoGameUtils {
         ];
         return playableCodes[Math.floor(Math.random() * playableCodes.length)];
     }
+
+    // Rotation mapping: CW rotation by 60° increments
+    // Built by rotating each tile's edge indices: i → (i + 1) % 6
+    // Maps: tile code → [rotated by 0°, 1×60°, 2×60°, 3×60°, 4×60°, 5×60°]
+    private static readonly ROTATION_MAP: Map<TruchetCode, TruchetCode[]> = new Map([
+        [TruchetCode.TSp1, [TruchetCode.TSp1, TruchetCode.TSp2, TruchetCode.TSp1, TruchetCode.TSp2, TruchetCode.TSp1, TruchetCode.TSp2]],
+        [TruchetCode.TSp2, [TruchetCode.TSp2, TruchetCode.TSp1, TruchetCode.TSp2, TruchetCode.TSp1, TruchetCode.TSp2, TruchetCode.TSp1]],
+        [TruchetCode.TStar, [TruchetCode.TStar, TruchetCode.TStar, TruchetCode.TStar, TruchetCode.TStar, TruchetCode.TStar, TruchetCode.TStar]],
+        [TruchetCode.TL, [TruchetCode.TL, TruchetCode.TR, TruchetCode.T0, TruchetCode.TL, TruchetCode.TR, TruchetCode.T0]],
+        [TruchetCode.TR, [TruchetCode.TR, TruchetCode.T0, TruchetCode.TL, TruchetCode.TR, TruchetCode.T0, TruchetCode.TL]],
+        [TruchetCode.T0, [TruchetCode.T0, TruchetCode.TL, TruchetCode.TR, TruchetCode.T0, TruchetCode.TL, TruchetCode.TR]],
+        [TruchetCode.T1, [TruchetCode.T1, TruchetCode.T2, TruchetCode.T3, TruchetCode.T1, TruchetCode.T2, TruchetCode.T3]],
+        [TruchetCode.T2, [TruchetCode.T2, TruchetCode.T3, TruchetCode.T1, TruchetCode.T2, TruchetCode.T3, TruchetCode.T1]],
+        [TruchetCode.T3, [TruchetCode.T3, TruchetCode.T1, TruchetCode.T2, TruchetCode.T3, TruchetCode.T1, TruchetCode.T2]],
+        [TruchetCode.T4, [TruchetCode.T4, TruchetCode.T5, TruchetCode.T6, TruchetCode.T9, TruchetCode.T8, TruchetCode.T7]],
+        [TruchetCode.T5, [TruchetCode.T5, TruchetCode.T6, TruchetCode.T9, TruchetCode.T8, TruchetCode.T7, TruchetCode.T4]],
+        [TruchetCode.T6, [TruchetCode.T6, TruchetCode.T9, TruchetCode.T8, TruchetCode.T7, TruchetCode.T4, TruchetCode.T5]],
+        [TruchetCode.T7, [TruchetCode.T7, TruchetCode.T4, TruchetCode.T5, TruchetCode.T6, TruchetCode.T9, TruchetCode.T8]],
+        [TruchetCode.T8, [TruchetCode.T8, TruchetCode.T7, TruchetCode.T4, TruchetCode.T5, TruchetCode.T6, TruchetCode.T9]],
+        [TruchetCode.T9, [TruchetCode.T9, TruchetCode.T8, TruchetCode.T7, TruchetCode.T4, TruchetCode.T5, TruchetCode.T6]],
+    ]);
+
+    /**
+     * Rotate a tile clockwise by N × 60° (where N is 0..5)
+     * @param tile The tile code to rotate
+     * @param rotationSteps Number of 60° steps (0..5, or will be normalized to 0..5)
+     * @returns The rotated tile code
+     */
+    static rotateTileClockwise(tile: TruchetCode, rotationSteps: number): TruchetCode {
+        const normalizedSteps = rotationSteps % 6;
+        const rotations = this.ROTATION_MAP.get(tile);
+        if (!rotations) {
+            // Fallback: return original tile if not in map (e.g., TEmpty, TFull)
+            return tile;
+        }
+        return rotations[normalizedSteps];
+    }
 }
 

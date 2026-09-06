@@ -7,6 +7,7 @@ import { HexMeta, TruchetCode } from "../common/HexTypes";
 import { HexagonBoardGenerator } from "./HexagonBoardGenerator";
 import { GameState, PlayerInfo, VojagoBoard } from "./VojagoCommon";
 import { VojagoGameUtils as utils } from './VojagoGameUtils';
+import {formatPosition, log, playerName, tileName} from './VojagoLog';
 
 const VojagoGameComponent: React.FC = () => {
 
@@ -17,29 +18,30 @@ const VojagoGameComponent: React.FC = () => {
         setVojagoSettings(newSettings);
     }
 
-    const moveOverTile = (currPlayer: PlayerInfo, tile: TruchetCode): string | null => {
+    const moveOverTile = (currPlayer: PlayerInfo, tile: TruchetCode, movePath: PlayerPosition[]): string | null => {
         const currPos = currPlayer.position;
         const nextOr = utils.calculateNextOrientation(currPlayer, tile);
         currPlayer.moves.push(new PlayerMove(currPos.row, currPos.col, currPos.orientation, nextOr));
         currPlayer.position = utils.calculateNextPosition(currPos, nextOr)!;
 
         const nextPos = currPlayer.position;
+        movePath.push(new PlayerPosition(nextPos.row, nextPos.col, nextPos.orientation));
         const collided = utils.playersCollided(board, currPos, nextOr);
         if (collided) {
             // collided with other player --> finish game, lost.
-            return `Player '${currPlayer.color}' lost due to a collision with '${collided.color}' player`;
+            return `${playerName(currPlayer)} player lost due to a collision with ${playerName(collided)} player`;
             // TODO check if players > 2, then these two lost, other may continue
         }
 
         if (utils.isOutOfBoard(nextPos, maxColumns, hexMeta)) {
             // go out of board --> finish game
-            return `Player '${currPlayer.color}' lost due to moving off the board`;
+            return `${playerName(currPlayer)} player lost due to moving off the board`;
         }
 
         const nextTile = utils.getTileAtPos(nextPos, board.tilesOnBoard);
         if (nextTile) {
             // enter an existing tile --> repeat the move thru the next tile
-            return moveOverTile(currPlayer, nextTile);
+            return moveOverTile(currPlayer, nextTile, movePath);
         }
 
         // enter an empty tile, it's safe to continue
@@ -50,10 +52,15 @@ const VojagoGameComponent: React.FC = () => {
         const currPlayer = board.players[board.currentPlayer];
         const currPos = currPlayer.position;
         const newTilesOnBoard = { ...board.tilesOnBoard, [utils.key(currPos.row, currPos.col)]: tile };
+        const movePath = [new PlayerPosition(currPos.row, currPos.col, currPos.orientation)];
 
-        const moveResult = moveOverTile(currPlayer, tile);
+        const moveResult = moveOverTile(currPlayer, tile, movePath);
+        log.info(`${playerName(currPlayer)} player put tile ${tileName(tile)} and moves to ${movePath.slice(1).map(formatPosition).join(" to ")}`);
         if (moveResult) {
             setGameResult(moveResult);
+            log.info(moveResult);
+            log.info("Game ended.");
+            log.dump();
             // TODO deactivate players that lost
             // set finished when active player is only one or none
             setGameState(GameState.Finished);
@@ -61,10 +68,13 @@ const VojagoGameComponent: React.FC = () => {
             // other players on this tile
             const otherPlayers = utils.getOtherPlayers(board).filter(p => p.position.row === currPos.row && p.position.col === currPos.col);
             otherPlayers.forEach(op => {
-                const moveResult = moveOverTile(op, tile);
+                const moveResult = moveOverTile(op, tile, [new PlayerPosition(op.position.row, op.position.col, op.position.orientation)]);
                 if (moveResult) {
                     setGameResult(moveResult);
                     setGameState(GameState.Finished);
+                    log.info(moveResult);
+                    log.info("Game ended.");
+                    log.dump();
                 }
             });
         }
@@ -99,8 +109,10 @@ const VojagoGameComponent: React.FC = () => {
 
     const startGame = () => {
         if (gameState === GameState.Settings) {
+            log.clear();
             resetBoard();
             setGameState(GameState.Playing);
+            log.info(`Game started. Board size: ${vojagoSettings.boardSize}. ${playerName(emptyBoard.players[1])} player position ${formatPosition(emptyBoard.players[1].position)}. ${playerName(emptyBoard.players[0])} player position ${formatPosition(emptyBoard.players[0].position)}.`);
         }
     }
 
@@ -113,6 +125,8 @@ const VojagoGameComponent: React.FC = () => {
 
     const newGame = () => {
         if (gameState === GameState.Finished) {
+            log.info("Game cancelled");
+            log.dump();
             resetBoard();
             setGameState(GameState.Settings);
         }
