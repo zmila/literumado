@@ -1,6 +1,6 @@
 import { TruchetCode } from "../common/HexTypes";
 
-const { TStar, TSp1, TSp2, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9, TEmpty } = TruchetCode;
+const { TStar, TUp, TDn, TR, TL, T0, T1, T2, T3, T4, T6, T7, T5, T8, T9, TEmpty } = TruchetCode;
 
 export default class LangUtils {
 
@@ -22,8 +22,8 @@ export default class LangUtils {
             case '\\': return TL;
             case '/': return TR;
             case '*': return TStar;
-            case '_': return TSp1;
-            case '^': return TSp2;
+            case '_': return TDn;
+            case '^': return TUp;
             case ' ': return TEmpty;
             case '\n': return LangUtils.LINE_BREAK;
             default: return undefined;
@@ -76,8 +76,8 @@ export default class LangUtils {
 
     static punctuation: { [key: string]: TruchetCode[] } = {
         '.': [TStar],
-        ' ': [TSp1],
-        '^': [TSp2],
+        ' ': [TDn],
+        '^': [TUp],
         ':': [TStar, TStar],
         ',': [TStar, TR],
         '?': [TStar, TL],

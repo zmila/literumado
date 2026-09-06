@@ -55,7 +55,7 @@ view at:
 # historio:
   as api json [.../api/historio] or public static paĝe [.../historio.json]
 
-- 0.10.1 [2026-09-05] Vojago: added UI to select a tile (instead of input field) WIP
+- 0.10.1 [2026-09-06] Vojago: added UI to select a tile 
 - 0.10.0 [2026-09-05] HexTruchet: new option Codes, to show mapping code<->tile
 - 0.9.4 [2026-06-22] refactoring to extract common svg fragments. add ligatures JN and DZ
 - 0.9.3 [2026-06-22] tria versio: farita "zoom" (mal)pligrandigo de svg-bildoj, kaj suporto de \n por komenci novan vicon

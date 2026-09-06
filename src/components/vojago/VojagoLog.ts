@@ -27,8 +27,8 @@ export const playerName = (player: {color: string}): string => {
 
 export const tileName = (tile: TruchetCode): string => {
     switch (tile) {
-        case TruchetCode.TSp1: return "TSp1";
-        case TruchetCode.TSp2: return "TSp2";
+        case TruchetCode.TUp: return "TUp";
+        case TruchetCode.TDn: return "TDn";
         case TruchetCode.TStar: return "TStar";
         case TruchetCode.TL: return "TL";
         case TruchetCode.TR: return "TR";

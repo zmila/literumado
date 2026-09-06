@@ -13,6 +13,8 @@ const HexTruchetComponent: React.FC = () => {
         showGrid: true,
         gridColor: 'grey',
         gridFill: 'none',
+        tileColor: 'blue',
+        tileFill: '',
         height: 12,
         width: 28,
         language: 'english'

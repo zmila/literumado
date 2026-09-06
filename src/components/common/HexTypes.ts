@@ -32,8 +32,8 @@ export class HexPoint {
 
 export enum TruchetCode {
     TEmpty = " ",
-    TSp1 = "_",
-    TSp2 = "^",
+    TDn = "_",
+    TUp = "^",
     TStar = "*",
     TL = "\\",
     TR = "/",
@@ -55,9 +55,9 @@ export const truchetCode = (code: string): TruchetCode | null => {
         case " ":
             return TruchetCode.TEmpty;
         case "_":
-            return TruchetCode.TSp1;
+            return TruchetCode.TDn;
         case "^":
-            return TruchetCode.TSp2;
+            return TruchetCode.TUp;
         case "*":
             return TruchetCode.TStar;
         case "\\":

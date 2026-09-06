@@ -4,6 +4,8 @@ export interface HexTruchetSettings {
     showCoord: boolean,
     gridColor: string, // "grey", "black", "brown", "green", "blue", "red"
     gridFill: string, // "none" or color
+    tileColor: string, // color of filled Truchet tiles
+    tileFill?: string, // fill color of non-empty tiles; defaults to gridFill
     height: number, // rows count
     width: number, // columns count
     language: string, // "english", "esperanto", or "codes"

@@ -15,7 +15,7 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({htSett
     useEffect(() => {
     }, [htSettings]);
 
-    const {size, width, height, showGrid, gridColor, gridFill} = htSettings;
+    const {size, width, height, showGrid, gridColor, gridFill, tileColor} = htSettings;
     // max(width, 1200) - to prevent very big tiles when width is small
     const hexW = Math.max(Math.sqrt(3) * size * (width + 1), 1200);  // sqrt(3) comes from sin(60°)
     const hexH = 1.5 * size * height + size;
@@ -28,12 +28,12 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({htSett
     }
 
     function buildSvgArc(id: string, m1: Point, center: Point, m2: Point): JSX.Element {
-        return <path key={id} stroke="blue" strokeWidth="3" fill="none"
+        return <path key={id} stroke={tileColor} strokeWidth="3" fill="none"
                      d={`M${m1.x} ${m1.y} Q${center.x} ${center.y} ${m2.x} ${m2.y}`}/>;
     }
 
     const buildSvgLine = (id: string, m1: Point, m2: Point): JSX.Element => {
-        return <line key={id} stroke="blue" strokeWidth="3"
+        return <line key={id} stroke={tileColor} strokeWidth="3"
                      x1={m1.x} y1={m1.y} x2={m2.x} y2={m2.y}/>;
     }
 
@@ -46,7 +46,10 @@ const HexTruchetGridComponent: React.FC<HexTruchetGridComponentProps> = ({htSett
                 }
                 const key = `${col}:${row}`;
                 const hex = new HexData(col, row, gu);
-                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={gridFill} showCoord={htSettings.showCoord}/>);
+                const tileCode = hexMeta.truchetCode(row, col);
+                const isNonEmptyTile = tileCode !== undefined && tileCode !== null && tileCode !== " ";
+                const fill = isNonEmptyTile ? (htSettings.tileFill || gridFill) : gridFill;
+                grid.push(<HexTile key={key} column={col} row={row} hex={hex} color={gridColor} fill={fill} showCoord={htSettings.showCoord}/>);
             }
         }
     }

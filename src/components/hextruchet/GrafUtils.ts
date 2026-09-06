@@ -111,8 +111,8 @@ export default class GrafUtils {
     static getFormula(code: TruchetCode): string {
         switch (code) {
             case TruchetCode.TEmpty: return "";
-            case TruchetCode.TSp1: return "01 23 45";
-            case TruchetCode.TSp2: return "05 12 34";
+            case TruchetCode.TUp: return "01 23 45";
+            case TruchetCode.TDn: return "05 12 34";
             case TruchetCode.TStar: return "03 14 25";
             case TruchetCode.TL: return "05 14 23";
             case TruchetCode.TR: return "01 25 34";

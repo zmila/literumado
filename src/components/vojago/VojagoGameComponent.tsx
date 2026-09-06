@@ -190,18 +190,3 @@ const VojagoGameComponent: React.FC = () => {
 
 
 export default VojagoGameComponent;
-
-/*
-[x] 0. show hexagon board 
-[x] 1. show initial positions of two players
-[x]    a. show player trace
-2. select tile for player1 - show 5 options
-3. rotate tile for player1 - left or right
-[x] 4. put the tile on board
-[x] 5. check player move:
-[x] 6. check other player auto-move
-7. repeat from 2 for other player
-
-    Rotate Clockwise: ↻ (U+21BB)
-    Rotate Counter Clockwise: ↺ (U+21BA)
-*/
